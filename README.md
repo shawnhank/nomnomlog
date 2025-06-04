@@ -1,6 +1,7 @@
 # 🍽️ NomNomLog – Your Personalized Meal Memory Bank
 
-## 📜 Executive Summary
+
+## 📜 Intro
 
   Picture this: You had a great meal at a restaurant. You were having such a good time with friends and family and you forgot to jot down the details? Now you want a repeat experience, but you can't remember the restaurant or amazing meal/dish you had. What do you do?
 
@@ -13,6 +14,7 @@
   NomNomLog is your personal, and fully private dining diary — a smarter way to remember what you liked (or didn't) at restaurants. There are no social features or public posts ensuring users can be candid in their comments and notes.  Replace you scattered Apple Notes, spreadsheets, and takeout guesswork with a searchable, organized, and private log of meals you've eaten across restaurants.
 
   NomNomLog helps users track:
+
     * What they ate, where and when they ate it, how much it cost and how much they liked it
     * Whether they'd order it again — or avoid it next time
     * Private Taste Records complete with personal notes, photos, and tags to make each meal searchable and memorable 
@@ -48,6 +50,23 @@
 
 ---
 ---
+
+### Screenshot Placeholder
+
+---
+---
+
+### Deployed App Link Placeholder
+
+### Trello Link Placeholder
+
+### Attributions Placeholder
+
+### Technologies Used Placeholder
+
+---
+---
+
 ## 📖 User Stories
 
 ✅ MVP User Stories (Trello List: “MVP User Stories”)
@@ -113,12 +132,14 @@
 ### ✅ MVP (Basic / Free Tier)
 
   * **User Authentication**
+
     * Users can sign up, log in, and securely manage their own data.
     * JWT-based authentication protects all user actions and data.
     * Email or social login (Google, Apple)
     * Private, secure meal log per user
 
   * **Meal Logging**
+
     * Log the meal name, description, restaurant, photo, rating, tags (e.g. "too spicy," "chef's special"), price, and personal comments.
     * Each meal is associated with a specific user and only visible/editable by them.
     * Meal name
@@ -135,6 +156,7 @@
       * Heart icon to mark best-of-the-best meals
 
   * **Restaurant Details**
+
     * Name
     * Address
     * Phone 
@@ -144,6 +166,7 @@
     * "Last ordered from here" tracker
     
   * **Full CRUD**
+
     * Users can Create, Read, Update, and Delete their meals, restaurants, notes,
       tags, comments and unfavorite items
     
@@ -157,11 +180,13 @@
       * Tags (e.g. spicy, comfort food, date night)
 
   * **Sorting (ascending/descending)**
+
       * Sort by date 
       * sort by restaurant
       * sort by tag
 
   * **Cross-Platform Use**
+  
     * Mobile-ready responsive design (browser, phone, tablet)
     * Designed to load fast and work on the go
 
@@ -325,18 +350,22 @@
 ##  🔌 External Services & Integrations
 
   ### 🍽 Restaurant Info APIs
+
     **Yelp Fusion API:** Search businesses, autofill name/address/phone, fetch categories, ratings, photos, and Yelp links (5,000 free requests/day).
+  
     **Nominatim API (OpenStreetMap):** Convert addresses to latitude/longitude for mapping and distance calculations. Free, open-source, cache-friendly.
 
   ### 🚚 Food Delivery (Deep Linking Only)
 
     **Uber Eats, DoorDash, GrubHub:**
+  
       - Smart links to restaurant or dish pages.
       - No public APIs — handled via deep link URL schemes when available.
 
   ### 📍 Mapping & Location
 
     - **Leaflet.js + OpenStreetMap**: Embed lightweight maps and markers for saved restaurants. Fully free and open-source. One-tap directions, map display
+  
     - **Browser Geolocation**: Show nearby saved restaurants
 
       Will provide:
@@ -344,6 +373,7 @@
         Mapping & Location Capabilities in NomNomLog
 
           Map Display
+         
             • Show saved restaurants on a map (with markers)
             • Center map on user location (via navigator.geolocation)
             • Optional: cluster, filter, zoom, highlight favorites
@@ -353,6 +383,7 @@
         ---
 
           One-Tap Directions
+         
             • Get user’s current location
             • Combine with saved restaurant lat/lng
             • Deep link to open Apple Maps or Google Maps for navigation
@@ -362,10 +393,12 @@
         ---
 
           Optional Extras
+       
             • “Nearby” view = show only restaurants within X miles/km of user
             • “Tap marker → get directions” flow
 
     ### 📧 Communication
+      
       - **SendGrid / Mailgun / Convert Kit**: Email for welcome, reset, digests, feature alerts
 
 ---
@@ -386,15 +419,18 @@
     - API integrations can be phased in
 
   ### Start Simple
+   
     - Restaurant name, dish name, thumbs, and date is enough for MVP
     - No AI, analytics, or deep APIs in phase one
 
   ### Pitfalls to Avoid
+   
     - 💸 API costs early (Yelp, Google Places)
     - 🧼 Data duplication from messy entry
     - 🤯 Confusion when empty (zero meals logged)
 
   ### Best Practices
+  
     - Use autocomplete for restaurant entry
     - Preload 2–3 meals in demo accounts
     - Show sample meal cards during onboarding
@@ -405,6 +441,7 @@
 ## 🔮 Icebox Features
 
   ### General
+
     * Support dish photo uploads via cloud storage
     * Show dish frequency/repeat history
     * Implement dietary filters (e.g. keto, vegan)
@@ -412,6 +449,7 @@
     * Offline Access - cached meals locally until reconnected
 
   ### External API Integration
+
     * Google Places API: Autocomplete, address/phone/images
     * Yelp Fusion API: Optional category/menu enrichment
       *  Auto import restaurant info
@@ -420,11 +458,13 @@
     * Cloud storage for photos, etc.
 
   ### Advanced Ratings & Metadata
+
     * 1–5 star rating
     * Categories (Appetizer, Main, Dessert)
     * Cuisine type (e.g. Korean, Sushi, Mexican)
 
   ### Delivery & Cost Tracking
+
     * Dine-in / takeout / delivery toggle
     * Delivery service (Uber Eats, DoorDash, etc.)
     * Service tier (DashPass, Uber One, GrubHub)
@@ -432,33 +472,41 @@
     * Auto-calculated total cost
 
   ### Analytics & Insights
+
     * Monthly food spending
     * Breakdown by delivery service or dine-in
     * "Most expensive low-rated meals"
     * ROI on memberships (e.g. Uber One savings)
 
   ### Export & Sharing / Personal Data Backups
+
     * Export meals to PDF or CSV
     * Optional sharing: "Top meals this month"
 
   ### AI Capabilities & Assistants
+
     #### Claude/ChatGPT Assistant
+
         * Answer user queries like: "What was the best ramen I logged?"
         * Filter meals by keyword or taste tags via natural language
         * Natural language queries like:
+
             *  "What was my best ramen?"
             * "Show spicy meals I liked"
     
     #### Voice Entry (Whisper API)
+
         * Log meals by speaking: "Cheeseburger from Five Guys, thumbs up"
         * OpenAI Whisper API: voice-to-text meal logging
 
     #### Smart Features
+
         * Detects repeated dishes
         * Prompts to reuse or log new
         * Suggests "nearby favorites" via GPS
 
     #### Smart Onboarding
+    
         * Claude-generated field hints, tooltips, empty state encouragement
         * Habit loop prompt: "Tried anything good lately?"
         * AI-generated field hints, empty state prompts
