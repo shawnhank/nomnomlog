@@ -32,7 +32,7 @@
 
   ### 🏆 Primary Tagline (for hero sections, landing pages, etc.)
     
-    **"Every bite that hit just right."**
+    **"Remember Every Bite."**
 
   ### 🧩 Alternate Taglines
 
