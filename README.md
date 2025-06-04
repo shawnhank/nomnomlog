@@ -44,9 +44,9 @@
   | Context | Text |
   |---------|------|
   | Title Tag | NomNomLog — Remember Every Bite |
-  | Meta Description | The smarter way to remember what you ordered — and why you liked it. Log your favorite meals, skip the bad ones. |
-  | Social Preview (Open Graph) | Title: NomNomLog<br>Description: Every bite that hit just right. Your food memory, finally organized. |
-  | Onboarding Screen #1 | Loved that meal? Don't forget it.<br>"Remember what you ordered — and why you liked it." |
+  | Meta Description | The smarter way to remember what you ate — and why you liked it. Log your favorite meals, skip the bad ones. |
+  | Social Preview (Open Graph) | Title: NomNomLog <br> Description: Remember Every Bite. Your private, organized food memory. |
+  | Onboarding Screen #1 | Loved that meal? <br> "Remember what you ordered — and why you liked it." |
 
 ---
 ---
