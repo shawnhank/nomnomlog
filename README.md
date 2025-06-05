@@ -3,9 +3,9 @@
     <td>
       <img src="https://raw.githubusercontent.com/shawnhank/nomnomlog/main/public/images/nnl_logo_v1.png" alt="NomNomLog logo" width="120">
     </td>
-    <td style="vertical-align: middle; padding-left: 1em;">
+    <td style="vertical-align: middle; padding-left: 1em; border: none;">
       <h1>NomNomLog</h1>
-      <h3><em>Remember Every Bite.</em></h3>
+      <h4>Remember Every Bite.</h4>
     </td>
   </tr>
 </table>
