@@ -1,9 +1,9 @@
 <table style="border: none;">
   <tr>
     <td style="border: none;">
-      <img src="https://raw.githubusercontent.com/shawnhank/nomnomlog/main/public/images/nnl_logo_v1.png" alt="NomNomLog logo" width="120">
+      <img src="https://github.com/shawnhank/nomnomlog/blob/main/public/images/nnl_logo_v1_.png" alt="NomNomLog logo" width="120">
     </td>
-    <td style="vertical-align: middle; padding-left: 1em; style=border: none;">
+    <td style="vertical-align: middle; padding-left: 1em; border: none;">
       <h1>NomNomLog</h1>
       <h4>Remember Every Bite</h4>
     </td>
@@ -11,7 +11,7 @@
 </table>
 
 ---
----
+--- 
 
 ## 📜 Intro
  
