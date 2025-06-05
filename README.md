@@ -89,8 +89,10 @@
   | Auth | JWT & bcrypt | Secure user sessions |
   | Deployment | Heroku / Render / Railway / Other (e.g. local hosting, VPS, AWS, GCP, Azure, etc.)) | App Hosting |
 
+---
+---
 
-### Trello Link Placeholder
+### [Trello Board](https://trello.com/b/0H9q21IY)
 
 ---
 ---
@@ -155,6 +157,18 @@
 
 ---
 ---
+
+### Entity Relationship Diagrams
+
+![MVP ERD](planning/erd/mvp_erd.png)
+
+
+![ICEBOX ERD](planning/erd/icebox_erd.png)
+
+
+---
+---
+
 ### Attributions Placeholder
 
 
