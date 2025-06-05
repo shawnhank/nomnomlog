@@ -5,7 +5,7 @@
     </td>
     <td valign="middle">
       <h1 style="margin: 0;">NomNomLog</h1>
-      <h4 style="margin: 0; padding-left: 1.0 em;">Remember Every Bite</h4>
+      <h4 style="margin: 0; padding-left: 2.0 em;">Remember Every Bite</h4>
     </td>
   </tr>
 </table>
