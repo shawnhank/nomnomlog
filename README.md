@@ -4,7 +4,7 @@
       <img src="https://github.com/shawnhank/nomnomlog/blob/main/public/images/nnl_logo_v1_.png" width="150" alt="NomNomLog logo">
     </td>
     <td valign="middle" style="padding-left: 1em;">
-      <div align="center" vertical-align="middle">
+      <div align="center" margin-bottom="0.5em;">
         <h1 style="margin: 0;">NomNomLog</h1>
       </div>
       <div align="center" verticalign="middle">
