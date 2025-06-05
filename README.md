@@ -14,12 +14,10 @@
   </tr>
 </table>
 
-
 ---
 --- 
 
 ## 📜 Intro
- 
 
   Picture this: You had a great meal at a restaurant a couple of months ago. You were having such a good time that you forgot to make a note about the meal.  Now you want a repeat experience, but you can't remember the restaurant. You look for a receipt and can't find it. You look at your calendar and find the restaurant, but not what you ate. What do you do?
 
