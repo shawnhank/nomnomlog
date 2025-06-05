@@ -32,7 +32,7 @@
   | Layer | Technology | Purpose |
   |-------|------------|---------|
   | Frontend | [HTML](https://developer.mozilla.org/en-US/docs/Web/HTML) + [JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript) + [React](https://react.dev/) + [Vite](https://vite.dev/) | Core UI rendering |
-  | Styling | [CSS Grid](https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/CSS_layout/Grids) / [Flexbox](https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/CSS_layout/Flexbox) / [Bootstrap](https://getbootstrap.com/) / [Tailwind](https://tailwindcss.com/) | Responsive layout|
+  | Styling | [CSS Grid](https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/CSS_layout/Grids) + [Flexbox](https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/CSS_layout/Flexbox) + [Tailwind](https://tailwindcss.com/) | Responsive layout|
   | Backend | [Express](https://expressjs.com/) + [Node.js](https://nodejs.org/en) | REST API server |
   | Database | [MongoDB](https://www.mongodb.com/) + [Mongoose](https://mongoosejs.com/) | Data persistence and modeling |
   | Auth | [JWT](https://jwt.io/) + [bcrypt](https://www.npmjs.com/package/bcrypt) | Secure user sessions |
@@ -83,7 +83,9 @@
 
   **[Leaflet.js](https://leafletjs.com/) + [OpenStreetMap](https://www.openstreetmap.org/)**: Embed lightweight maps and markers for saved restaurants. Fully open-source solution using browser/device geolocation for on device mapping, one-click/tap directions, restaurant locations and more.
 
-  **Deep Linking** for Apple and Google Maps
+  **Apple Maps** and **Google Maps**
+
+    - No public APIs — handled via deep link URL schemes.
 
   ### 🍽 Restaurant Info APIs
 
@@ -95,8 +97,7 @@
 
   **Uber Eats, DoorDash, GrubHub**:
   
-    - Smart links to restaurant or dish pages.
-    - No public APIs — handled via deep link URL schemes when available.
+    - No public APIs — handled via deep link URL schemes.
 
   ### 📧 Communications
       
@@ -106,11 +107,11 @@
 
   **[Lucidchart.com Diagramming SaaS software](https://lucidchart.com) for Entity Relationship Diagrams**
 
-  **[Wireframe.cc Wireframe Diagramming SaaS software](https://wireframe.cc) for Wireframes**
+  **[Wireframe.cc Diagramming SaaS software](https://wireframe.cc) for Wireframes**
 
   ### Project Management
 
-  **[Trello Project Management SaaS software](https://trello.com) for Kanban Board**
+  **[Trello Project Management SaaS software](https://trello.com) for Kanban Boards**
 
 ---
 ---
