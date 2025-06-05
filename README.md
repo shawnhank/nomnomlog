@@ -31,11 +31,11 @@
 
   | Layer | Technology | Purpose |
   |-------|------------|---------|
-  | Frontend | HTML, JS, [React](https://react.dev/), [Vite](https://vite.dev/) | Core UI rendering |
+  | Frontend | [HTML](https://developer.mozilla.org/en-US/docs/Web/HTML) + [JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript) + [React](https://react.dev/) + [Vite](https://vite.dev/) | Core UI rendering |
   | Styling | [CSS Grid](https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/CSS_layout/Grids) / [Flexbox](https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/CSS_layout/Flexbox) / [Bootstrap](https://getbootstrap.com/) / [Tailwind](https://tailwindcss.com/) | Responsive layout|
   | Backend | [Express](https://expressjs.com/) + [Node.js](https://nodejs.org/en) | REST API server |
   | Database | [MongoDB](https://www.mongodb.com/) + [Mongoose](https://mongoosejs.com/) | Data persistence and modeling |
-  | Auth | [JWT](https://jwt.io/) & [bcrypt](https://www.npmjs.com/package/bcrypt) | Secure user sessions |
+  | Auth | [JWT](https://jwt.io/) + [bcrypt](https://www.npmjs.com/package/bcrypt) | Secure user sessions |
   | Deployment | [Heroku](https://www.heroku.com/) / [SSD Nodes](https://www.ssdnodes.com/) | App Hosting |
 
 
