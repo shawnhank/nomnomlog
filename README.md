@@ -96,8 +96,8 @@
 
 #### [View Public Trello Board in Browser](https://trello.com/b/0H9q21IY)
 
-#### Screenshot of Trello Board
- 
+#### Screenshot of Trello Board: 
+
   ![Trello Board Image](planning/user_stories/trello_board_001.png)
 
 ---
@@ -168,9 +168,7 @@
 
 ![MVP ERD](planning/erd/mvp_erd.png)
 
-
 ![ICEBOX ERD](planning/erd/icebox_erd.png)
-
 
 ---
 ---
@@ -182,28 +180,28 @@
 
   ### 📍 Mapping & Location
 
-    - *Leaflet.js + OpenStreetMap*: Embed lightweight maps and markers for saved restaurants. Fully open-source solution using browser/device geolocation for on device mapping, one-click/tap directions, restaurant locations and more.
+    - **Leaflet.js + OpenStreetMap**: Embed lightweight maps and markers for saved restaurants. Fully open-source solution using browser/device geolocation for on device mapping, one-click/tap directions, restaurant locations and more.
 
-    - Deep Linking for Apple and Google Maps
+    - **Deep Linking** for Apple and Google Maps
 
   ### 🍽 Restaurant Info APIs
 
-    *Yelp Fusion API:* Search businesses, autofill name/address/phone, fetch categories, ratings, photos, and Yelp links (5,000 free requests/day).
+    **Yelp Fusion API:** Search businesses, autofill name/address/phone, fetch categories, ratings, photos, and Yelp links (5,000 free requests/day).
   
-    *Nominatim API (OpenStreetMap):* Convert addresses to latitude/longitude for mapping and distance calculations. Free, open-source, cache-friendly.
+    **Nominatim API (OpenStreetMap)**: Convert addresses to latitude/longitude for mapping and distance calculations. Free, open-source, cache-friendly.
 
   ### 🚚 Food Delivery (Deep Linking Only)
 
-    *Uber Eats, DoorDash, GrubHub:*
+    **Uber Eats, DoorDash, GrubHub**:
   
       - Smart links to restaurant or dish pages.
       - No public APIs — handled via deep link URL schemes when available.
 
   ### 📧 Communication
       
-      - *SendGrid / Mailgun / Convert Kit*: Email for welcome, reset, digests, feature alerts
+    **SendGrid / Mailgun / Convert Kit**: 
 
-      
+      - Email for welcome, reset, digests, feature alerts, newsletters
 
 ---
 ---
