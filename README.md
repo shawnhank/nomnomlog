@@ -18,11 +18,11 @@
 ---
 ---
 
-## <a href="https://heroku.com" target="_blank">Deployed App Link Placeholder</a>
+**[Deployed App Link Placeholder](https://heroku.com)**
 
-## <a href="https://github.com" target="_blank">Screenshot Placeholder</a>
+**[Screenshot Placeholder](https://github.com)**
 
-## <a href="https://github.com" target="_blank">Back End Repo Link Placeholder</a>
+**[Back End Repo Link Placeholder](https://github.com)**
 
 ---
 ---
@@ -43,76 +43,75 @@
   
 ## Planning
 
+---
 
 ### Trello Board
 
-  **<a href="https://trello.com/b/0H9q21IY" target="_blank">View Public Trello Board in Browser</a>**
+  **[View Public Trello Board in Browser](https://trello.com/b/0H9q21IY)**
 
-  ### Screenshot of Trello Board: 
+  **Screenshot of Trello Board:**
 
-    ![Trello Board Image](planning/user_stories/trello_board_003.png)
+  ![Trello Board Image](planning/user_stories/trello_board_003.png)
 
----    
+---
 
 ### Documents
 
-  ### <a href="https://github.com/shawnhank/nomnomlog/blob/main/docs/core_features.md" target="_blank">Core Features List</a>
+   [Core Features List](docs/core_features.md)
 
-  ### <a href="https://github.com/shawnhank/nomnomlog/blob/main/docs/data_model.md" target="_blank">Data Model</a>
+   [Data Model](docs/data_model.md)
 
-  ### <a href="https://github.com/shawnhank/nomnomlog/blob/main/docs/crud_map.md" target="_blank">CRUD Map</a>
+   [CRUD Map](docs/crud_map.md)
 
-  ### <a href="https://github.com/shawnhank/nomnomlog/blob/main/docs/user_stories.md" target="_blank">User Stories</a>
+   [User Stories](docs/user_stories.md)
 
-  ### <a href="https://github.com/shawnhank/nomnomlog/blob/main/docs/future_enhancements.md" target="_blank">Future Enhancements</a>
-
----
+   [Future Enhancements](docs/future_enhancements.md)
 
 ### Entity Relationship Diagrams
-  
-  #### ![MVP ERD](planning/erd/mvp_erd.png)
-  
-  #### ![ICEBOX ERD](planning/erd/icebox_erd.png)
+
+   ![MVP ERD](planning/erd/mvp_erd.png)
+
+   ![ICEBOX ERD](planning/erd/icebox_erd.png)
 
 ---
 ---
 
-## 🔌 Attributions for External Services
+##  🔌 Attributions
 
   ### 📍 Mapping & Location
 
-    **Leaflet.js + OpenStreetMap**: Embed lightweight maps and markers for saved restaurants. Fully open-source solution using browser/device geolocation for on device mapping, one-click/tap directions, restaurant locations and more.
+  **Leaflet.js + OpenStreetMap**: Embed lightweight maps and markers for saved restaurants. Fully open-source solution using browser/device geolocation for on device mapping, one-click/tap directions, restaurant locations and more.
 
-    **Deep Links** for Apple and Google Maps
+  **Deep Linking** for Apple and Google Maps
 
   ### 🍽 Restaurant Info APIs
 
-    **Yelp Fusion API:** Search businesses, autofill name/address/phone, fetch categories, ratings, photos, and Yelp links (5,000 free requests/day).
+  **Yelp Fusion API:** Search businesses, autofill name/address/phone, fetch categories, ratings, photos, and Yelp links (5,000 free requests/day).
   
-    **Nominatim API (OpenStreetMap)**: Convert addresses to latitude/longitude for mapping and distance calculations. Free, open-source, cache-friendly.
+  **Nominatim API (OpenStreetMap)**: Convert addresses to latitude/longitude for mapping and distance calculations. Free, open-source, cache-friendly.
 
   ### 🚚 Food Delivery (Deep Linking Only)
 
-    **Uber Eats, DoorDash, GrubHub**:
+  **Uber Eats, DoorDash, GrubHub**:
   
-      - Smart links to restaurant or dish pages.
-        - No public APIs — handled via deep link URL schemes when available.
+    - Smart links to restaurant or dish pages.
+    - No public APIs — handled via deep link URL schemes when available.
 
-  ### 📧 Communication
+  ### 📧 Communications
       
-    **SendGrid / Mailgun / Convert Kit**: 
+  **SendGrid / Mailgun / Convert Kit**: 
 
     - Email for welcome, reset, digests, feature alerts, newsletters
 
-  ### 🎨 Diagrams & Wireframes
+  ### Diagramming and Wireframing
 
-    **<a href="https://lucidchart.com" target="_blank">Lucidchart Diagramming SaaS Software</a>**
+    **[Lucidchart.com Diagramming SaaS software](https://lucidchart.com) for Entity Relationship Diagrams**
 
-    **<a href="https://wireframe.cc" target="_blank">Wireframe.cc - Wireframing SaaS Software</a>**
-  
-  ### 🎨 Project Management
+    **[Wireframe.cc Wireframe Diagramming SaaS software](https://wireframe.cc) for Wireframes**
 
-    **<a href="https://trello.com" target="_blank">Trello Project Management SaaS Software for Kanban Board</a>**
+  ### Project Management
+   
+  **[Trello Project Management SaaS software](https://trello.com) for Kanban Board**
 
 ---
 ---
