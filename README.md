@@ -13,6 +13,7 @@
 </table>
 
 ---
+> NOTE: Use CMD + Click or CTRL+Click to open links in a new tab.
 --- 
 
 ## 📜 Intro
