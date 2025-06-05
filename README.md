@@ -4,10 +4,10 @@
       <img src="https://github.com/shawnhank/nomnomlog/blob/main/public/images/nnl_logo_v1_.png" width="150" alt="NomNomLog logo">
     </td>
     <td valign="middle" style="padding-left: 1em;">
-      <div align="center" margin-bottom="0.5em;">
+      <div align="center" valign="middle">
         <h1 style="margin: 0;">NomNomLog</h1>
       </div>
-      <div align="center" verticalign="middle">
+      <div align="center">
         <h3 style="margin: 0;">Remember Every Bite</h3>
       </div>
     </td>
