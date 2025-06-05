@@ -1,11 +1,13 @@
-<table style="border: none;">
+<table style="border: none; border-collapse: collapse;">
   <tr>
     <td style="border: none;">
-      <img src="https://github.com/shawnhank/nomnomlog/blob/main/public/images/nnl_logo_v1_.png" alt="NomNomLog logo" width="120">
+      <img src="https://raw.githubusercontent.com/shawnhank/nomnomlog/main/public/images/nnl_logo_v1_.png" alt="NomNomLog logo" width="120">
     </td>
-    <td style="vertical-align: middle; padding-left: 1em; border: none;">
-      <h1>NomNomLog</h1>
-      <h4 style="text-align: center;">Remember Every Bite</h4>
+    <td style="border: none; vertical-align: middle; padding-left: 1em;">
+      <div style="display: flex; flex-direction: column; align-items: flex-start;">
+        <h1 style="margin: 0;">NomNomLog</h1>
+        <h4 style="margin: 0;">Remember Every Bite</h4>
+      </div>
     </td>
   </tr>
 </table>
