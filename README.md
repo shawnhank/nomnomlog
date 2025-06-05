@@ -36,7 +36,7 @@
   | Backend | [Express](https://expressjs.com/) + [Node.js](https://nodejs.org/en) | REST API server |
   | Database | [MongoDB](https://www.mongodb.com/) + [Mongoose](https://mongoosejs.com/) | Data persistence and modeling |
   | Auth | [JWT](https://jwt.io/) + [bcrypt](https://www.npmjs.com/package/bcrypt) | Secure user sessions |
-  | Deployment | [Heroku](https://www.heroku.com/) / [SSD Nodes](https://www.ssdnodes.com/) | App Hosting |
+  | Deployment | [Heroku](https://www.heroku.com/) + [SSD Nodes](https://www.ssdnodes.com/) | App Hosting |
 
 
 ---
