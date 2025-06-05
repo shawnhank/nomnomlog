@@ -92,7 +92,9 @@
 ---
 ---
 
-### [Trello Board](https://trello.com/b/0H9q21IY)
+### [View Trello Board in Browser](https://trello.com/b/0H9q21IY)
+
+### ![Trello Board Image](planning/user_stories/trello_board_001.png)
 
 ---
 ---
