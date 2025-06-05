@@ -31,12 +31,13 @@
 
   | Layer | Technology | Purpose |
   |-------|------------|---------|
-  | Frontend | HTML, JS, React (Vite) | Core UI rendering |
-  | Styling | CSS Grid / Flexbox / Bootstrap / Tailwind | Responsive layout|
-  | Backend | Express + Node.js | REST API server |
-  | Database | MongoDB + Mongoose | Data persistence and modeling |
-  | Auth | JWT & bcrypt | Secure user sessions |
-  | Deployment | Heroku / Render / Railway / Other (e.g. local hosting, VPS, AWS, GCP, Azure, etc.)) | App Hosting |
+  | Frontend | HTML, JS, [React](https://react.dev/), [Vite](https://vite.dev/) | Core UI rendering |
+  | Styling | [CSS Grid](https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/CSS_layout/Grids) / [Flexbox](https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/CSS_layout/Flexbox) / [Bootstrap](https://getbootstrap.com/) / [Tailwind](https://tailwindcss.com/) | Responsive layout|
+  | Backend | [Express](https://expressjs.com/) + [Node.js](https://nodejs.org/en) | REST API server |
+  | Database | [MongoDB](https://www.mongodb.com/) + [Mongoose](https://mongoosejs.com/) | Data persistence and modeling |
+  | Auth | [JWT](https://jwt.io/) & [bcrypt](https://www.npmjs.com/package/bcrypt) | Secure user sessions |
+  | Deployment | [Heroku](https://www.heroku.com/) / [SSD Nodes](https://www.ssdnodes.com/) | App Hosting |
+
 
 ---
 ---
@@ -80,15 +81,15 @@
 
   ### 📍 Mapping & Location
 
-  **Leaflet.js + OpenStreetMap**: Embed lightweight maps and markers for saved restaurants. Fully open-source solution using browser/device geolocation for on device mapping, one-click/tap directions, restaurant locations and more.
+  **[Leaflet.js](https://leafletjs.com/) + [OpenStreetMap](https://www.openstreetmap.org/)**: Embed lightweight maps and markers for saved restaurants. Fully open-source solution using browser/device geolocation for on device mapping, one-click/tap directions, restaurant locations and more.
 
   **Deep Linking** for Apple and Google Maps
 
   ### 🍽 Restaurant Info APIs
 
-  **Yelp Fusion API:** Search businesses, autofill name/address/phone, fetch categories, ratings, photos, and Yelp links (5,000 free requests/day).
+  **[Yelp Fusion API](https://docs.developer.yelp.com/docs/getting-started)** for search , autofill name/address/phone, fetch categories, ratings, photos, and links (5,000 free requests/day)
   
-  **Nominatim API (OpenStreetMap)**: Convert addresses to latitude/longitude for mapping and distance calculations. Free, open-source, cache-friendly.
+  **[Nominatim API (OpenStreetMap)](https://nominatim.org/)**: Convert addresses to latitude/longitude for mapping and distance calculations. Free, open-source, cache-friendly.
 
   ### 🚚 Food Delivery (Deep Linking Only)
 
@@ -99,18 +100,16 @@
 
   ### 📧 Communications
       
-  **SendGrid / Mailgun / Convert Kit**: 
-
-    - Email for welcome, reset, digests, feature alerts, newsletters
+  **[Convert Kit](https://kit.com/)** for email for welcome, reset, digests, feature alerts, newsletters
 
   ### Diagramming and Wireframing
 
-    **[Lucidchart.com Diagramming SaaS software](https://lucidchart.com) for Entity Relationship Diagrams**
+  **[Lucidchart.com Diagramming SaaS software](https://lucidchart.com) for Entity Relationship Diagrams**
 
-    **[Wireframe.cc Wireframe Diagramming SaaS software](https://wireframe.cc) for Wireframes**
+  **[Wireframe.cc Wireframe Diagramming SaaS software](https://wireframe.cc) for Wireframes**
 
   ### Project Management
-   
+
   **[Trello Project Management SaaS software](https://trello.com) for Kanban Board**
 
 ---
