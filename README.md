@@ -6,7 +6,7 @@
     <td valign="middle" style="padding-left: 1em;">
       <div align="center">
         <h1 style="margin: 0;">NomNomLog</h1>
-        <h3 style="margin: 0;">Remember Every Bite</h3>
+        <h4 style="margin: 0;">Remember Every Bite</h4>
       </div>
     </td>
   </tr>
