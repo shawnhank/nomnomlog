@@ -14,19 +14,19 @@
 
 ---
 > NOTE: Use CMD + Click or CTRL+Click to open links in a new tab.
---- 
+---
 
 ## 📜 Intro
 
-  Picture this: You had a great meal at a restaurant a couple of months ago. You were having such a good time that you forgot to make a note about the meal.  Now you want a repeat experience, but you can't remember the restaurant. You look for a receipt and can't find it. You look at your calendar and find the restaurant, but not what you ate. What do you do?
+Picture this: You had a great meal at a restaurant a couple of months ago. You were having such a good time that you forgot to make a note about the meal.  Now you want a repeat experience, but you can't remember the restaurant. You look for a receipt and can't find it. You look at your calendar and find the restaurant, but not what you ate. What do you do?
 
-  Enter NomNomLog - your private dining diary that helps you track, rate, and reflect on meals you've eaten at restaurants or had delivered.
+Enter NomNomLog - your private dining diary that helps you track, rate, and reflect on meals you've eaten at restaurants or had delivered.
 
-  It's perfect for frequent diners, business travelers, and foodies who want to make smarter decisions when dining out or ordering in.  While delivery apps and review sites like Uber Eats, DoorDash, GrubHub, Yelp, Google, and OpenTable track your order history, they lack the features that let you add personal notes about what was good enought to reorder and what you'll want to stay away from in the future.
+It's perfect for frequent diners, business travelers, and foodies who want to make smarter decisions when dining out or ordering in.  While delivery apps and review sites like Uber Eats, DoorDash, GrubHub, Yelp, Google, and OpenTable track your order history, they lack the features that let you add personal notes about what was good enought to reorder and what you'll want to stay away from in the future.
 
-  NomNomLog is your personal, and fully private dining diary — a smarter way to remember the meals you liked and the meals you didn't. And because it's private, you can be as candid and "real" as you want to be about all aspects of the experience.  Replace your scattered notes, post-its, emails, calendar entries, spreadsheets, and remove all that friction searchable, organized, fast and private history of all the meals you've eaten. 
+NomNomLog is your personal, and fully private dining diary — a smarter way to remember the meals you liked and the meals you didn't. And because it's private, you can be as candid and "real" as you want to be about all aspects of the experience.  Replace your scattered notes, post-its, emails, calendar entries, spreadsheets, and remove all that friction searchable, organized, fast and private history of all the meals you've eaten. 
 
-  Whether dining in, carrying out, or having it delivered, NomNomLog is The smarter way to remember what you ate, and why you liked it.
+Whether dining in, carrying out, or having it delivered, NomNomLog is The smarter way to remember what you ate, and why you liked it.
 
 ---
 ---
@@ -54,7 +54,7 @@
 
 ---
 ---
-  
+
 ## Planning
 
 ---
@@ -65,7 +65,7 @@
 
   **Screenshot of Trello Board:**
 
-  ![Trello Board Image](planning/user_stories/trello_board_003.png)
+![Trello Board Image](planning/user_stories/trello_board_004.png)
 
 ---
 
@@ -83,9 +83,11 @@
 
 ### Entity Relationship Diagrams
 
-   ![MVP ERD](planning/erd/mvp_erd.png)
+###    ![MVP ERD](planning/erd/mvp_erd.png)
 
    ![ICEBOX ERD](planning/erd/icebox_erd.png)
+
+![ICEBOX ERD](planning/erd/lookup_erd.png)
 
 ---
 ---
@@ -94,37 +96,33 @@
 
   ### 📍 Mapping & Location
 
-  **[Leaflet.js](https://leafletjs.com/) + [OpenStreetMap](https://www.openstreetmap.org/)**: Embed lightweight maps and markers for saved restaurants. Fully open-source solution using browser/device geolocation for on device mapping, one-click/tap directions, restaurant locations and more.
+> **[Leaflet.js](https://leafletjs.com/) + [OpenStreetMap](https://www.openstreetmap.org/)**: Embed lightweight maps and markers for saved restaurants. Fully open-source solution using browser/device geolocation for on device mapping, one-click/tap directions, restaurant locations and more.
 
-  **Apple Maps** and **Google Maps**
-
-    - No public APIs — handled via deep link URL schemes.
+> **Apple Maps** and **Google Maps**: No public APIs — handled via deep link URL schemes.
 
   ### 🍽 Restaurant Info APIs
 
-  **[Yelp Fusion API](https://docs.developer.yelp.com/docs/getting-started)** for search , autofill name/address/phone, fetch categories, ratings, photos, and links (5,000 free requests/day)
-  
-  **[Nominatim API (OpenStreetMap)](https://nominatim.org/)**: Convert addresses to latitude/longitude for mapping and distance calculations. Free, open-source, cache-friendly.
+> **[Yelp Fusion API](https://docs.developer.yelp.com/docs/getting-started)** for search , autofill name/address/phone, fetch categories, ratings, photos, and links (5,000 free requests/day)
+
+> **[Nominatim API (OpenStreetMap)](https://nominatim.org/)**: Convert addresses to latitude/longitude for mapping and distance calculations. Free, open-source, cache-friendly.
 
   ### 🚚 Food Delivery (Deep Linking Only)
 
-  **Uber Eats, DoorDash, GrubHub**:
-  
-    - No public APIs — handled via deep link URL schemes.
+>  **Uber Eats, DoorDash, GrubHub**:  - No public APIs — handled via deep link URL schemes.
 
   ### 📧 Communications
-      
-  **[Convert Kit](https://kit.com/)** for email for welcome, reset, digests, feature alerts, newsletters
 
-  ### Diagramming and Wireframing
+>  **[Convert Kit](https://kit.com/)** for email for welcome, reset, digests, feature alerts, newsletters
 
-  **[Lucidchart.com Diagramming SaaS software](https://lucidchart.com) for Entity Relationship Diagrams**
+  ### 🗺️ Diagramming and Wireframing
 
-  **[Wireframe.cc Diagramming SaaS software](https://wireframe.cc) for Wireframes**
+> **[Lucidchart.com Diagramming SaaS software](https://lucidchart.com) for Entity Relationship Diagrams**
 
-  ### Project Management
+> **[Wireframe.cc Diagramming SaaS software](https://wireframe.cc) for Wireframes**
 
-  **[Trello Project Management SaaS software](https://trello.com) for Kanban Boards**
+  ### 📊 Project Management
+
+> **[Trello Project Management SaaS software](https://trello.com) for Kanban Boards**
 
 ---
 ---
