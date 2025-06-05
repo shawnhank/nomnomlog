@@ -1,4 +1,14 @@
-#  <img src="https://raw.githubusercontent.com/shawnhank/nomnomlog/main/public/images/nnl_logo_v1.png" alt="NomNomLog logo" width="120"> NomNomLog - Remember Every Bite.
+<table>
+  <tr>
+    <td>
+      <img src="https://raw.githubusercontent.com/shawnhank/nomnomlog/main/public/images/nnl_logo_v1.png" alt="NomNomLog logo" width="120">
+    </td>
+    <td style="vertical-align: middle; padding-left: 1em;">
+      <h1>NomNomLog</h1>
+      <h3><em>Remember Every Bite.</em></h3>
+    </td>
+  </tr>
+</table>
 
 ---
 ---
