@@ -1,4 +1,4 @@
-## 🔗 RESTful Routes Table (NomNomLog – MVP + Icebox Features)
+## 🗺️ RESTful Routes Table (NomNomLog – MVP + Icebox Features)
 
 ### `users` routes
 
@@ -78,3 +78,65 @@
   | `DELETE` | `/restaurant-tags/:id`            | Remove restaurant–tag relationship by ID   |
   | `GET`    | `/restaurants/:restaurantId/tags` | List tags linked to a specific restaurant  |
   | `GET`    | `/tags/:tagId/restaurants`        | List restaurants linked to a specific tag  |
+
+
+
+## 🗾 Additional RESTful Routes for Lookup Tables
+
+### `mealMethods` routes
+
+| Method   | Path                | Description                |
+| -------- | ------------------- | -------------------------- |
+| `GET`    | `/meal-methods`     | List all meal methods      |
+| `POST`   | `/meal-methods`     | Create new meal method     |
+| `DELETE` | `/meal-methods/:id` | Delete a meal method by ID |
+
+---
+
+### `mealCategories` routes
+
+| Method   | Path                   | Description                  |
+| -------- | ---------------------- | ---------------------------- |
+| `GET`    | `/meal-categories`     | List all meal categories     |
+| `POST`   | `/meal-categories`     | Create new meal category     |
+| `DELETE` | `/meal-categories/:id` | Delete a meal category by ID |
+
+---
+
+### `restaurantCategories` routes
+
+| Method   | Path                         | Description                      |
+| -------- | ---------------------------- | -------------------------------- |
+| `GET`    | `/restaurant-categories`     | List all restaurant categories   |
+| `POST`   | `/restaurant-categories`     | Create new restaurant category   |
+| `DELETE` | `/restaurant-categories/:id` | Delete restaurant category by ID |
+
+---
+
+### `deliveryServices` routes
+
+| Method   | Path                     | Description                   |
+| -------- | ------------------------ | ----------------------------- |
+| `GET`    | `/delivery-services`     | List all delivery services    |
+| `POST`   | `/delivery-services`     | Create new delivery service   |
+| `DELETE` | `/delivery-services/:id` | Delete delivery service by ID |
+
+---
+
+### `deliveryTiers` routes
+
+| Method   | Path                  | Description                |
+| -------- | --------------------- | -------------------------- |
+| `GET`    | `/delivery-tiers`     | List all delivery tiers    |
+| `POST`   | `/delivery-tiers`     | Create new delivery tier   |
+| `DELETE` | `/delivery-tiers/:id` | Delete delivery tier by ID |
+
+---
+
+### `captureStatuses` routes
+
+| Method   | Path                    | Description                     |
+| -------- | ----------------------- | ------------------------------- |
+| `GET`    | `/capture-statuses`     | List all voice capture statuses |
+| `POST`   | `/capture-statuses`     | Create new voice capture status |
+| `DELETE` | `/capture-statuses/:id` | Delete capture status by ID     |
