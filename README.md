@@ -1,11 +1,11 @@
-<table>
+<table style="border: none;">
   <tr>
-    <td>
+    <td style="border: none;">
       <img src="https://raw.githubusercontent.com/shawnhank/nomnomlog/main/public/images/nnl_logo_v1.png" alt="NomNomLog logo" width="120">
     </td>
-    <td style="vertical-align: middle; padding-left: 1em; border: none;">
+    <td style="vertical-align: middle; padding-left: 1em; style=border: none;">
       <h1>NomNomLog</h1>
-      <h4>Remember Every Bite.</h4>
+      <h4>Remember Every Bite</h4>
     </td>
   </tr>
 </table>
