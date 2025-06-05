@@ -46,7 +46,7 @@
 
 ### Trello Board
 
-  ### <a href="https://trello.com/b/0H9q21IY" target="_blank">View Public Trello Board in Browser</a>
+  **<a href="https://trello.com/b/0H9q21IY" target="_blank">View Public Trello Board in Browser</a>**
 
   ### Screenshot of Trello Board: 
 
