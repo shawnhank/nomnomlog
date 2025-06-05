@@ -18,11 +18,11 @@
 ---
 ---
 
-### Deployed App Link Placeholder
+## <a href="https://heroku.com" target="_blank">Deployed App Link Placeholder</a>
 
-### Screenshot Placeholder
+## <a href="https://github.com" target="_blank">Screenshot Placeholder</a>
 
-### Back End Repo Link Placeholder
+## <a href="https://github.com" target="_blank">Back End Repo Link Placeholder</a>
 
 ---
 ---
@@ -46,67 +46,73 @@
 
 ### Trello Board
 
-  ### [View Public Trello Board in Browser](https://trello.com/b/0H9q21IY)
+  ### <a href="https://trello.com/b/0H9q21IY" target="_blank">View Public Trello Board in Browser</a>
 
   ### Screenshot of Trello Board: 
 
     ![Trello Board Image](planning/user_stories/trello_board_003.png)
 
+---    
+
 ### Documents
 
-  #### [Core Features List](docs/core_features.md)
+  ### <a href="https://github.com/shawnhank/nomnomlog/blob/main/docs/core_features.md" target="_blank">Core Features List</a>
 
-  #### [Data Model](docs/data_model.md)
+  ### <a href="https://github.com/shawnhank/nomnomlog/blob/main/docs/data_model.md" target="_blank">Data Model</a>
 
-  #### [CRUD Map](docs/crud_map.md)
+  ### <a href="https://github.com/shawnhank/nomnomlog/blob/main/docs/crud_map.md" target="_blank">CRUD Map</a>
 
-  #### [User Stories](docs/user_stories.md)
+  ### <a href="https://github.com/shawnhank/nomnomlog/blob/main/docs/user_stories.md" target="_blank">User Stories</a>
 
-  #### [Future Enhancements](docs/future_enhancements.md)
+  ### <a href="https://github.com/shawnhank/nomnomlog/blob/main/docs/future_enhancements.md" target="_blank">Future Enhancements</a>
+
+---
 
 ### Entity Relationship Diagrams
-
+  
   #### ![MVP ERD](planning/erd/mvp_erd.png)
-
+  
   #### ![ICEBOX ERD](planning/erd/icebox_erd.png)
 
 ---
 ---
 
-## Attributions
+## 🔌 Attributions for External Services
 
-  ###  🔌 External Services & Integrations
+  ### 📍 Mapping & Location
 
-    #### 📍 Mapping & Location
+    **Leaflet.js + OpenStreetMap**: Embed lightweight maps and markers for saved restaurants. Fully open-source solution using browser/device geolocation for on device mapping, one-click/tap directions, restaurant locations and more.
 
-    - **Leaflet.js + OpenStreetMap**: Embed lightweight maps and markers for saved restaurants. Fully open-source solution using browser/device geolocation for on device mapping, one-click/tap directions, restaurant locations and more.
+    **Deep Links** for Apple and Google Maps
 
-    - **Deep Linking** for Apple and Google Maps
-
-  #### 🍽 Restaurant Info APIs
+  ### 🍽 Restaurant Info APIs
 
     **Yelp Fusion API:** Search businesses, autofill name/address/phone, fetch categories, ratings, photos, and Yelp links (5,000 free requests/day).
   
     **Nominatim API (OpenStreetMap)**: Convert addresses to latitude/longitude for mapping and distance calculations. Free, open-source, cache-friendly.
 
-  #### 🚚 Food Delivery (Deep Linking Only)
+  ### 🚚 Food Delivery (Deep Linking Only)
 
     **Uber Eats, DoorDash, GrubHub**:
   
       - Smart links to restaurant or dish pages.
-      - No public APIs — handled via deep link URL schemes when available.
+        - No public APIs — handled via deep link URL schemes when available.
 
-  #### 📧 Communication
+  ### 📧 Communication
       
     **SendGrid / Mailgun / Convert Kit**: 
 
-      - Email for welcome, reset, digests, feature alerts, newsletters
+    - Email for welcome, reset, digests, feature alerts, newsletters
 
-  #### [Lucidchart.com Diagramming SaaS tool](https://lucidchart.com) for Entity Relationship Diagrams
+  ### 🎨 Diagrams & Wireframes
 
-  #### [Wireframe.cc Wireframe Diagramming SaaS tool](https://wireframe.cc) for Wireframes
+    **<a href="https://lucidchart.com" target="_blank">Lucidchart Diagramming SaaS Software</a>**
 
-  #### [Trello Project Management SaaS tool](https://trello.com) for Kanban Board
+    **<a href="https://wireframe.cc" target="_blank">Wireframe.cc - Wireframing SaaS Software</a>**
+  
+  ### 🎨 Project Management
+
+    **<a href="https://trello.com" target="_blank">Trello Project Management SaaS Software for Kanban Board</a>**
 
 ---
 ---
