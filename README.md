@@ -92,9 +92,13 @@
 ---
 ---
 
-### [View Trello Board in Browser](https://trello.com/b/0H9q21IY)
+### Trello Board
 
-### ![Trello Board Image](planning/user_stories/trello_board_001.png)
+#### [View Public Trello Board in Browser](https://trello.com/b/0H9q21IY)
+
+#### Screenshot of Trello Board
+ 
+  ![Trello Board Image](planning/user_stories/trello_board_001.png)
 
 ---
 ---
