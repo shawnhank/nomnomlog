@@ -27,6 +27,8 @@ app.use('/api/posts', require('./routes/posts'));
 app.use('/api/restaurants', require('./routes/restaurants'));
 app.use('/api/tags', require('./routes/tags'));
 app.use('/api/restaurant-tags', require('./routes/restaurantTags'));
+app.use('/api/meals', require('./routes/meals'));
+app.use('/api/meal-tags', require('./routes/mealTags'));
 
 
 // Use a "catch-all" route to deliver the frontend's production index.html

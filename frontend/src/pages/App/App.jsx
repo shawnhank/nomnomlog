@@ -11,6 +11,7 @@ import RestaurantListPage from '../RestaurantListPage/RestaurantListPage';
 import RestaurantDetailPage from '../RestaurantDetailPage/RestaurantDetailPage';
 import NewRestaurantPage from '../NewRestaurantPage/NewRestaurantPage';
 import EditRestaurantPage from '../EditRestaurantPage/EditRestaurantPage';
+import MealListPage from '../MealListPage/MealListPage';
 import NavBar from '../../components/NavBar/NavBar';
 import './App.css';
 
@@ -33,6 +34,10 @@ export default function App() {
             <Route path="/restaurants/new" element={<NewRestaurantPage />} />
             <Route path="/restaurants/:id" element={<RestaurantDetailPage />} />
             <Route path="/restaurants/:id/edit" element={<EditRestaurantPage />} />
+            
+            {/* Meal routes */}
+            <Route path="/meals" element={<MealListPage />} />
+            {/* Add other meal routes as needed */}
             
             <Route path="*" element={null} />
           </Routes>

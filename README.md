@@ -83,11 +83,11 @@ Whether dining in, carrying out, or having it delivered, NomNomLog is The smarte
 
 ### Entity Relationship Diagrams
 
-###    ![MVP ERD](planning/erd/mvp_erd_v2.png)
+###    ![MVP ERD](planning/erd/mvp_erd_v5.png)
 
-   ![ICEBOX ERD](planning/erd/icebox_erd_v2.png)
+   ![ICEBOX ERD](planning/erd/icebox_erd_v5.png)
 
-![ICEBOX ERD](planning/erd/lookup_erd_v2.png)
+![ICEBOX ERD](planning/erd/lookup_erd_v5.png)
 
 ---
 ---
