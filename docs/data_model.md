@@ -68,10 +68,13 @@ Every form you build, every API you design, and every page you render depends on
   ```
 User (MVP)
   - _id : ObjectId (PK)
+  - fname : string (optional)
+  - lname : string (optional)
   - email : string
   - passwordHash : string
   - socialLoginId : string (optional)
   - createdAt : date
+  - updatedAt : date
 
 Restaurant (MVP)
   - _id : ObjectId (PK)
@@ -80,33 +83,27 @@ Restaurant (MVP)
   - address : string (optional)
   - phone : string (optional)
   - website : string (optional)
+  - lat : number (optional)
+  - long : number (optional)
   - categoryId : ObjectId (FK → RestaurantCategory)
+  - createdAt : date
+  - updatedAt : date
 
 Meal  (MVP)
   - _id : ObjectId (PK)
   - userId : ObjectId (FK → User)
   - restaurantId : ObjectId (FK → Restaurant)
   - mealName : string
+  - mealCategoryId : ObjectId (FK → MealCategory)
+  - mealMethodId : ObjectId (FK → MealMethod)
   - thumbsRating : boolean
   - starRating : number (optional)
   - favorite : boolean
   - photoUrl : string (optional)
   - notes : string
   - dateEaten : date
-  - mealCategoryId : ObjectId (FK → MealCategory)
-  - mealMethodId : ObjectId (FK → MealMethod)
-
-DeliveryLog (MVP)
-  - _id : ObjectId (PK)
-  - userId : ObjectId (FK → User)
-  - mealId : ObjectId (FK → Meal)
-  - deliveryServiceId : ObjectId (FK → DeliveryService)
-  - serviceTierId : ObjectId (FK → DeliveryTier)
-  - deliveryFee : number
-  - tip : number
-  - tax : number
-  - discountAmount : number
-  - totalCost : number
+  - createdAt : date
+  - updatedAt : date
 
 Tag (MVP)
   - _id : ObjectId (PK)
@@ -123,6 +120,20 @@ RestaurantTag (Join Table)
   - restaurantId : ObjectId (FK → Restaurant)
   - tagId : ObjectId (FK → Tag)
 
+DeliveryLog (Icebox)
+  - _id : ObjectId (PK)
+  - userId : ObjectId (FK → User)
+  - mealId : ObjectId (FK → Meal)
+  - deliveryServiceId : ObjectId (FK → DeliveryService)
+  - serviceTierId : ObjectId (FK → DeliveryTier)
+  - deliveryFee : number
+  - tip : number
+  - tax : number
+  - discountAmount : number
+  - totalCost : number
+  - createdAt : date
+  - updatedAt : date
+
 VoiceCapture (Icebox)
   - _id : ObjectId (PK)
   - userId : ObjectId (FK → User)
@@ -133,6 +144,7 @@ VoiceCapture (Icebox)
   - transcript : string
   - audioFileUrl : string
   - createdAt : date
+  - updatedAt : date
 
 AIQuery (Icebox)
   - _id : ObjectId (PK)
@@ -142,6 +154,7 @@ AIQuery (Icebox)
   - filters : string
   - resultIds : string
   - createdAt : date
+  - updatedAt : date
 
 AnalyticsLog (Icebox)
   - _id : ObjectId (PK)
@@ -150,6 +163,45 @@ AnalyticsLog (Icebox)
   - targetType : string
   - targetId : string
   - timestamp : date
+  - createdAt : date
+  - updatedAt : date
+  
+RestaurantCategory (Lookup Table)
+  - _id : ObjectId (PK)
+  - yelpSlug : string
+  - displayName : string
+  
+RestaurantCategory (Lookup Table)
+  - _id : ObjectId (PK)
+  - yelpSlug : string
+  - displayName : string
+
+MealCategory (Lookup Table)
+  - _id : ObjectId (PK)
+  - name : string
+
+MealMethod (Lookup Table)
+  - _id : ObjectId (PK)
+  - name : string
+
+DeliveryService (Lookup Table)
+  - _id : ObjectId (PK)
+  - name : string
+  - description : string
+  - isActive : boolean
+  
+DeliveryTier (Lookup Table)
+  - _id : ObjectId (PK)
+  - name : string
+  - serviceId : ObjectId (FK → DeliveryService)
+  - isActive : boolean
+  
+CaptureStatus (Lookup Table)
+  - _id : ObjectId (PK)
+  - label : string
+  - code : ObjectId (FK → VoiceCapture)
+  - isActive : boolean
+
   ```
 
 
