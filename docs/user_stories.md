@@ -44,7 +44,7 @@
 ---
 ---
 
-  ### 🛰 Icebox External Services & Smart Features
+  ### 🧊  Icebox External Services & Smart Features
 
     1.  As a user, I want restaurant fields to auto-fill using Google or Yelp or other API, so that I don’t have to type addresses or phone numbers.
     2.  As a user, I want to see Yelp data like categories or ratings when I add a restaurant, so that I can get more context.
@@ -58,4 +58,29 @@
     10. As a user, I want the app to suggest “nearby favorites” based on GPS, so that I can eat something I like.
     11. As a user, I want onboarding and tooltips to guide me, so that I understand how to use each feature.
     12. As a user, I want the app to occasionally nudge me with prompts like “Tried anything good lately?”, so that I build the habit of logging meals.
+    13. As a user, I want to upgrade my account to a Pro plan via Stripe, so that I can unlock premium features like voice capture or AI filters.
+    14. As a user, I want to downgrade my account to cancel premium features, so that I stop future billing.
+    15. As a user, I want to view a list of all previous invoices or receipts, so that I can track past payments and check plan details.
+    16. As a user, I want to contact support easily, so that I can get help when I need it.
+
+
+
+## **🧊  Icebox Admin / Dev User Stories**
+
+```
+1. **As a developer**, I want to manage lookup tables (like Meal Categories and Delivery Services), so that I can ensure consistency across dropdowns and filters.
+2. **As an admin**, I want to activate or deactivate specific lookup options (like Meal Methods or Capture Statuses), so that users only see valid choices during form entry.
+3. **As a developer**, I want to view and audit AI queries submitted by users, so that I can improve parsing accuracy and NLP reliability over time.
+4. **As an admin**, I want a voice capture management panel to view all audio transcripts and manually update their status if needed, so that I can troubleshoot failures or incomplete logs.
+5.	As an admin, I want to search and manage user accounts, so that I can respond to support issues and moderate the platform.
+6.	As an admin, I want to deactivate or delete user accounts, so that I can enforce terms of service and handle account removal requests.
+7.	As a developer, I want to assign user roles (e.g., admin, tester, user), so that access to management tools can be securely controlled.
+8.	As a user, I want to view my billing history and invoices, so that I can track my payments and plan changes.
+9.	As an admin, I want to access and manage Stripe billing events (subscriptions, charges, refunds), so that I can support users with payment issues.
+10.	As a developer, I want to merge or clean up duplicate tags (e.g., “taco” vs. “tacos”), so that user data remains consistent and searchable.
+11.	As an admin, I want to export logs and activity data (e.g., meals, AI queries, delivery costs), so that I can perform audits or usage analysis.
+12.	As a developer, I want to monitor the app’s system health and service status, so that I can respond quickly to outages or API errors.
+```
+
+
 

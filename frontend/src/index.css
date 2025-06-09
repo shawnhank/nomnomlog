@@ -1,0 +1,83 @@
+:root {
+  font-family: Arial, Helvetica, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color: #1a1a1a;
+  background-color: whitesmoke;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+}
+
+h1,
+h2 {
+  text-align: center;
+}
+
+button {
+  border: 0.5vmin solid #1a1a1a;
+  border-radius: 0.5vmin;
+  padding: 0.8vmin;
+  font-size: 2vmin;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #1a1a1a;
+  color: whitesmoke;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: white;
+  color: #1a1a1a;
+  border-color: #1a1a1a;
+}
+
+button:disabled {
+  background-color: grey;
+}
+
+form {
+  display: grid;
+  gap: 1.2vmin;
+  padding: 4vmin;
+  border: 0.5vmin solid #1a1a1a;
+  border-radius: 1vmin;
+}
+
+input,
+select,
+textarea {
+  padding: 0.7vmin;
+  font-size: 2vmin;
+  border: 0.3vmin solid #1a1a1a;
+  border-radius: 0.5vmin;
+}
+
+form>button:last-child {
+  margin-top: 2vmin;
+}
+
+label {
+  font-size: 2vmin;
+  font-weight: bold;
+}
+
+h2 {
+  text-align: center;
+}
+
+.error-message {
+  color: rgb(166, 29, 29);
+}

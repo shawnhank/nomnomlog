@@ -1,0 +1,30 @@
+.NavBar {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 2vmin;
+  font-size: 2vmin;
+}
+
+.NavBar {
+  a {
+    border-radius: 0.8vmin;
+    padding: 0.5vmin 1.5vmin;
+    text-decoration: none;
+    color: #1a1a1a;
+  }
+
+  a:hover {
+    background-color: #1a1a1a;
+    color: whitesmoke;
+  }
+
+  a.active {
+    background-color: rebeccapurple;
+    color: whitesmoke;
+  }
+
+  span {
+    color: rgb(108, 9, 87);
+  }
+}
