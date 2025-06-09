@@ -86,7 +86,6 @@ Restaurant (MVP)
   - website : string (optional)
   - lat : number (optional)
   - long : number (optional)
-  - categoryId : ObjectId (FK → RestaurantCategory)
   - createdAt : date
   - updatedAt : date
 

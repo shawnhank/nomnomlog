@@ -1,0 +1,158 @@
+.RestaurantDetailPage {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 15px;
+}
+
+.detail-header h1 {
+  margin: 0;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-edit, .btn-delete {
+  padding: 8px 15px;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-edit {
+  background-color: #4285f4;
+  color: white;
+  border: none;
+}
+
+.btn-delete {
+  background-color: #fff;
+  color: #d9534f;
+  border: 1px solid #d9534f;
+}
+
+.btn-edit:hover {
+  background-color: #3367d6;
+}
+
+.btn-delete:hover {
+  background-color: #d9534f;
+  color: white;
+}
+
+.restaurant-details {
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.detail-item {
+  margin-bottom: 12px;
+  display: flex;
+  align-items: baseline;
+}
+
+.label {
+  font-weight: bold;
+  width: 100px;
+  color: #555;
+}
+
+.category-tag {
+  display: inline-block;
+  background-color: #f0f0f0;
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-size: 0.9em;
+}
+
+.back-link {
+  display: inline-block;
+  margin-top: 20px;
+  color: #4285f4;
+  text-decoration: none;
+}
+
+.back-link:hover {
+  text-decoration: underline;
+}
+
+/* Delete confirmation modal */
+.delete-confirm-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 25px;
+  border-radius: 8px;
+  max-width: 500px;
+  width: 90%;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.modal-content h2 {
+  margin-top: 0;
+  color: #d9534f;
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.btn-cancel, .btn-confirm-delete {
+  padding: 8px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.btn-cancel {
+  background-color: #f8f9fa;
+  border: 1px solid #ddd;
+  color: #333;
+}
+
+.btn-confirm-delete {
+  background-color: #d9534f;
+  border: none;
+  color: white;
+}
+
+/* Loading and error states */
+.loading, .error, .not-found {
+  text-align: center;
+  padding: 40px 20px;
+  font-size: 18px;
+}
+
+.error {
+  color: #d9534f;
+}
