@@ -7,6 +7,10 @@ import NewPostPage from '../NewPostPage/NewPostPage';
 import SignUpPage from '../SignUpPage/SignUpPage';
 import LogInPage from '../LogInPage/LogInPage';
 import ProfilePage from '../ProfilePage/ProfilePage';
+import RestaurantListPage from '../RestaurantListPage/RestaurantListPage';
+import RestaurantDetailPage from '../RestaurantDetailPage/RestaurantDetailPage';
+import NewRestaurantPage from '../NewRestaurantPage/NewRestaurantPage';
+import EditRestaurantPage from '../EditRestaurantPage/EditRestaurantPage';
 import NavBar from '../../components/NavBar/NavBar';
 import './App.css';
 
@@ -23,6 +27,13 @@ export default function App() {
             <Route path="/posts" element={<PostListPage />} />
             <Route path="/posts/new" element={<NewPostPage />} />
             <Route path="/profile" element={<ProfilePage user={user} setUser={setUser} />} />
+            
+            {/* Restaurant routes */}
+            <Route path="/restaurants" element={<RestaurantListPage />} />
+            <Route path="/restaurants/new" element={<NewRestaurantPage />} />
+            <Route path="/restaurants/:id" element={<RestaurantDetailPage />} />
+            <Route path="/restaurants/:id/edit" element={<EditRestaurantPage />} />
+            
             <Route path="*" element={null} />
           </Routes>
         ) : (

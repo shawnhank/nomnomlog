@@ -24,6 +24,8 @@ app.use(require('./middleware/checkToken'));
 // API Routes
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/posts', require('./routes/posts'));
+app.use('/api/restaurants', require('./routes/restaurants'));
+app.use('/api/restaurant-categories', require('./routes/restaurantCategories'));
 
 
 // Use a "catch-all" route to deliver the frontend's production index.html

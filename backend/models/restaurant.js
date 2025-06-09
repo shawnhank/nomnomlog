@@ -13,7 +13,14 @@ const restaurantSchema = new Schema({
   },
   address: String,
   phone: String,
-  website: String
+  website: String,
+  // New fields based on updated data model
+  lat: Number,
+  long: Number,
+  categoryId: {
+    type: Schema.Types.ObjectId,
+    ref: 'RestaurantCategory'
+  }
 }, {
   timestamps: true
 });

@@ -73,6 +73,7 @@ User (MVP)
   - email : string
   - passwordHash : string
   - socialLoginId : string (optional)
+  - isAdmin : boolean
   - createdAt : date
   - updatedAt : date
 

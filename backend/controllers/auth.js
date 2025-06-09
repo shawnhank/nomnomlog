@@ -25,6 +25,11 @@ async function logIn(req, res) {
 
 async function signUp(req, res) {
   try {
+    // If fname and lname are provided but name isn't, create a name from them
+    if (!req.body.name && (req.body.fname || req.body.lname)) {
+      req.body.name = [req.body.fname, req.body.lname].filter(Boolean).join(' ');
+    }
+    
     const user = await User.create(req.body);
     const token = createJWT(user);
     res.json(token);
@@ -36,11 +41,21 @@ async function signUp(req, res) {
 
 async function updateProfile(req, res) {
   try {
-    // Only allow updating name and email
+    // Allow updating name, fname, lname, and email
     const updates = {
       name: req.body.name,
+      fname: req.body.fname,
+      lname: req.body.lname,
       email: req.body.email
     };
+    
+    // If fname or lname changed but name wasn't provided, update name
+    if (!updates.name && (updates.fname || updates.lname)) {
+      const user = await User.findById(req.user._id);
+      const firstName = updates.fname || user.fname || '';
+      const lastName = updates.lname || user.lname || '';
+      updates.name = [firstName, lastName].filter(Boolean).join(' ');
+    }
     
     const user = await User.findByIdAndUpdate(
       req.user._id,
@@ -59,30 +74,27 @@ async function updateProfile(req, res) {
 
 async function changePassword(req, res) {
   try {
-    const { currentPassword, newPassword } = req.body;
-    
-    // Find the user
     const user = await User.findById(req.user._id);
     
-    // Verify current password
-    const match = await bcrypt.compare(currentPassword, user.password);
+    // Check if current password is correct
+    const match = await bcrypt.compare(req.body.currentPassword, user.password);
     if (!match) {
       return res.status(400).json({ message: 'Current password is incorrect' });
     }
     
-    // Update password
-    user.password = newPassword;
+    // Update to new password
+    user.password = req.body.newPassword;
     await user.save();
     
+    // Return success message
     res.json({ message: 'Password updated successfully' });
   } catch (err) {
     console.error('Password change error:', err);
-    res.status(400).json({ message: 'Failed to update password' });
+    res.status(400).json({ message: err.message || 'Failed to change password' });
   }
 }
 
-/*--- Helper Functions ---*/
-
+// Helper function to create JWT
 function createJWT(user) {
   return jwt.sign(
     // data payload

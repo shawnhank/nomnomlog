@@ -23,6 +23,11 @@ export default function NavBar({ user, setUser }) {
           &nbsp; | &nbsp;
           <NavLink to="/posts/new">New Post</NavLink>
           &nbsp; | &nbsp;
+          {/* Restaurant links */}
+          <NavLink to="/restaurants">Restaurants</NavLink>
+          &nbsp; | &nbsp;
+          <NavLink to="/restaurants/new">New Restaurant</NavLink>
+          &nbsp; | &nbsp;
           <Link to="/" onClick={handleLogOut}>Log Out</Link>
           <Link to="/profile" className="welcome-link">Welcome, {user.name}</Link>
         </>

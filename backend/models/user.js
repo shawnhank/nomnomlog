@@ -6,7 +6,10 @@ const SALT_ROUNDS = 6;
 
 const userSchema = new Schema(
   {
-    name: { type: String, required: true },
+    // Updated fields based on ERD
+    fname: { type: String }, // Optional
+    lname: { type: String }, // Optional
+    name: { type: String, required: true }, // Keeping for backward compatibility
     email: {
       type: String,
       unique: true,
@@ -18,6 +21,8 @@ const userSchema = new Schema(
       type: String,
       required: true,
     },
+    socialLoginId: { type: String }, // Optional, for social login integration
+    isAdmin: { type: Boolean, default: false }, // For admin functionality
   },
   {
     timestamps: true,
