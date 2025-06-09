@@ -96,9 +96,9 @@ Meal  (MVP)
   - mealName : string
   - mealCategoryId : ObjectId (FK → MealCategory)
   - mealMethodId : ObjectId (FK → MealMethod)
-  - thumbsRating : boolean
+  - isThumbsUp : boolean
   - starRating : number (optional)
-  - favorite : boolean
+  - isFavorite : boolean
   - photoUrl : string (optional)
   - notes : string
   - dateEaten : date
