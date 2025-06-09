@@ -32,6 +32,17 @@ export function getToken() {
   return token;
 }
 
+export async function updateProfile(userData) {
+  const token = await sendRequest(`${BASE_URL}/profile`, 'PUT', userData);
+  localStorage.setItem('token', token);
+  return getUser();
+}
+
+export async function changePassword(passwordData) {
+  return sendRequest(`${BASE_URL}/password`, 'PUT', passwordData);
+}
+
+
 export function logOut() {
   localStorage.removeItem('token');
 }

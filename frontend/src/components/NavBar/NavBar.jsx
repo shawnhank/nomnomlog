@@ -24,7 +24,7 @@ export default function NavBar({ user, setUser }) {
           <NavLink to="/posts/new">New Post</NavLink>
           &nbsp; | &nbsp;
           <Link to="/" onClick={handleLogOut}>Log Out</Link>
-          <span>Welcome, {user.name}</span>
+          <Link to="/profile" className="welcome-link">Welcome, {user.name}</Link>
         </>
       ) : (
         <>

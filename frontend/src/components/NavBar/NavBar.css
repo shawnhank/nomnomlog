@@ -28,3 +28,14 @@
     color: rgb(108, 9, 87);
   }
 }
+
+.welcome-link {
+  margin-left: 10px;
+  font-weight: 500;
+  color: var(--accent-color, #007bff);
+  text-decoration: none;
+}
+
+.welcome-link:hover {
+  text-decoration: underline;
+}
