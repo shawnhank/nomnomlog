@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router';
 import * as restaurantService from '../../services/restaurant';
+import * as restaurantTagService from '../../services/restaurantTag';
 import './RestaurantDetailPage.css';
 
 export default function RestaurantDetailPage() {
@@ -8,25 +9,31 @@ export default function RestaurantDetailPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [tags, setTags] = useState([]);
   
   const { id } = useParams();
   const navigate = useNavigate();
   
   // Fetch restaurant details when component mounts or id changes
   useEffect(() => {
-    async function fetchRestaurant() {
+    async function fetchData() {
       try {
         setLoading(true);
         const restaurantData = await restaurantService.getById(id);
         setRestaurant(restaurantData);
+        
+        // Fetch tags for this restaurant
+        const tagsData = await restaurantTagService.getTagsByRestaurant(id);
+        setTags(tagsData);
+        
         setLoading(false);
       } catch (err) {
-        setError('Failed to load restaurant details');
+        setError('Failed to load restaurant');
         setLoading(false);
       }
     }
     
-    fetchRestaurant();
+    fetchData();
   }, [id]);
   
   // Handle delete restaurant
@@ -71,10 +78,14 @@ export default function RestaurantDetailPage() {
       
       {/* Restaurant details */}
       <div className="restaurant-details">
-        {restaurant.categoryId && (
+        {tags.length > 0 && (
           <div className="detail-item">
-            <span className="label">Category:</span>
-            <span className="category-tag">{restaurant.categoryId.displayName}</span>
+            <span className="label">Tags:</span>
+            <div className="tags-container">
+              {tags.map(tag => (
+                <span key={tag._id} className="tag-badge">{tag.name}</span>
+              ))}
+            </div>
           </div>
         )}
         

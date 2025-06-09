@@ -17,10 +17,6 @@ const restaurantSchema = new Schema({
   // New fields based on updated data model
   lat: Number,
   long: Number,
-  categoryId: {
-    type: Schema.Types.ObjectId,
-    ref: 'RestaurantCategory'
-  }
 }, {
   timestamps: true
 });

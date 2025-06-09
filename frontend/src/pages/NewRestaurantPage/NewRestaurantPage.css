@@ -65,3 +65,40 @@
   background-color: #f8d7da;
   border-radius: 4px;
 }
+
+/* Add styles for tags */
+.tags-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.tag-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.add-tag-container {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.btn-add-tag {
+  padding: 5px 10px;
+  background-color: #f0f0f0;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.tag-badge {
+  display: inline-block;
+  padding: 5px 10px;
+  background-color: #007bff;
+  color: white;
+  border-radius: 4px;
+  margin-right: 5px;
+}

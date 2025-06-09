@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import * as restaurantService from '../../services/restaurant';
-import * as restaurantCategoryService from '../../services/restaurantCategory';
+import * as tagService from '../../services/tag';
+import * as restaurantTagService from '../../services/restaurantTag';
 import './NewRestaurantPage.css';
 
 export default function NewRestaurantPage() {
@@ -10,12 +11,13 @@ export default function NewRestaurantPage() {
     name: '',
     address: '',
     phone: '',
-    website: '',
-    categoryId: ''
+    website: ''
   });
   
-  // State for restaurant categories (for dropdown)
-  const [categories, setCategories] = useState([]);
+  // State for tags
+  const [tags, setTags] = useState([]);
+  const [selectedTags, setSelectedTags] = useState([]);
+  const [newTag, setNewTag] = useState('');
   
   // State for error message
   const [errorMsg, setErrorMsg] = useState('');
@@ -23,18 +25,18 @@ export default function NewRestaurantPage() {
   // Hook for programmatic navigation
   const navigate = useNavigate();
   
-  // Fetch restaurant categories when component mounts
+  // Fetch tags when component mounts
   useEffect(() => {
-    async function fetchCategories() {
+    async function fetchTags() {
       try {
-        const categoriesData = await restaurantCategoryService.getAll();
-        setCategories(categoriesData);
+        const tagsData = await tagService.getAll();
+        setTags(tagsData);
       } catch (err) {
-        console.error('Failed to load restaurant categories:', err);
+        console.error('Failed to load tags:', err);
       }
     }
     
-    fetchCategories();
+    fetchTags();
   }, []);
   
   // Handle form input changes
@@ -44,12 +46,51 @@ export default function NewRestaurantPage() {
     setErrorMsg('');
   }
   
+  // Handle tag selection
+  function handleTagSelect(tagId) {
+    if (selectedTags.includes(tagId)) {
+      setSelectedTags(selectedTags.filter(id => id !== tagId));
+    } else {
+      setSelectedTags([...selectedTags, tagId]);
+    }
+  }
+  
+  // Handle new tag input
+  function handleNewTagChange(evt) {
+    setNewTag(evt.target.value);
+  }
+  
+  // Create a new tag
+  async function handleCreateTag() {
+    if (!newTag.trim()) return;
+    
+    try {
+      const createdTag = await tagService.create({ name: newTag });
+      setTags([...tags, createdTag]);
+      setSelectedTags([...selectedTags, createdTag._id]);
+      setNewTag('');
+    } catch (err) {
+      console.error('Failed to create tag:', err);
+    }
+  }
+  
   // Handle form submission
   async function handleSubmit(evt) {
     evt.preventDefault();
     try {
       // Call API to create new restaurant
       const newRestaurant = await restaurantService.create(formData);
+      
+      // Create restaurant-tag relationships for selected tags
+      const tagPromises = selectedTags.map(tagId => 
+        restaurantTagService.create({
+          restaurantId: newRestaurant._id,
+          tagId
+        })
+      );
+      
+      await Promise.all(tagPromises);
+      
       // Navigate to the detail page for the new restaurant
       navigate(`/restaurants/${newRestaurant._id}`);
     } catch (err) {
@@ -60,6 +101,8 @@ export default function NewRestaurantPage() {
   return (
     <div className="NewRestaurantPage">
       <h1>Add New Restaurant</h1>
+      
+      {errorMsg && <p className="error-message">{errorMsg}</p>}
       
       <form onSubmit={handleSubmit}>
         {/* Restaurant Name field (required) */}
@@ -112,38 +155,54 @@ export default function NewRestaurantPage() {
           />
         </div>
         
-        {/* Category dropdown (optional) */}
+        {/* Tags section */}
         <div className="form-group">
-          <label htmlFor="categoryId">Category</label>
-          <select
-            id="categoryId"
-            name="categoryId"
-            value={formData.categoryId}
-            onChange={handleChange}
-          >
-            <option value="">-- Select a Category --</option>
-            {categories.map(category => (
-              <option key={category._id} value={category._id}>
-                {category.displayName}
-              </option>
+          <label>Tags</label>
+          <div className="tags-container">
+            {tags.map(tag => (
+              <div key={tag._id} className="tag-item">
+                <input
+                  type="checkbox"
+                  id={`tag-${tag._id}`}
+                  checked={selectedTags.includes(tag._id)}
+                  onChange={() => handleTagSelect(tag._id)}
+                />
+                <label htmlFor={`tag-${tag._id}`}>{tag.name}</label>
+              </div>
             ))}
-          </select>
+          </div>
+          
+          {/* Add new tag */}
+          <div className="add-tag-container">
+            <input
+              type="text"
+              value={newTag}
+              onChange={handleNewTagChange}
+              placeholder="Add a new tag"
+            />
+            <button 
+              type="button" 
+              onClick={handleCreateTag}
+              className="btn-add-tag"
+            >
+              Add
+            </button>
+          </div>
         </div>
         
-        {/* Action buttons */}
+        {/* Form actions */}
         <div className="form-actions">
           <button 
             type="button" 
-            className="btn-cancel"
+            className="btn-cancel" 
             onClick={() => navigate('/restaurants')}
           >
             Cancel
           </button>
-          <button type="submit" className="btn-submit">Add Restaurant</button>
+          <button type="submit" className="btn-submit">
+            Add Restaurant
+          </button>
         </div>
-        
-        {/* Error message display */}
-        {errorMsg && <p className="error-message">{errorMsg}</p>}
       </form>
     </div>
   );

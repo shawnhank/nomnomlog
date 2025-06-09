@@ -58,11 +58,7 @@ export default function RestaurantListPage() {
               <Link to={`/restaurants/${restaurant._id}`}>
                 <h3>{restaurant.name}</h3>
                 {restaurant.address && <p>{restaurant.address}</p>}
-                {restaurant.categoryId && (
-                  <span className="category-tag">
-                    {restaurant.categoryId.displayName}
-                  </span>
-                )}
+                {/* Category display removed */}
               </Link>
             </li>
           ))}

@@ -23,7 +23,6 @@ async function index(req, res) {
   try {
     // Find restaurants for the logged-in user
     const restaurants = await Restaurant.find({ userId: req.user._id })
-      .populate('categoryId')
       .sort({ updatedAt: -1 });
     res.json(restaurants);
   } catch (err) {
@@ -36,7 +35,7 @@ async function show(req, res) {
     const restaurant = await Restaurant.findOne({
       _id: req.params.id,
       userId: req.user._id
-    }).populate('categoryId');
+    });
     
     if (!restaurant) return res.status(404).json({ message: 'Restaurant not found' });
     res.json(restaurant);

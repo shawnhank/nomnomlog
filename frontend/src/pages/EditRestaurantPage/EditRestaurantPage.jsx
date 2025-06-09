@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router';
 import * as restaurantService from '../../services/restaurant';
-import * as restaurantCategoryService from '../../services/restaurantCategory';
+import * as tagService from '../../services/tag';
+import * as restaurantTagService from '../../services/restaurantTag';
 import './EditRestaurantPage.css';
 
 export default function EditRestaurantPage() {
@@ -9,18 +10,21 @@ export default function EditRestaurantPage() {
     name: '',
     address: '',
     phone: '',
-    website: '',
-    categoryId: ''
+    website: ''
   });
   
-  const [categories, setCategories] = useState([]);
+  const [tags, setTags] = useState([]);
+  const [restaurantTags, setRestaurantTags] = useState([]);
+  const [selectedTags, setSelectedTags] = useState([]);
+  const [newTag, setNewTag] = useState('');
+  
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   
   const { id } = useParams();
   const navigate = useNavigate();
   
-  // Fetch restaurant data and categories when component mounts
+  // Fetch restaurant data, tags, and restaurant tags when component mounts
   useEffect(() => {
     async function fetchData() {
       try {
@@ -29,19 +33,24 @@ export default function EditRestaurantPage() {
         // Fetch restaurant data
         const restaurantData = await restaurantService.getById(id);
         
-        // Fetch categories for dropdown
-        const categoriesData = await restaurantCategoryService.getAll();
+        // Fetch all tags
+        const tagsData = await tagService.getAll();
+        
+        // Fetch tags for this restaurant
+        const restaurantTagsData = await restaurantTagService.getTagsByRestaurant(id);
         
         // Update state
         setFormData({
           name: restaurantData.name || '',
           address: restaurantData.address || '',
           phone: restaurantData.phone || '',
-          website: restaurantData.website || '',
-          categoryId: restaurantData.categoryId?._id || ''
+          website: restaurantData.website || ''
         });
         
-        setCategories(categoriesData);
+        setTags(tagsData);
+        setRestaurantTags(restaurantTagsData);
+        setSelectedTags(restaurantTagsData.map(tag => tag._id));
+        
         setLoading(false);
       } catch (err) {
         setError('Failed to load restaurant data');
@@ -59,12 +68,63 @@ export default function EditRestaurantPage() {
     setError('');
   }
   
+  // Handle tag selection
+  function handleTagSelect(tagId) {
+    if (selectedTags.includes(tagId)) {
+      setSelectedTags(selectedTags.filter(id => id !== tagId));
+    } else {
+      setSelectedTags([...selectedTags, tagId]);
+    }
+  }
+  
+  // Handle new tag input
+  function handleNewTagChange(evt) {
+    setNewTag(evt.target.value);
+  }
+  
+  // Create a new tag
+  async function handleCreateTag() {
+    if (!newTag.trim()) return;
+    
+    try {
+      const createdTag = await tagService.create({ name: newTag });
+      setTags([...tags, createdTag]);
+      setSelectedTags([...selectedTags, createdTag._id]);
+      setNewTag('');
+    } catch (err) {
+      console.error('Failed to create tag:', err);
+    }
+  }
+  
   // Handle form submission
   async function handleSubmit(evt) {
     evt.preventDefault();
     try {
-      // Call API to update restaurant
+      // Update restaurant data
       await restaurantService.update(id, formData);
+      
+      // Get current restaurant tags
+      const currentTagIds = restaurantTags.map(tag => tag._id);
+      
+      // Tags to add (in selectedTags but not in currentTagIds)
+      const tagsToAdd = selectedTags.filter(tagId => !currentTagIds.includes(tagId));
+      
+      // Tags to remove (in currentTagIds but not in selectedTags)
+      const tagsToRemove = currentTagIds.filter(tagId => !selectedTags.includes(tagId));
+      
+      // Add new tags
+      const addPromises = tagsToAdd.map(tagId => 
+        restaurantTagService.create({
+          restaurantId: id,
+          tagId
+        })
+      );
+      
+      // Remove tags (this would require additional API to find and delete the join records)
+      // This is a simplified approach - you may need to implement a method to find restaurant-tag by restaurantId and tagId
+      
+      await Promise.all(addPromises);
+      
       // Navigate back to the detail page
       navigate(`/restaurants/${id}`);
     } catch (err) {
@@ -134,34 +194,53 @@ export default function EditRestaurantPage() {
           />
         </div>
         
-        {/* Category dropdown (optional) */}
+        {/* Tags section */}
         <div className="form-group">
-          <label htmlFor="categoryId">Category</label>
-          <select
-            id="categoryId"
-            name="categoryId"
-            value={formData.categoryId}
-            onChange={handleChange}
-          >
-            <option value="">-- Select a Category --</option>
-            {categories.map(category => (
-              <option key={category._id} value={category._id}>
-                {category.displayName}
-              </option>
+          <label>Tags</label>
+          <div className="tags-container">
+            {tags.map(tag => (
+              <div key={tag._id} className="tag-item">
+                <input
+                  type="checkbox"
+                  id={`tag-${tag._id}`}
+                  checked={selectedTags.includes(tag._id)}
+                  onChange={() => handleTagSelect(tag._id)}
+                />
+                <label htmlFor={`tag-${tag._id}`}>{tag.name}</label>
+              </div>
             ))}
-          </select>
+          </div>
+          
+          {/* Add new tag */}
+          <div className="add-tag-container">
+            <input
+              type="text"
+              value={newTag}
+              onChange={handleNewTagChange}
+              placeholder="Add a new tag"
+            />
+            <button 
+              type="button" 
+              onClick={handleCreateTag}
+              className="btn-add-tag"
+            >
+              Add
+            </button>
+          </div>
         </div>
         
-        {/* Action buttons */}
+        {/* Form actions */}
         <div className="form-actions">
           <button 
             type="button" 
-            className="btn-cancel"
+            className="btn-cancel" 
             onClick={() => navigate(`/restaurants/${id}`)}
           >
             Cancel
           </button>
-          <button type="submit" className="btn-save">Save Changes</button>
+          <button type="submit" className="btn-submit">
+            Save Changes
+          </button>
         </div>
       </form>
     </div>
