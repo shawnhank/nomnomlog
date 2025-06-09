@@ -1,36 +1,41 @@
 import { getToken } from './authService';
 
-export default async function sendRequest(
-  url,
-  method = 'GET',
-  payload = null
-) {
-  // Fetch accepts an options object as the 2nd argument
-  // used to include a data payload, set headers, specifiy the method, etc.
+export default async function sendRequest(url, method = 'GET', payload = null, additionalHeaders = {}) {
+  // Add a cache-busting query parameter to all GET requests
+  if (method === 'GET') {
+    // Add a timestamp to prevent caching
+    const separator = url.includes('?') ? '&' : '?';
+    url = `${url}${separator}_t=${Date.now()}`;
+  }
+  
   const options = { method };
-  // If payload is a FormData object (used to upload files),
-  // fetch will automatically set the Content-Type to 'multipart/form-data',
-  // otherwise set the Content-Type header as usual
-  if (payload instanceof FormData) {
-    options.body = payload;
-  } else if (payload) {
-    options.headers = { 'Content-Type': 'application/json' };
+  options.headers = { ...additionalHeaders };
+  
+  if (payload) {
+    options.headers['Content-Type'] = 'application/json';
     options.body = JSON.stringify(payload);
   }
+  
   const token = getToken();
   if (token) {
-    // Need to add an Authorization header
-    // Use the Logical OR Assignment operator
-    options.headers ||= {};
-    // Older approach
-    // options.headers = options.headers || {};
     options.headers.Authorization = `Bearer ${token}`;
   }
+  
+  // Add cache control headers to prevent caching
+  options.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate';
+  options.headers['Pragma'] = 'no-cache';
+  options.headers['Expires'] = '0';
+  
   const res = await fetch(url, options);
-  // if res.ok is false then something went wrong
+  
+  // Handle 304 Not Modified as a success case
+  if (res.status === 304) {
+    console.log('Got 304 response, retrying with cache disabled');
+    // For 304, retry the request with a different timestamp
+    return sendRequest(`${url}&_retry=${Date.now()}`, method, payload, additionalHeaders);
+  }
+  
   if (res.ok) return res.json();
-  // Obtain error sent from server
-  const err = await res.json();
-  // Throw error to be handled in React
-  throw new Error(err.message);
+  
+  throw new Error('Bad Request');
 }

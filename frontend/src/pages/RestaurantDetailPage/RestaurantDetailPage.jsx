@@ -19,16 +19,30 @@ export default function RestaurantDetailPage() {
     async function fetchData() {
       try {
         setLoading(true);
+        console.log(`Fetching restaurant with ID: ${id}`);
+        
         const restaurantData = await restaurantService.getById(id);
-        setRestaurant(restaurantData);
+        console.log('Restaurant data received:', restaurantData);
         
-        // Fetch tags for this restaurant
-        const tagsData = await restaurantTagService.getTagsByRestaurant(id);
-        setTags(tagsData);
-        
-        setLoading(false);
+        if (!restaurantData || Object.keys(restaurantData).length === 0) {
+          console.error('Empty restaurant data received');
+          setError('Failed to load restaurant data');
+        } else {
+          setRestaurant(restaurantData);
+          
+          try {
+            // Fetch tags for this restaurant
+            const tagsData = await restaurantTagService.getAllForRestaurant(id);
+            setTags(tagsData);
+          } catch (tagErr) {
+            console.error('Error fetching tags:', tagErr);
+            // Don't fail the whole page if just tags fail
+          }
+        }
       } catch (err) {
-        setError('Failed to load restaurant');
+        console.error('Error in fetchData:', err);
+        setError(`Failed to load restaurant: ${err.message}`);
+      } finally {
         setLoading(false);
       }
     }

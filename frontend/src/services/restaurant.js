@@ -10,8 +10,17 @@ export function getAll() {
   return sendRequest(BASE_URL);
 }
 
-export function getById(id) {
-  return sendRequest(`${BASE_URL}/${id}`);
+export function getById(id, noCache = false) {
+  const headers = {};
+  
+  // Add cache control if needed
+  if (noCache) {
+    headers['Cache-Control'] = 'no-cache, no-store, must-revalidate';
+    headers['Pragma'] = 'no-cache';
+    headers['Expires'] = '0';
+  }
+  
+  return sendRequest(`${BASE_URL}/${id}`, 'GET', null, headers);
 }
 
 export function update(id, restaurantData) {
