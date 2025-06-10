@@ -8,6 +8,18 @@ const ensureLoggedIn = require('../middleware/ensureLoggedIn');
 // Get all meals (for the logged-in user)
 router.get('/', ensureLoggedIn, mealsCtrl.getAll);
 
+// Get all favorite meals
+router.get('/favorites', ensureLoggedIn, mealsCtrl.getFavorites);
+
+// Get all thumbs up meals
+router.get('/thumbs-up', ensureLoggedIn, mealsCtrl.getThumbsUp);
+
+// Get all thumbs down meals
+router.get('/thumbs-down', ensureLoggedIn, mealsCtrl.getThumbsDown);
+
+// Get all unrated meals (no thumbs rating)
+router.get('/unrated', ensureLoggedIn, mealsCtrl.getUnrated);
+
 // Get one meal by ID
 router.get('/:id', ensureLoggedIn, mealsCtrl.getOne);
 
@@ -25,8 +37,5 @@ router.put('/:id/favorite', ensureLoggedIn, mealsCtrl.toggleFavorite);
 
 // Set thumbs rating
 router.put('/:id/thumbs', ensureLoggedIn, mealsCtrl.setThumbsRating);
-
-// Get all favorite meals
-router.get('/favorites', ensureLoggedIn, mealsCtrl.getFavorites);
 
 module.exports = router;

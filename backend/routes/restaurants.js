@@ -9,7 +9,11 @@ const ensureLoggedIn = require('../middleware/ensureLoggedIn');
 router.use(ensureLoggedIn);
 
 // GET /api/restaurants - Get all restaurants for the logged-in user
-router.get('/', restaurantsCtrl.index);
+router.get('/', (req, res, next) => {
+  console.log('GET /api/restaurants request received');
+  console.log('User:', req.user);
+  next();
+}, restaurantsCtrl.index);
 // POST /api/restaurants - Create a new restaurant
 router.post('/', restaurantsCtrl.create);
 // GET /api/restaurants/:id - Get a specific restaurant

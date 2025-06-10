@@ -9,7 +9,10 @@ module.exports = {
   delete: deleteMeal,
   toggleFavorite,
   setThumbsRating,
-  getFavorites
+  getFavorites,
+  getThumbsUp,
+  getThumbsDown,
+  getUnrated
 };
 
 // Get all meals for the logged-in user
@@ -145,6 +148,48 @@ async function getFavorites(req, res) {
     const meals = await Meal.find({ 
       userId: req.user._id,
       isFavorite: true 
+    }).populate('restaurantId').sort('-date');
+    
+    res.json(meals);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+}
+
+// Get all thumbs up meals
+async function getThumbsUp(req, res) {
+  try {
+    const meals = await Meal.find({ 
+      userId: req.user._id,
+      isThumbsUp: true 
+    }).populate('restaurantId').sort('-date');
+    
+    res.json(meals);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+}
+
+// Get all thumbs down meals
+async function getThumbsDown(req, res) {
+  try {
+    const meals = await Meal.find({ 
+      userId: req.user._id,
+      isThumbsUp: false 
+    }).populate('restaurantId').sort('-date');
+    
+    res.json(meals);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+}
+
+// Get all unrated meals (no thumbs rating)
+async function getUnrated(req, res) {
+  try {
+    const meals = await Meal.find({ 
+      userId: req.user._id,
+      isThumbsUp: null 
     }).populate('restaurantId').sort('-date');
     
     res.json(meals);

@@ -22,10 +22,13 @@ async function create(req, res) {
 async function index(req, res) {
   try {
     console.log(`Fetching restaurants for user: ${req.user._id}`);
+    console.log('User object:', JSON.stringify(req.user));
     
     // Find restaurants for the logged-in user
     const restaurants = await Restaurant.find({ userId: req.user._id })
       .sort({ updatedAt: -1 });
+    
+    console.log(`Found ${restaurants.length} restaurants`);
     
     // Set headers to prevent caching
     res.set({
@@ -35,7 +38,9 @@ async function index(req, res) {
       'Surrogate-Control': 'no-store'
     });
     
+    console.log('Sending response');
     res.json(restaurants);
+    console.log('Response sent');
   } catch (err) {
     console.error('Error in index controller:', err);
     res.status(500).json({ message: err.message });

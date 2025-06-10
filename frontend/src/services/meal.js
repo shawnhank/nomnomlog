@@ -132,3 +132,48 @@ export async function getFavorites() {
     throw new Error('Failed to fetch favorite meals');
   }
 }
+
+// Get all thumbs up meals
+export async function getThumbsUp() {
+  const res = await fetch(`${BASE_URL}/thumbs-up`, {
+    headers: {
+      'Authorization': `Bearer ${getToken()}`
+    }
+  });
+  
+  if (res.ok) {
+    return res.json();
+  } else {
+    throw new Error('Failed to fetch thumbs up meals');
+  }
+}
+
+// Get all thumbs down meals
+export async function getThumbsDown() {
+  const res = await fetch(`${BASE_URL}/thumbs-down`, {
+    headers: {
+      'Authorization': `Bearer ${getToken()}`
+    }
+  });
+  
+  if (res.ok) {
+    return res.json();
+  } else {
+    throw new Error('Failed to fetch thumbs down meals');
+  }
+}
+
+// Get all unrated meals
+export async function getUnrated() {
+  const res = await fetch(`${BASE_URL}/unrated`, {
+    headers: {
+      'Authorization': `Bearer ${getToken()}`
+    }
+  });
+  
+  if (res.ok) {
+    return res.json();
+  } else {
+    throw new Error('Failed to fetch unrated meals');
+  }
+}
