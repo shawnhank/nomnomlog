@@ -43,6 +43,14 @@ export async function changePassword(passwordData) {
 }
 
 
-export function logOut() {
-  localStorage.removeItem('token');
+export async function logOut() {
+  try {
+    // Call the logout API endpoint
+    await sendRequest(`${BASE_URL}/logout`, 'POST');
+  } catch (error) {
+    console.error('Logout error:', error);
+  } finally {
+    // Always remove the token from localStorage
+    localStorage.removeItem('token');
+  }
 }

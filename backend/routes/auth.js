@@ -12,5 +12,6 @@ router.post('/login', authCtrl.logIn);
 // Protected routes - require authentication
 router.put('/profile', ensureLoggedIn, authCtrl.updateProfile);
 router.put('/password', ensureLoggedIn, authCtrl.changePassword);
+router.post('/logout', ensureLoggedIn, authCtrl.logOut);
 
 module.exports = router;

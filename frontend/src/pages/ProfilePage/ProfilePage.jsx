@@ -71,20 +71,32 @@ export default function ProfilePage({ user, setUser }) {
     
     try {
       // Call API to change the password
-      await changePassword({
+      const response = await changePassword({
         currentPassword: passwordData.currentPassword,
         newPassword: passwordData.newPassword
       });
       
-      // Reset password form fields after successful update
+      // Reset password form fields
       setPasswordData({
         currentPassword: '',
         newPassword: '',
         confirmPassword: '',
       });
       
-      // Show success message
-      setPasswordMsg('Password updated successfully!');
+      // If server indicates re-login is required
+      if (response.requireRelogin) {
+        // Clear the stored token
+        localStorage.removeItem('token');
+        // Update user state to null
+        setUser(null);
+        // Redirect to login page
+        navigate('/login', { 
+          state: { message: 'Password updated successfully. Please log in with your new password.' }
+        });
+      } else {
+        // Show success message
+        setPasswordMsg('Password updated successfully!');
+      }
     } catch (err) {
       // Show error message if password change fails
       setPasswordMsg('Password update failed - Try again');
