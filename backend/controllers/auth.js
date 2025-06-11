@@ -27,12 +27,15 @@ async function logIn(req, res) {
 
 async function signUp(req, res) {
   try {
-    // If fname and lname are provided but name isn't, create a name from them
-    if (!req.body.name && (req.body.fname || req.body.lname)) {
-      req.body.name = [req.body.fname, req.body.lname].filter(Boolean).join(' ');
+    // Create a new user with the fullName field
+    const userData = { ...req.body };
+    
+    // For backward compatibility - if fullName is provided but name isn't, copy fullName to name
+    if (userData.fullName && !userData.name) {
+      userData.name = userData.fullName;
     }
     
-    const user = await User.create(req.body);
+    const user = await User.create(userData);
     const token = createJWT(user);
     res.json(token);
   } catch (err) {
@@ -43,43 +46,32 @@ async function signUp(req, res) {
 
 async function updateProfile(req, res) {
   try {
-    console.log('Request body:', req.body);
-    console.log('User from token:', req.user);
-    
-    // Check if req.body exists
-    if (!req.body) {
-      return res.status(400).json({ message: 'Request body is missing' });
-    }
-    
-    // Find the user by ID
     const user = await User.findById(req.user._id);
+    if (!user) return res.status(404).json({ message: 'User not found' });
     
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' });
+    // Update fullName if provided
+    if (req.body.fullName) {
+      user.fullName = req.body.fullName;
+      // Also update name for backward compatibility
+      user.name = req.body.fullName;
     }
     
-    // Update only the fields that are provided in the request
+    // Update email if provided
     if (req.body.email) user.email = req.body.email;
-    if (req.body.fname) user.fname = req.body.fname;
-    if (req.body.lname) user.lname = req.body.lname;
-    if (req.body.name) user.name = req.body.name;
     
-    // If name isn't provided but fname or lname are, update the name
-    if (!req.body.name && (req.body.fname || req.body.lname)) {
-      const firstName = req.body.fname || user.fname || '';
-      const lastName = req.body.lname || user.lname || '';
-      user.name = [firstName, lastName].filter(Boolean).join(' ');
+    // Migration: If user doesn't have fullName but has fname/lname, create fullName
+    if (!user.fullName && (user.fname || user.lname)) {
+      user.fullName = [user.fname, user.lname].filter(Boolean).join(' ');
     }
     
-    // Save the updated user
     await user.save();
     
-    // Return a new token with the updated user info
+    // Create a new token with the updated user info
     const token = createJWT(user);
     res.json(token);
   } catch (err) {
-    console.error('Profile update error:', err);
-    res.status(400).json({ message: err.message || 'Failed to update profile' });
+    console.log(err);
+    res.status(400).json({ message: 'Failed to update profile' });
   }
 }
 

@@ -6,10 +6,15 @@ const SALT_ROUNDS = 6;
 
 const userSchema = new Schema(
   {
-    // Updated fields based on ERD
-    fname: { type: String }, // Optional
-    lname: { type: String }, // Optional
-    name: { type: String, required: true }, // Keeping for backward compatibility
+    // New field for the simplified name approach
+    fullName: { 
+      type: String, 
+      required: true 
+    },
+    // Keep these temporarily for migration
+    fname: { type: String }, // Will be deprecated
+    lname: { type: String }, // Will be deprecated
+    name: { type: String }, // Keeping for backward compatibility
     email: {
       type: String,
       unique: true,
@@ -35,6 +40,24 @@ const userSchema = new Schema(
     },
   }
 );
+
+// Add a virtual to handle migration from fname/lname to fullName
+// TODO: Remove this virtual after migration to fullName is complete for all users
+userSchema.virtual('displayName').get(function() {
+  // Prioritize fullName if it exists
+  if (this.fullName) return this.fullName;
+  
+  // Fall back to name if it exists
+  if (this.name) return this.name;
+  
+  // Last resort: combine fname and lname if they exist
+  if (this.fname || this.lname) {
+    return [this.fname, this.lname].filter(Boolean).join(' ');
+  }
+  
+  // If nothing else, return email
+  return this.email;
+});
 
 userSchema.pre('save', async function (next) {
   // 'this' is the user document

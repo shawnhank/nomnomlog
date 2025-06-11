@@ -3,11 +3,9 @@ import { updateProfile, changePassword } from '../../services/authService';
 import './ProfilePage.css';
 
 export default function ProfilePage({ user, setUser }) {
-  // State for profile data - includes fname and lname fields from our updated User model
+  // State for profile data - updated to use fullName instead of fname/lname
   const [profileData, setProfileData] = useState({
-    fname: user.fname || '',    
-    lname: user.lname || '',  
-    name: user.name,          
+    fullName: user.fullName || user.displayName || '',
     email: user.email,        
   });
   
@@ -27,21 +25,13 @@ export default function ProfilePage({ user, setUser }) {
   
   /**
    * Handle profile form submission
-   * Updates user profile information including first name, last name, display name, and email
+   * Updates user profile information including fullName and email
    */
   async function handleProfileSubmit(evt) {
     evt.preventDefault();
     try {
       // Create a copy of the profile data for submission
       const dataToSubmit = { ...profileData };
-      
-      // If display name is empty but first or last name are provided,
-      // automatically generate a display name from first and last name
-      if (!dataToSubmit.name && (dataToSubmit.fname || dataToSubmit.lname)) {
-        dataToSubmit.name = [dataToSubmit.fname, dataToSubmit.lname]
-          .filter(Boolean)  // Remove empty strings
-          .join(' ');       // Join with space
-      }
       
       // Call API to update the user's profile
       const updatedUser = await updateProfile(dataToSubmit);
@@ -148,40 +138,18 @@ export default function ProfilePage({ user, setUser }) {
         </button>
       </div>
       
-      {/* Profile Edit Form - shown when profile tab is active */}
+      {/* Profile Edit Form - updated to use fullName instead of fname/lname */}
       {activeTab === 'profile' && (
         <form autoComplete="off" onSubmit={handleProfileSubmit}>
           <div className="form-group">
-            <label>First Name</label>
+            <label>Full Name</label>
             <input
               type="text"
-              name="fname"
-              value={profileData.fname}
+              name="fullName"
+              value={profileData.fullName}
               onChange={handleProfileChange}
-            />
-          </div>
-          
-          <div className="form-group">
-            <label>Last Name</label>
-            <input
-              type="text"
-              name="lname"
-              value={profileData.lname}
-              onChange={handleProfileChange}
-            />
-          </div>
-          
-          <div className="form-group">
-            <label>Display Name</label>
-            <input
-              type="text"
-              name="name"
-              value={profileData.name}
-              onChange={handleProfileChange}
-              placeholder="Leave blank to use First/Last name"
               required
             />
-            <div className="optional-note">Leave blank to use First/Last name</div>
           </div>
           
           <div className="form-group">
@@ -203,7 +171,7 @@ export default function ProfilePage({ user, setUser }) {
         </form>
       )}
       
-      {/* Password Change Form - shown when password tab is active */}
+      {/* Password Change Form - remains the same */}
       {activeTab === 'password' && (
         <form autoComplete="off" onSubmit={handlePasswordSubmit}>
           <div className="form-group">

@@ -11,7 +11,7 @@
   background-color: whitesmoke;
 }
 
-/* Existing global styles pre-tailwind */
+/* Only keep minimal global styles that don't conflict with Tailwind */
 * {
   box-sizing: border-box;
 }
@@ -21,81 +21,36 @@ body {
   min-height: 100vh;
 }
 
-h1,
-h2 {
-  text-align: center;
+/* Custom classes */
+.logo-size {
+  height: 250px !important;
+  width: 250px !important;
+  display: block;
+  margin: 0 auto;
 }
 
-button {
-  border: 0.5vmin solid #1a1a1a;
-  border-radius: 0.5vmin;
-  padding: 0.8vmin;
-  font-size: 2vmin;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  color: whitesmoke;
-  cursor: pointer;
+/* Custom input height for Catalyst Input components */
+.custom-input-height input {
+  min-height: 2.50rem !important; /* 44px */
+  padding-top: 0.75rem !important;
+  padding-bottom: 0.75rem !important;
 }
 
-button:hover {
-  background-color: white;
-  color: #1a1a1a;
-  border-color: #1a1a1a;
+/* Add spacing between labels and inputs within each field */
+.custom-input-height [data-slot="label"] {
+  margin-bottom: 0.75rem !important; /* 12px */
 }
 
-/* Add this to prevent global button styles from affecting our action buttons */
-button.action-button {
-  border: none;
-  border-radius: 0;
-  border-bottom: 3px solid transparent;
-  background-color: transparent;
-  color: #555;
-  padding: 10px 15px;
-  font-size: 16px;
+/* Add spacing between form fields */
+.form-field-spacing {
+  margin-bottom: 1.5rem !important; /* 24px */
 }
 
-button.action-button:hover {
-  background-color: transparent;
-  color: #1a1a1a;
-  border-color: transparent;
-  border-bottom-color: #1a1a1a;
+/* Add extra spacing for checkbox field */
+.checkbox-spacing {
+  margin-top: 2rem !important; /* 32px */
+  margin-bottom: 2rem !important; /* 32px */
 }
 
-button:disabled {
-  background-color: grey;
-}
 
-form {
-  display: grid;
-  gap: 1.2vmin;
-  padding: 4vmin;
-  border: 0.5vmin solid #1a1a1a;
-  border-radius: 1vmin;
-}
-
-input,
-select,
-textarea {
-  padding: 0.7vmin;
-  font-size: 2vmin;
-  border: 0.3vmin solid #1a1a1a;
-  border-radius: 0.5vmin;
-}
-
-form>button:last-child {
-  margin-top: 2vmin;
-}
-
-label {
-  font-size: 2vmin;
-  font-weight: bold;
-}
-
-h2 {
-  text-align: center;
-}
-
-.error-message {
-  color: rgb(166, 29, 29);
-}
+/* Remove all the other styles that conflict with Tailwind */
