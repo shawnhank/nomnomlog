@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { updateProfile, changePassword } from '../../services/authService';
+import './ProfilePage.css';
 
 export default function ProfilePage({ user, setUser }) {
   // State for profile data - includes fname and lname fields from our updated User model
@@ -128,7 +129,7 @@ export default function ProfilePage({ user, setUser }) {
   }
   
   return (
-    <>
+    <div className="ProfilePage">
       <h2>My Profile</h2>
       
       {/* Tab navigation */}
@@ -150,87 +151,94 @@ export default function ProfilePage({ user, setUser }) {
       {/* Profile Edit Form - shown when profile tab is active */}
       {activeTab === 'profile' && (
         <form autoComplete="off" onSubmit={handleProfileSubmit}>
-          {/* First Name field - new field from our updated User model */}
-          <label>First Name</label>
-          <input
-            type="text"
-            name="fname"
-            value={profileData.fname}
-            onChange={handleProfileChange}
-          />
+          <div className="form-group">
+            <label>First Name</label>
+            <input
+              type="text"
+              name="fname"
+              value={profileData.fname}
+              onChange={handleProfileChange}
+            />
+          </div>
           
-          {/* Last Name field - new field from our updated User model */}
-          <label>Last Name</label>
-          <input
-            type="text"
-            name="lname"
-            value={profileData.lname}
-            onChange={handleProfileChange}
-          />
+          <div className="form-group">
+            <label>Last Name</label>
+            <input
+              type="text"
+              name="lname"
+              value={profileData.lname}
+              onChange={handleProfileChange}
+            />
+          </div>
           
-          {/* Display Name field - can be auto-generated from first and last name */}
-          <label>Display Name</label>
-          <input
-            type="text"
-            name="name"
-            value={profileData.name}
-            onChange={handleProfileChange}
-            placeholder="Leave blank to use First/Last name"
-            required
-          />
+          <div className="form-group">
+            <label>Display Name</label>
+            <input
+              type="text"
+              name="name"
+              value={profileData.name}
+              onChange={handleProfileChange}
+              placeholder="Leave blank to use First/Last name"
+              required
+            />
+            <div className="optional-note">Leave blank to use First/Last name</div>
+          </div>
           
-          {/* Email field */}
-          <label>Email</label>
-          <input
-            type="email"
-            name="email"
-            value={profileData.email}
-            onChange={handleProfileChange}
-            required
-          />
+          <div className="form-group">
+            <label>Email</label>
+            <input
+              type="email"
+              name="email"
+              value={profileData.email}
+              onChange={handleProfileChange}
+              required
+            />
+          </div>
           
-          {/* Submit button for profile updates */}
           <button type="submit">UPDATE PROFILE</button>
           
-          {/* Message area for profile update feedback */}
-          <p className="message">{profileMsg}</p>
+          <p className={`message ${profileMsg.includes('failed') ? 'error-message' : ''}`}>
+            {profileMsg}
+          </p>
         </form>
       )}
       
       {/* Password Change Form - shown when password tab is active */}
       {activeTab === 'password' && (
         <form autoComplete="off" onSubmit={handlePasswordSubmit}>
-          {/* Current Password field - for verification */}
-          <label>Current Password</label>
-          <input
-            type="password"
-            name="currentPassword"
-            value={passwordData.currentPassword}
-            onChange={handlePasswordChange}
-            required
-          />
+          <div className="form-group">
+            <label>Current Password</label>
+            <input
+              type="password"
+              name="currentPassword"
+              value={passwordData.currentPassword}
+              onChange={handlePasswordChange}
+              required
+            />
+          </div>
           
-          {/* New Password field */}
-          <label>New Password</label>
-          <input
-            type="password"
-            name="newPassword"
-            value={passwordData.newPassword}
-            onChange={handlePasswordChange}
-            required
-          />
+          <div className="form-group">
+            <label>New Password</label>
+            <input
+              type="password"
+              name="newPassword"
+              value={passwordData.newPassword}
+              onChange={handlePasswordChange}
+              required
+            />
+          </div>
           
-          {/* Confirm New Password field - must match new password */}
-          <label>Confirm New Password</label>
-          <input
-            type="password"
-            name="confirmPassword"
-            value={passwordData.confirmPassword}
-            onChange={handlePasswordChange}
-            required
-          />
+          <div className="form-group">
+            <label>Confirm New Password</label>
+            <input
+              type="password"
+              name="confirmPassword"
+              value={passwordData.confirmPassword}
+              onChange={handlePasswordChange}
+              required
+            />
+          </div>
           
-          {/* Submit button - disabled if passwords don't match */}
           <button 
             type="submit" 
             disabled={passwordData.newPassword !== passwordData.confirmPassword}
@@ -238,10 +246,11 @@ export default function ProfilePage({ user, setUser }) {
             CHANGE PASSWORD
           </button>
           
-          {/* Message area for password change feedback */}
-          <p className="message">{passwordMsg}</p>
+          <p className={`message ${passwordMsg.includes('failed') ? 'error-message' : ''}`}>
+            {passwordMsg}
+          </p>
         </form>
       )}
-    </>
+    </div>
   );
 }

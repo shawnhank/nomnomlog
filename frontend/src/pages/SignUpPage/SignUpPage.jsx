@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useNavigate, Link } from 'react-router';
 import { signUp } from '../../services/authService';
+import './SignUpPage.css';
 
 export default function SignUpPage({ setUser }) {
   // State to track form input values
-  // Added fname and lname fields to match updated User model
   const [formData, setFormData] = useState({
     fname: '',        
     lname: '',        
@@ -60,75 +60,85 @@ export default function SignUpPage({ setUser }) {
   const disable = formData.password !== formData.confirm;
 
   return (
-    <>
-      <h2>Sign Up!</h2>
+    <div className="SignUpPage">
+      <h2>Sign Up</h2>
       <form autoComplete="off" onSubmit={handleSubmit}>
-        {/* First Name field (new) */}
-        <label>First Name</label>
-        <input
-          type="text"
-          name="fname"
-          value={formData.fname}
-          onChange={handleChange}
-        />
+        <div className="form-group">
+          <label>First Name</label>
+          <input
+            type="text"
+            name="fname"
+            value={formData.fname}
+            onChange={handleChange}
+            required
+          />
+        </div>
         
-        {/* Last Name field (new) */}
-        <label>Last Name</label>
-        <input
-          type="text"
-          name="lname"
-          value={formData.lname}
-          onChange={handleChange}
-        />
+        <div className="form-group">
+          <label>Last Name</label>
+          <input
+            type="text"
+            name="lname"
+            value={formData.lname}
+            onChange={handleChange}
+            required
+          />
+        </div>
         
-        {/* Display Name field (optional) */}
-        <label>Display Name (optional)</label>
-        <input
-          type="text"
-          name="name"
-          value={formData.name}
-          onChange={handleChange}
-          placeholder="Leave blank to use First/Last name"
-        />
+        <div className="form-group">
+          <label>Display Name</label>
+          <input
+            type="text"
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+          />
+          <div className="optional-note">Optional - leave blank to use First/Last name</div>
+        </div>
         
-        {/* Email field (required) */}
-        <label>Email</label>
-        <input
-          type="email"
-          name="email"
-          value={formData.email}
-          onChange={handleChange}
-          required
-        />
+        <div className="form-group">
+          <label>Email</label>
+          <input
+            type="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            required
+          />
+        </div>
         
-        {/* Password field (required) */}
-        <label>Password</label>
-        <input
-          type="password"
-          name="password"
-          value={formData.password}
-          onChange={handleChange}
-          required
-        />
+        <div className="form-group">
+          <label>Password</label>
+          <input
+            type="password"
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+            required
+          />
+        </div>
         
-        {/* Password confirmation field (required) */}
-        <label>Confirm</label>
-        <input
-          type="password"
-          name="confirm"
-          value={formData.confirm}
-          onChange={handleChange}
-          required
-        />
+        <div className="form-group">
+          <label>Confirm Password</label>
+          <input
+            type="password"
+            name="confirm"
+            value={formData.confirm}
+            onChange={handleChange}
+            required
+          />
+        </div>
         
-        {/* Submit button - disabled if passwords don't match */}
-        <button type="submit" disabled={disable}>
+        <button type="submit" className="submit-btn" disabled={disable}>
           SIGN UP
         </button>
       </form>
       
-      {/* Error message display */}
-      <p className="error-message">&nbsp;{errorMsg}</p>
-    </>
+      {errorMsg && <p className="error-message">{errorMsg}</p>}
+      
+      <div className="login-link">
+        Already have an account? <Link to="/login">Log In</Link>
+      </div>
+    </div>
   );
 }

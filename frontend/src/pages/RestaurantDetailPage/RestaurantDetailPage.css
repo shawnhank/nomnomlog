@@ -8,6 +8,7 @@
   display: flex;
   flex-direction: column;
   margin-bottom: 24px;
+  align-items: center; /* Center the header content */
 }
 
 .detail-header h2 {
@@ -21,41 +22,103 @@
   justify-content: center;
   gap: 10px;
   margin-top: 10px;
+  border-bottom: 1px solid #ddd;
+  width: 100%;
+  padding-bottom: 10px;
+  align-items: center; /* Ensure vertical alignment */
 }
 
 .action-button {
-  padding: 8px 16px;
-  background-color: #1a1a1a;
-  color: white;
+  padding: 10px 15px;
+  background-color: transparent;
+  color: #555;
   text-align: center;
   text-decoration: none;
-  border-radius: 4px;
+  border-radius: 0;
   font-weight: 500;
   border: none;
   cursor: pointer;
+  border-bottom: 3px solid transparent;
+  font-size: 16px;
+  transition: all 0.2s ease;
 }
 
 .action-button:hover {
-  background-color: #333333;
+  color: #1a1a1a;
+  background-color: transparent;
+  border-bottom-color: #1a1a1a;
 }
 
 .action-button.delete {
-  background-color: #dc3545;
+  background-color: transparent;
+  color: #000000;
 }
 
 .action-button.delete:hover {
-  background-color: #c82333;
+  color: #1a1a0a0a;
+}
+
+.action-button.delete:hover {
+  background-color: transparent;
+  color: #1a1a1a;
+  border-bottom-color: #1a1a1a;
+}
+
+/* More specific selectors to increase specificity */
+.RestaurantDetailPage .action-buttons .action-button,
+.RestaurantDetailPage .action-buttons button.action-button,
+.RestaurantDetailPage .action-buttons a.action-button {
+  border: none !important;
+  border-radius: 0 !important;
+  border-bottom: 3px solid transparent !important;
+  background-color: transparent !important;
+  color: #555 !important;
+  padding: 10px 15px !important;
+  font-size: 16px !important;
+  font-weight: 500 !important;
+  text-decoration: none !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  line-height: 1.5 !important;
+  margin: 0 !important;
+  vertical-align: middle !important;
+  box-sizing: border-box !important;
+  height: auto !important;
+}
+
+.RestaurantDetailPage .action-buttons .action-button:hover,
+.RestaurantDetailPage .action-buttons button.action-button:hover,
+.RestaurantDetailPage .action-buttons a.action-button:hover {
+  background-color: transparent !important;
+  color: #1a1a1a !important;
+  border-color: transparent !important;
+  border-bottom-color: #1a1a1a !important;
+}
+
+/* Specific styling for the delete button */
+.RestaurantDetailPage .action-buttons .action-button.delete,
+.RestaurantDetailPage .action-buttons button.action-button.delete {
+  background-color: transparent !important;
+  color: #555 !important;
+}
+
+.RestaurantDetailPage .action-buttons .action-button.delete:hover,
+.RestaurantDetailPage .action-buttons button.action-button.delete:hover {
+  background-color: transparent !important;
+  color: #dc3545 !important; /* Red text on hover */
+  border-bottom-color: #dc3545 !important; /* Red underline on hover */
 }
 
 @media (min-width: 768px) {
   .detail-header {
-    flex-direction: row;
-    justify-content: space-between;
+    flex-direction: column; /* Keep column layout for consistency */
     align-items: center;
   }
   
   .action-buttons {
-    margin-top: 0;
+    margin-top: 10px;
+    width: 100%;
   }
 }
 

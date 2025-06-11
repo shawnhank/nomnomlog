@@ -57,13 +57,16 @@ export default function MealDetailPage() {
   // Handle thumbs rating with toggle functionality
   async function handleThumbsRating(isThumbsUp) {
     try {
-      // If the current state matches what was clicked, set to null (toggle off)
-      const newValue = meal.isThumbsUp === isThumbsUp ? null : isThumbsUp;
-      const updatedMeal = await mealService.setThumbsRating(id, newValue);
+      const updatedMeal = await mealService.setThumbsRating(id, isThumbsUp);
       setMeal(updatedMeal);
     } catch (err) {
       setError('Failed to update thumbs rating');
     }
+  }
+
+  // Add this function to handle edit navigation
+  function handleEdit() {
+    navigate(`/meals/${id}/edit`);
   }
 
   if (loading) return <div className="flex justify-center items-center h-64">Loading meal details...</div>;
@@ -73,13 +76,18 @@ export default function MealDetailPage() {
   return (
     <div className="max-w-3xl mx-auto p-4 sm:p-6">
       {/* Header with meal name and action buttons */}
-      <div className="detail-header">
-        <h2>{meal.name}</h2>
-        <div className="action-buttons">
-          <Link to={`/meals/${id}/edit`} className="action-button">Edit</Link>
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b pb-4 mb-6">
+        <h1 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-0">{meal.name}</h1>
+        <div className="flex gap-3">
+          <button 
+            onClick={handleEdit}
+            className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md text-sm"
+          >
+            Edit
+          </button>
           <button 
             onClick={handleDelete} 
-            className="action-button delete"
+            className="bg-white hover:bg-red-50 text-red-600 border border-red-600 px-4 py-2 rounded-md text-sm"
           >
             Delete
           </button>

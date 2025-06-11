@@ -78,11 +78,11 @@ export default function RestaurantDetailPage() {
   return (
     <div className="RestaurantDetailPage">
       <div className="detail-header">
-        <h1>{restaurant.name}</h1>
+        <h2>{restaurant.name}</h2>
         <div className="action-buttons">
-          <Link to={`/restaurants/${id}/edit`} className="btn-edit">Edit</Link>
+          <Link to={`/restaurants/${id}/edit`} className="action-button">Edit</Link>
           <button 
-            className="btn-delete" 
+            className="action-button delete" 
             onClick={() => setShowDeleteConfirm(true)}
           >
             Delete

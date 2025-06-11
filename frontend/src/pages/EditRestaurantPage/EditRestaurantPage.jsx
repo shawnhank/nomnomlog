@@ -29,15 +29,25 @@ export default function EditRestaurantPage() {
     async function fetchData() {
       try {
         setLoading(true);
+        setError('');
         
-        // Fetch restaurant data
-        const restaurantData = await restaurantService.getById(id);
+        console.log(`Fetching restaurant with ID: ${id}`);
+        
+        // Fetch restaurant data with no-cache option
+        const restaurantData = await restaurantService.getById(id, true);
+        console.log('Restaurant data received:', restaurantData);
+        
+        if (!restaurantData || !restaurantData._id) {
+          throw new Error('Invalid restaurant data received');
+        }
         
         // Fetch all tags
         const tagsData = await tagService.getAll();
+        console.log('Tags data received:', tagsData);
         
         // Fetch tags for this restaurant
-        const restaurantTagsData = await restaurantTagService.getTagsByRestaurant(id);
+        const restaurantTagsData = await restaurantTagService.getAllForRestaurant(id);
+        console.log('Restaurant tags received:', restaurantTagsData);
         
         // Update state
         setFormData({
@@ -53,7 +63,8 @@ export default function EditRestaurantPage() {
         
         setLoading(false);
       } catch (err) {
-        setError('Failed to load restaurant data');
+        console.error('Error fetching restaurant data:', err);
+        setError('Failed to load restaurant data: ' + (err.message || 'Unknown error'));
         setLoading(false);
       }
     }

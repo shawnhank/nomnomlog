@@ -44,6 +44,24 @@ button:hover {
   border-color: #1a1a1a;
 }
 
+/* Add this to prevent global button styles from affecting our action buttons */
+button.action-button {
+  border: none;
+  border-radius: 0;
+  border-bottom: 3px solid transparent;
+  background-color: transparent;
+  color: #555;
+  padding: 10px 15px;
+  font-size: 16px;
+}
+
+button.action-button:hover {
+  background-color: transparent;
+  color: #1a1a1a;
+  border-color: transparent;
+  border-bottom-color: #1a1a1a;
+}
+
 button:disabled {
   background-color: grey;
 }

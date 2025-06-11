@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Routes, Route } from 'react-router';
+import { Routes, Route, Navigate } from 'react-router';
 import { getUser } from '../../services/authService';
 import HomePage from '../HomePage/HomePage';
 import PostListPage from '../PostListPage/PostListPage';
@@ -12,6 +12,9 @@ import RestaurantDetailPage from '../RestaurantDetailPage/RestaurantDetailPage';
 import NewRestaurantPage from '../NewRestaurantPage/NewRestaurantPage';
 import EditRestaurantPage from '../EditRestaurantPage/EditRestaurantPage';
 import MealListPage from '../MealListPage/MealListPage';
+import MealDetailPage from '../MealDetailPage/MealDetailPage';
+import NewMealPage from '../NewMealPage/NewMealPage';
+import EditMealPage from '../EditMealPage/EditMealPage';
 import NavBar from '../../components/NavBar/NavBar';
 import './App.css';
 
@@ -37,16 +40,19 @@ export default function App() {
             
             {/* Meal routes */}
             <Route path="/meals" element={<MealListPage />} />
+            <Route path="/meals/new" element={<NewMealPage />} />
+            <Route path="/meals/:id" element={<MealDetailPage />} />
+            <Route path="/meals/:id/edit" element={<EditMealPage />} />
             {/* Add other meal routes as needed */}
             
-            <Route path="*" element={null} />
+            <Route path="*" element={<Navigate to="/" />} />
           </Routes>
         ) : (
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/signup" element={<SignUpPage setUser={setUser} />} />
             <Route path="/login" element={<LogInPage setUser={setUser} />} />
-            <Route path="*" element={null} />
+            <Route path="*" element={<Navigate to="/" />} />
           </Routes>
         )}
       </section>

@@ -1,5 +1,9 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router';
+import { HeartIcon as HeartSolid } from '@heroicons/react/24/solid';
+import { HeartIcon as HeartOutline } from '@heroicons/react/24/outline';
+import { HandThumbUpIcon, HandThumbDownIcon } from '@heroicons/react/24/outline';
+import { HandThumbUpIcon as HandThumbUpSolid, HandThumbDownIcon as HandThumbDownSolid } from '@heroicons/react/24/solid';
 import * as mealService from '../../services/meal';
 import './MealListPage.css';
 
@@ -72,21 +76,26 @@ export default function MealListPage() {
 
   return (
     <div className="MealListPage">
-      <h1>My Meals</h1>
+      <div className="page-header">
+        <h2>My Meals</h2>
+      </div>
       
-      {/* Add New Meal button */}
-      <Link to="/meals/new" className="btn-add">
-        Add New Meal
-      </Link>
-      
-      {/* Filter controls */}
-      <div className="filter-controls">
+      <div className="tabs">
         <button 
-          className={showFavoritesOnly ? 'active' : ''}
-          onClick={() => setShowFavoritesOnly(!showFavoritesOnly)}
+          className={!showFavoritesOnly ? 'active' : ''} 
+          onClick={() => setShowFavoritesOnly(false)}
         >
-          {showFavoritesOnly ? 'Show All Meals' : 'Show Favorites Only'}
+          All Meals
         </button>
+        <button 
+          className={showFavoritesOnly ? 'active' : ''} 
+          onClick={() => setShowFavoritesOnly(true)}
+        >
+          Show Favorites Only
+        </button>
+        <Link to="/meals/new" className="action-button">
+          Add New Meal
+        </Link>
       </div>
       
       {/* Show loading message while fetching data */}
@@ -115,7 +124,13 @@ export default function MealListPage() {
                       onClick={(e) => handleToggleFavorite(meal._id, e)}
                       title={meal.isFavorite ? "Remove from favorites" : "Add to favorites"}
                     >
-                      ★
+                      <span className={`heart-icon ${meal.isFavorite ? 'filled' : ''}`}>
+                        {meal.isFavorite ? (
+                          <HeartSolid style={{ width: '24px', height: '24px' }} />
+                        ) : (
+                          <HeartOutline style={{ width: '24px', height: '24px' }} />
+                        )}
+                      </span>
                     </button>
                     
                     {/* Thumbs up/down buttons */}
@@ -125,14 +140,26 @@ export default function MealListPage() {
                         onClick={(e) => handleThumbsRating(meal._id, true, e)}
                         title="Would order again"
                       >
-                        👍
+                        <span className={`thumbs-up-icon ${meal.isThumbsUp === true ? 'filled' : ''}`}>
+                          {meal.isThumbsUp === true ? (
+                            <HandThumbUpSolid style={{ width: '24px', height: '24px' }} />
+                          ) : (
+                            <HandThumbUpIcon style={{ width: '24px', height: '24px' }} />
+                          )}
+                        </span>
                       </button>
                       <button 
                         className={`btn-thumbs-down ${meal.isThumbsUp === false ? 'active' : ''}`}
                         onClick={(e) => handleThumbsRating(meal._id, false, e)}
                         title="Would not order again"
                       >
-                        👎
+                        <span className={`thumbs-down-icon ${meal.isThumbsUp === false ? 'filled' : ''}`}>
+                          {meal.isThumbsUp === false ? (
+                            <HandThumbDownSolid style={{ width: '24px', height: '24px' }} />
+                          ) : (
+                            <HandThumbDownIcon style={{ width: '24px', height: '24px' }} />
+                          )}
+                        </span>
                       </button>
                     </div>
                   </div>

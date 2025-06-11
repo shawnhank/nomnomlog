@@ -163,7 +163,7 @@ export default function NewMealPage() {
           />
         </div>
         
-        <div className="form-actions">
+        <div className="form-actions meal-form-actions">
           <button type="button" className="btn-cancel" onClick={() => navigate('/meals')}>
             Cancel
           </button>

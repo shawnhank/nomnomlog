@@ -27,34 +27,57 @@
   font-size: 16px;
 }
 
-.form-actions {
-  display: flex;
-  gap: 10px;
-  margin-top: 20px;
+/* Reset form actions container */
+.EditRestaurantPage .form-actions {
+  display: flex !important;
+  flex-direction: row-reverse !important; /* Reverse the order of the buttons */
+  gap: 10px !important;
+  margin-top: 20px !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  width: 100% !important;
 }
 
-.btn-cancel, .btn-save {
-  padding: 10px 15px;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 16px;
+/* Reset both buttons to have consistent base styling */
+.EditRestaurantPage .form-actions .btn-cancel,
+.EditRestaurantPage .form-actions .btn-submit {
+  padding: 10px 15px !important;
+  border-radius: 4px !important;
+  cursor: pointer !important;
+  font-size: 16px !important;
+  height: 44px !important; /* Set a consistent height for both buttons */
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-sizing: border-box !important;
+  margin: 0 !important;
+  line-height: 1 !important;
+  text-align: center !important;
 }
 
-.btn-cancel {
-  background-color: #f8f9fa;
-  border: 1px solid #ddd;
-  color: #333;
+/* Cancel button specific styling */
+.EditRestaurantPage .form-actions .btn-cancel {
+  background-color: transparent !important;
+  border: 1px solid #dc3545 !important; /* Red outline */
+  color: #dc3545 !important; /* Red text */
+  min-width: 100px !important;
 }
 
-.btn-save {
-  background-color: #4CAF50;
-  border: none;
-  color: white;
-  flex-grow: 1;
+.EditRestaurantPage .form-actions .btn-cancel:hover {
+  background-color: #dc3545 !important; /* Red fill on hover */
+  color: white !important; /* White text on hover */
 }
 
-.btn-save:hover {
-  background-color: #45a049;
+/* Submit button specific styling */
+.EditRestaurantPage .form-actions .btn-submit {
+  background-color: #4CAF50 !important;
+  border: none !important;
+  color: white !important;
+  flex-grow: 1 !important;
+}
+
+.EditRestaurantPage .form-actions .btn-submit:hover {
+  background-color: #45a049 !important;
 }
 
 .error-message {

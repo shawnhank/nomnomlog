@@ -32,12 +32,16 @@ export default function RestaurantListPage() {
 
   return (
     <div className="RestaurantListPage">
-      <h1>My Restaurants</h1>
+      <div className="page-header">
+        <h2>My Restaurants</h2>
+      </div>
       
-      {/* Add New Restaurant button */}
-      <Link to="/restaurants/new" className="btn-add">
-        Add New Restaurant
-      </Link>
+      <div className="tabs">
+        <div className="tab-spacer"></div>
+        <Link to="/restaurants/new" className="action-button">
+          New
+        </Link>
+      </div>
       
       {/* Show loading message while fetching data */}
       {loading && <p>Loading restaurants...</p>}
@@ -58,7 +62,6 @@ export default function RestaurantListPage() {
               <Link to={`/restaurants/${restaurant._id}`}>
                 <h3>{restaurant.name}</h3>
                 {restaurant.address && <p>{restaurant.address}</p>}
-                {/* Category display removed */}
               </Link>
             </li>
           ))}

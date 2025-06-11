@@ -35,6 +35,14 @@
   @apply mt-6 flex justify-end gap-4;
 }
 
-.btn-submit {
-  @apply px-4 py-2 bg-primary text-white rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary;
+/* Submit button styling */
+.form-actions .btn-submit {
+  background-color: #4CAF50 !important; /* Green background */
+  border: none !important;
+  color: white !important;
+  flex-grow: 1 !important;
+}
+
+.form-actions .btn-submit:hover {
+  background-color: #45a049 !important; /* Slightly darker green on hover */
 }
