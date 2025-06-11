@@ -1,7 +1,4 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
+@import "tailwindcss";
 /* Custom base styles go here */
 :root {
   font-family: Arial, Helvetica, sans-serif;
@@ -22,35 +19,8 @@ body {
 }
 
 /* Custom classes */
-.logo-size {
-  height: 250px !important;
-  width: 250px !important;
-  display: block;
-  margin: 0 auto;
-}
 
-/* Custom input height for Catalyst Input components */
-.custom-input-height input {
-  min-height: 2.50rem !important; /* 44px */
-  padding-top: 0.75rem !important;
-  padding-bottom: 0.75rem !important;
-}
 
-/* Add spacing between labels and inputs within each field */
-.custom-input-height [data-slot="label"] {
-  margin-bottom: 0.75rem !important; /* 12px */
-}
-
-/* Add spacing between form fields */
-.form-field-spacing {
-  margin-bottom: 1.5rem !important; /* 24px */
-}
-
-/* Add extra spacing for checkbox field */
-.checkbox-spacing {
-  margin-top: 2rem !important; /* 32px */
-  margin-bottom: 2rem !important; /* 32px */
-}
 
 
 /* Remove all the other styles that conflict with Tailwind */
