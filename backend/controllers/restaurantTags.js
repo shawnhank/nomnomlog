@@ -5,6 +5,7 @@ module.exports = {
   getAllForRestaurant,
   create,
   delete: deleteRestaurantTag,
+  deleteByRestaurantAndTag,
   deleteAllForRestaurant
 };
 
@@ -23,13 +24,11 @@ async function getAllForRestaurant(req, res) {
     
     // Get all restaurant-tag relationships for this restaurant
     const restaurantTags = await RestaurantTag.find({ 
-      restaurantId: req.params.restaurantId 
+      restaurantId: req.params.restaurantId,
+      userId: req.user._id
     }).populate('tagId');
     
-    // Extract just the tags from the relationships
-    const tags = restaurantTags.map(rt => rt.tagId);
-    
-    res.json(tags);
+    res.json(restaurantTags);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -48,6 +47,9 @@ async function create(req, res) {
       return res.status(404).json({ error: 'Restaurant not found' });
     }
     
+    // Add the user ID to the restaurant tag
+    req.body.userId = req.user._id;
+    
     const restaurantTag = await RestaurantTag.create(req.body);
     res.status(201).json(restaurantTag);
   } catch (err) {
@@ -55,29 +57,40 @@ async function create(req, res) {
   }
 }
 
-// Delete a restaurant-tag relationship
+// Delete a restaurant-tag relationship by ID
 async function deleteRestaurantTag(req, res) {
   try {
-    const restaurantTag = await RestaurantTag.findById(req.params.id);
+    const restaurantTag = await RestaurantTag.findOneAndDelete({
+      _id: req.params.id,
+      userId: req.user._id
+    });
     
     if (!restaurantTag) {
       return res.status(404).json({ error: 'Restaurant tag not found' });
     }
     
-    // Verify the restaurant belongs to the user
-    const restaurant = await Restaurant.findOne({
-      _id: restaurantTag.restaurantId,
+    res.json({ message: 'Restaurant tag deleted successfully' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+}
+
+// Delete a restaurant-tag relationship by restaurant ID and tag ID
+async function deleteByRestaurantAndTag(req, res) {
+  try {
+    const restaurantTag = await RestaurantTag.findOneAndDelete({
+      restaurantId: req.params.restaurantId,
+      tagId: req.params.tagId,
       userId: req.user._id
     });
     
-    if (!restaurant) {
-      return res.status(403).json({ error: 'Not authorized' });
+    if (!restaurantTag) {
+      return res.status(404).json({ error: 'Restaurant tag relationship not found' });
     }
     
-    await RestaurantTag.findByIdAndDelete(req.params.id);
     res.json({ message: 'Restaurant tag deleted successfully' });
   } catch (err) {
-    res.status(400).json({ error: err.message });
+    res.status(500).json({ error: err.message });
   }
 }
 
@@ -94,9 +107,15 @@ async function deleteAllForRestaurant(req, res) {
       return res.status(404).json({ error: 'Restaurant not found' });
     }
     
-    await RestaurantTag.deleteMany({ restaurantId: req.params.restaurantId });
-    res.json({ message: 'All restaurant tags deleted successfully' });
+    const result = await RestaurantTag.deleteMany({ 
+      restaurantId: req.params.restaurantId,
+      userId: req.user._id
+    });
+    
+    res.json({ 
+      message: `${result.deletedCount} restaurant tags deleted`
+    });
   } catch (err) {
-    res.status(400).json({ error: err.message });
+    res.status(500).json({ error: err.message });
   }
 }

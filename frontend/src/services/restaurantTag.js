@@ -35,9 +35,25 @@ export async function create(data) {
   }
 }
 
-// Delete a restaurant-tag relationship
+// Delete a restaurant-tag relationship by ID
 export async function deleteRestaurantTag(id) {
   const res = await fetch(`${BASE_URL}/${id}`, {
+    method: 'DELETE',
+    headers: {
+      'Authorization': `Bearer ${getToken()}`
+    }
+  });
+  
+  if (res.ok) {
+    return res.json();
+  } else {
+    throw new Error('Failed to delete restaurant tag');
+  }
+}
+
+// Delete a restaurant-tag relationship by restaurant ID and tag ID
+export async function deleteRestaurantTagByRestaurantAndTag(restaurantId, tagId) {
+  const res = await fetch(`${BASE_URL}/restaurant/${restaurantId}/tag/${tagId}`, {
     method: 'DELETE',
     headers: {
       'Authorization': `Bearer ${getToken()}`

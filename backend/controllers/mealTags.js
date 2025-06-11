@@ -5,6 +5,7 @@ module.exports = {
   getAllForMeal,
   create,
   delete: deleteMealTag,
+  deleteByMealAndTag,
   deleteAllForMeal
 };
 
@@ -45,7 +46,7 @@ async function create(req, res) {
   }
 }
 
-// Delete a meal-tag relationship
+// Delete a meal-tag relationship by ID
 async function deleteMealTag(req, res) {
   try {
     const mealTag = await MealTag.findOneAndDelete({
@@ -63,6 +64,25 @@ async function deleteMealTag(req, res) {
   }
 }
 
+// Delete a meal-tag relationship by meal ID and tag ID
+async function deleteByMealAndTag(req, res) {
+  try {
+    const mealTag = await MealTag.findOneAndDelete({
+      mealId: req.params.mealId,
+      tagId: req.params.tagId,
+      userId: req.user._id
+    });
+    
+    if (!mealTag) {
+      return res.status(404).json({ error: 'Meal tag relationship not found' });
+    }
+    
+    res.json({ message: 'Meal tag deleted successfully' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+}
+
 // Delete all tags for a meal
 async function deleteAllForMeal(req, res) {
   try {
@@ -71,7 +91,9 @@ async function deleteAllForMeal(req, res) {
       userId: req.user._id
     });
     
-    res.json({ message: `${result.deletedCount} meal tags deleted` });
+    res.json({ 
+      message: `${result.deletedCount} meal tags deleted`
+    });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

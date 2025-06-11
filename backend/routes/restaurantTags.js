@@ -14,6 +14,9 @@ router.post('/', ensureLoggedIn, restaurantTagsCtrl.create);
 // Delete a restaurant-tag relationship
 router.delete('/:id', ensureLoggedIn, restaurantTagsCtrl.delete);
 
+// Add a more descriptive endpoint for deleting a relationship
+router.delete('/restaurant/:restaurantId/tag/:tagId', ensureLoggedIn, restaurantTagsCtrl.deleteByRestaurantAndTag);
+
 // Delete all tags for a restaurant
 router.delete('/restaurant/:restaurantId', ensureLoggedIn, restaurantTagsCtrl.deleteAllForRestaurant);
 
