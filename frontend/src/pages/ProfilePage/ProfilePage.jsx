@@ -42,8 +42,12 @@ export default function ProfilePage({ user, setUser }) {
       // Show success message
       setProfileMsg('Profile updated successfully!');
     } catch (err) {
-      // Show error message if update fails
-      setProfileMsg('Profile update failed - Try again');
+      // More specific error messages based on the error
+      if (err.message && err.message.includes('duplicate')) {
+        setProfileMsg('Email address is already in use by another account');
+      } else {
+        setProfileMsg('Profile update failed - Try again');
+      }
     }
   }
   

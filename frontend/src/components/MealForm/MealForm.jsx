@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import './MealForm.css'; // Keep this for any custom styles
+import ImageUploader from '../ImageUploader/ImageUploader'; // Update the import path
 
 export default function MealForm({ initialData, onSubmit, buttonLabel = 'Save', loading = false }) {
   // Default form values
@@ -39,6 +40,14 @@ export default function MealForm({ initialData, onSubmit, buttonLabel = 'Save', 
     setFormData({
       ...formData,
       [name]: type === 'checkbox' ? checked : value
+    });
+  }
+  
+  // Handle image upload completion
+  function handleImageUploaded(imageUrl) {
+    setFormData({
+      ...formData,
+      imageUrl
     });
   }
   
@@ -128,6 +137,22 @@ export default function MealForm({ initialData, onSubmit, buttonLabel = 'Save', 
       </div>
       
       <div className="mb-4">
+        <label className="block text-sm font-medium text-gray-700 mb-1">Meal Photo</label>
+        <ImageUploader onImageUploaded={handleImageUploaded} />
+        
+        {formData.imageUrl && (
+          <div className="mt-2 flex items-center">
+            <img 
+              src={formData.imageUrl} 
+              alt="Meal" 
+              className="w-16 h-16 object-cover rounded-md mr-2" 
+            />
+            <span className="text-sm text-gray-600">Image will be saved with this meal</span>
+          </div>
+        )}
+      </div>
+      
+      <div className="mb-4">
         <label htmlFor="notes" className="block text-sm font-medium text-gray-700 mb-1">Notes</label>
         <textarea
           id="notes"
@@ -135,18 +160,6 @@ export default function MealForm({ initialData, onSubmit, buttonLabel = 'Save', 
           value={formData.notes}
           onChange={handleChange}
           rows="4"
-          className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
-        />
-      </div>
-      
-      <div className="mb-4">
-        <label htmlFor="imageUrl" className="block text-sm font-medium text-gray-700 mb-1">Image URL</label>
-        <input
-          type="url"
-          id="imageUrl"
-          name="imageUrl"
-          value={formData.imageUrl}
-          onChange={handleChange}
           className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
         />
       </div>

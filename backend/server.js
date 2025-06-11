@@ -1,3 +1,4 @@
+
 const path = require('path'); // Built into Node
 const express = require('express');
 const logger = require('morgan');
@@ -29,6 +30,7 @@ app.use('/api/tags', require('./routes/tags'));
 app.use('/api/restaurant-tags', require('./routes/restaurantTags'));
 app.use('/api/meals', require('./routes/meals'));
 app.use('/api/meal-tags', require('./routes/mealTags'));
+app.use('/api/uploads', require('./routes/uploads'));
 
 
 // Use a "catch-all" route to deliver the frontend's production index.html
