@@ -54,3 +54,13 @@ export async function logOut() {
     localStorage.removeItem('token');
   }
 }
+
+export async function forgotPassword(email) {
+  const response = await sendRequest(`${BASE_URL}/forgot-password`, 'POST', { email });
+  return response;
+}
+
+export async function resetPassword(token, password) {
+  const response = await sendRequest(`${BASE_URL}/reset-password/${token}`, 'POST', { password });
+  return response;
+}

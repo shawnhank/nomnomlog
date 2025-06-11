@@ -1,7 +1,7 @@
 <table>
   <tr>
     <td>
-      <img src="https://github.com/shawnhank/nomnomlog/blob/main/public/images/nnl_logo_v1_.png" width="150" alt="NomNomLog logo">
+      <img src="https://github.com/shawnhank/nomnomlog/blob/c8a200e6178f17b36abe3e2ebf726d53792a82ca/frontend/public/images/nnl_logo_v1_.png" width="150" alt="NomNomLog logo">
     </td>
     <td valign="middle" style="padding-left: 1em;">
       <div align="center">

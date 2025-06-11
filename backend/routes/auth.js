@@ -14,4 +14,8 @@ router.put('/profile', ensureLoggedIn, authCtrl.updateProfile);
 router.put('/password', ensureLoggedIn, authCtrl.changePassword);
 router.post('/logout', ensureLoggedIn, authCtrl.logOut);
 
+// Add these routes for password reset
+router.post('/forgot-password', authCtrl.forgotPassword);
+router.post('/reset-password/:token', authCtrl.resetPassword);
+
 module.exports = router;

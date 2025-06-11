@@ -18,6 +18,8 @@ import EditMealPage from '../EditMealPage/EditMealPage';
 import NavBar from '../../components/NavBar/NavBar';
 import { useEffect } from 'react';
 import { initializeTheme } from "../../utils/themeUtils";
+import ForgotPasswordPage from '../ForgotPasswordPage/ForgotPasswordPage';
+import ResetPasswordPage from '../ResetPasswordPage/ResetPasswordPage';
 
 export default function App() {
   const [user, setUser] = useState(getUser());
@@ -57,7 +59,8 @@ export default function App() {
       <Route path="/" element={<HomePage />} />
       <Route path="/signup" element={<SignUpPage setUser={setUser} />} />
       <Route path="/login" element={<LogInPage setUser={setUser} />} /> 
-      <Route path="/forgot-password" element={<LogInPage setUser={setUser} />} /> 
+      <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+      <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
       <Route path="*" element={<Navigate to="/" />} />
     </Routes>
   );

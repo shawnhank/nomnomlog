@@ -28,6 +28,8 @@ const userSchema = new Schema(
     },
     socialLoginId: { type: String }, // Optional, for social login integration
     isAdmin: { type: Boolean, default: false }, // For admin functionality
+    resetPasswordToken: String,
+    resetPasswordExpires: Date,
   },
   {
     timestamps: true,

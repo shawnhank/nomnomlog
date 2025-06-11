@@ -2,13 +2,17 @@ const User = require('../models/user');
 const TokenBlacklist = require('../models/tokenBlacklist');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+const crypto = require('crypto');
+const nodemailer = require('nodemailer');
 
 module.exports = {
   signUp,
   logIn,
   updateProfile,
   changePassword,
-  logOut
+  logOut,
+  forgotPassword,
+  resetPassword
 };
 
 async function logIn(req, res) {
@@ -142,4 +146,95 @@ function createJWT(user) {
     process.env.SECRET,
     { expiresIn: '24h' }
   );
+}
+
+// Generate a random token
+function generateToken() {
+  return crypto.randomBytes(20).toString('hex');
+}
+
+// Send password reset email
+async function forgotPassword(req, res) {
+  try {
+    const { email } = req.body;
+    
+    // Find user by email
+    const user = await User.findOne({ email });
+    if (!user) {
+      // Don't reveal that the user doesn't exist
+      return res.json({ message: 'If your email is registered, you will receive a password reset link.' });
+    }
+    
+    // Generate reset token and expiry
+    const resetToken = generateToken();
+    const resetTokenExpiry = Date.now() + 3600000; // 1 hour from now
+    
+    // Save token to user
+    user.resetPasswordToken = resetToken;
+    user.resetPasswordExpires = resetTokenExpiry;
+    await user.save();
+    
+    // Create reset URL
+    const resetUrl = `${process.env.FRONTEND_URL || 'http://localhost:3000'}/reset-password/${resetToken}`;
+    
+    // Setup email transporter (configure for your email provider)
+    const transporter = nodemailer.createTransport({
+      service: process.env.EMAIL_SERVICE || 'gmail',
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASSWORD
+      }
+    });
+    
+    // Email options
+    const mailOptions = {
+      from: process.env.EMAIL_FROM || 'noreply@nomnomlog.com',
+      to: user.email,
+      subject: 'NomNomLog Password Reset',
+      html: `
+        <p>You requested a password reset for your NomNomLog account.</p>
+        <p>Please click the link below to reset your password:</p>
+        <a href="${resetUrl}">Reset Password</a>
+        <p>This link will expire in 1 hour.</p>
+        <p>If you didn't request this, please ignore this email.</p>
+      `
+    };
+    
+    // Send email
+    await transporter.sendMail(mailOptions);
+    
+    res.json({ message: 'If your email is registered, you will receive a password reset link.' });
+  } catch (err) {
+    console.error('Password reset error:', err);
+    res.status(500).json({ message: 'Failed to process password reset request' });
+  }
+}
+
+// Reset password with token
+async function resetPassword(req, res) {
+  try {
+    const { token } = req.params;
+    const { password } = req.body;
+    
+    // Find user with valid token
+    const user = await User.findOne({
+      resetPasswordToken: token,
+      resetPasswordExpires: { $gt: Date.now() }
+    });
+    
+    if (!user) {
+      return res.status(400).json({ message: 'Password reset token is invalid or has expired' });
+    }
+    
+    // Update password and clear reset token
+    user.password = password;
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpires = undefined;
+    await user.save();
+    
+    res.json({ message: 'Password has been reset successfully. Please log in with your new password.' });
+  } catch (err) {
+    console.error('Password reset error:', err);
+    res.status(500).json({ message: 'Failed to reset password' });
+  }
 }
