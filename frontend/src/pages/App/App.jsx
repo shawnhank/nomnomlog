@@ -5,7 +5,6 @@ import HomePage from '../HomePage/HomePage';
 import PostListPage from '../PostListPage/PostListPage';
 import NewPostPage from '../NewPostPage/NewPostPage';
 import SignUpPage from '../SignUpPage/SignUpPage';
-import SignUp2Page from '../SignUp2Page/SignUp2Page';
 import LogInPage from '../LogInPage/LogInPage';
 import ProfilePage from '../ProfilePage/ProfilePage';
 import RestaurantListPage from '../RestaurantListPage/RestaurantListPage';
@@ -57,8 +56,8 @@ export default function App() {
     <Routes>
       <Route path="/" element={<HomePage />} />
       <Route path="/signup" element={<SignUpPage setUser={setUser} />} />
-      <Route path="/signup2" element={<SignUp2Page setUser={setUser} />} />
-      <Route path="/login" element={<LogInPage setUser={setUser} />} />
+      <Route path="/login" element={<LogInPage setUser={setUser} />} /> 
+      <Route path="/forgot-password" element={<LogInPage setUser={setUser} />} /> 
       <Route path="*" element={<Navigate to="/" />} />
     </Routes>
   );

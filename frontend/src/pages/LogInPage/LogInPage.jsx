@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useNavigate, Link } from 'react-router';
 import * as authService from '../../services/authService';
 
 export default function LogInPage({ setUser }) {
