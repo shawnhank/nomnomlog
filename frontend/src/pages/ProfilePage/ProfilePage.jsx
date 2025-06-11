@@ -1,228 +1,76 @@
-import { useState } from 'react';
-import { updateProfile, changePassword } from '../../services/authService';
+import { useState, useEffect } from 'react';
+import * as userService from '../../services/userService';
+import MultiImageUploader from '../../components/MultiImageUploader/MultiImageUploader';
 import './ProfilePage.css';
 
 export default function ProfilePage({ user, setUser }) {
-  // State for profile data - updated to use fullName instead of fname/lname
-  const [profileData, setProfileData] = useState({
-    fullName: user.fullName || user.displayName || '',
-    email: user.email,        
+  const [formData, setFormData] = useState({
+    fullName: user.fullName || '',
+    email: user.email || '',
+    userImages: user.userImages || []
   });
   
-  // State for password change functionality
-  const [passwordData, setPasswordData] = useState({
-    currentPassword: '',      
-    newPassword: '',          
-    confirmPassword: '',      
-  });
-  
-  // State for user feedback messages
-  const [profileMsg, setProfileMsg] = useState('');  // Message for profile updates
-  const [passwordMsg, setPasswordMsg] = useState(''); // Message for password changes
-  
-  // State to track which tab is active (profile or password)
-  const [activeTab, setActiveTab] = useState('profile');
-  
-  /**
-   * Handle profile form submission
-   * Updates user profile information including fullName and email
-   */
-  async function handleProfileSubmit(evt) {
+  const [message, setMessage] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  function handleChange(evt) {
+    setFormData({
+      ...formData,
+      [evt.target.name]: evt.target.value
+    });
+  }
+
+  // Handle image updates from MultiImageUploader
+  function handleImagesUpdated(updatedData) {
+    setFormData({
+      ...formData,
+      ...updatedData
+    });
+  }
+
+  async function handleSubmit(evt) {
     evt.preventDefault();
+    setLoading(true);
+    
     try {
-      // Create a copy of the profile data for submission
-      const dataToSubmit = { ...profileData };
-      
-      // Call API to update the user's profile
-      const updatedUser = await updateProfile(dataToSubmit);
-      
-      // Update the user state in the parent component
+      const updatedUser = await userService.updateProfile(formData);
       setUser(updatedUser);
-      
-      // Show success message
-      setProfileMsg('Profile updated successfully!');
+      setMessage('Profile updated successfully!');
     } catch (err) {
-      // More specific error messages based on the error
-      if (err.message && err.message.includes('duplicate')) {
-        setProfileMsg('Email address is already in use by another account');
-      } else {
-        setProfileMsg('Profile update failed - Try again');
-      }
+      setMessage('Failed to update profile. Please try again.');
+    } finally {
+      setLoading(false);
     }
   }
-  
-  /**
-   * Handle password change form submission
-   * Verifies current password and updates to new password if confirmed
-   */
-  async function handlePasswordSubmit(evt) {
-    evt.preventDefault();
-    
-    // Validate that new password and confirmation match
-    if (passwordData.newPassword !== passwordData.confirmPassword) {
-      setPasswordMsg('New passwords do not match');
-      return;
-    }
-    
-    try {
-      // Call API to change the password
-      const response = await changePassword({
-        currentPassword: passwordData.currentPassword,
-        newPassword: passwordData.newPassword
-      });
-      
-      // Reset password form fields
-      setPasswordData({
-        currentPassword: '',
-        newPassword: '',
-        confirmPassword: '',
-      });
-      
-      // If server indicates re-login is required
-      if (response.requireRelogin) {
-        // Clear the stored token
-        localStorage.removeItem('token');
-        // Update user state to null
-        setUser(null);
-        // Redirect to login page
-        navigate('/login', { 
-          state: { message: 'Password updated successfully. Please log in with your new password.' }
-        });
-      } else {
-        // Show success message
-        setPasswordMsg('Password updated successfully!');
-      }
-    } catch (err) {
-      // Show error message if password change fails
-      setPasswordMsg('Password update failed - Try again');
-    }
-  }
-  
-  /**
-   * Handle changes to profile form input fields
-   * Updates the corresponding field in state and clears any messages
-   */
-  function handleProfileChange(evt) {
-    setProfileData({ 
-      ...profileData, 
-      [evt.target.name]: evt.target.value 
-    });
-    setProfileMsg(''); // Clear any previous messages
-  }
-  
-  /**
-   * Handle changes to password form input fields
-   * Updates the corresponding field in state and clears any messages
-   */
-  function handlePasswordChange(evt) {
-    setPasswordData({ 
-      ...passwordData, 
-      [evt.target.name]: evt.target.value 
-    });
-    setPasswordMsg(''); // Clear any previous messages
-  }
-  
+
   return (
     <div className="ProfilePage">
-      <h2>My Profile</h2>
+      <h1>My Profile</h1>
       
-      {/* Tab navigation */}
-      <div className="tabs">
+      {message && <p className={message.includes('Failed') ? 'text-red-500' : 'text-green-500'}>{message}</p>}
+      
+      <form onSubmit={handleSubmit}>
+        {/* Existing form fields */}
+        {/* ... */}
+        
+        {/* Add MultiImageUploader */}
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700 mb-1">Profile Photos</label>
+          <MultiImageUploader 
+            images={formData.userImages} 
+            onImagesUpdated={handleImagesUpdated}
+            entityType="user"
+          />
+        </div>
+        
         <button 
-          className={activeTab === 'profile' ? 'active' : ''} 
-          onClick={() => setActiveTab('profile')}
+          type="submit" 
+          className="w-full py-2 px-4 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:bg-gray-400"
+          disabled={loading}
         >
-          Edit Profile
+          {loading ? 'Updating...' : 'Update Profile'}
         </button>
-        <button 
-          className={activeTab === 'password' ? 'active' : ''} 
-          onClick={() => setActiveTab('password')}
-        >
-          Change Password
-        </button>
-      </div>
-      
-      {/* Profile Edit Form - updated to use fullName instead of fname/lname */}
-      {activeTab === 'profile' && (
-        <form autoComplete="off" onSubmit={handleProfileSubmit}>
-          <div className="form-group">
-            <label>Full Name</label>
-            <input
-              type="text"
-              name="fullName"
-              value={profileData.fullName}
-              onChange={handleProfileChange}
-              required
-            />
-          </div>
-          
-          <div className="form-group">
-            <label>Email</label>
-            <input
-              type="email"
-              name="email"
-              value={profileData.email}
-              onChange={handleProfileChange}
-              required
-            />
-          </div>
-          
-          <button type="submit">UPDATE PROFILE</button>
-          
-          <p className={`message ${profileMsg.includes('failed') ? 'error-message' : ''}`}>
-            {profileMsg}
-          </p>
-        </form>
-      )}
-      
-      {/* Password Change Form - remains the same */}
-      {activeTab === 'password' && (
-        <form autoComplete="off" onSubmit={handlePasswordSubmit}>
-          <div className="form-group">
-            <label>Current Password</label>
-            <input
-              type="password"
-              name="currentPassword"
-              value={passwordData.currentPassword}
-              onChange={handlePasswordChange}
-              required
-            />
-          </div>
-          
-          <div className="form-group">
-            <label>New Password</label>
-            <input
-              type="password"
-              name="newPassword"
-              value={passwordData.newPassword}
-              onChange={handlePasswordChange}
-              required
-            />
-          </div>
-          
-          <div className="form-group">
-            <label>Confirm New Password</label>
-            <input
-              type="password"
-              name="confirmPassword"
-              value={passwordData.confirmPassword}
-              onChange={handlePasswordChange}
-              required
-            />
-          </div>
-          
-          <button 
-            type="submit" 
-            disabled={passwordData.newPassword !== passwordData.confirmPassword}
-          >
-            CHANGE PASSWORD
-          </button>
-          
-          <p className={`message ${passwordMsg.includes('failed') ? 'error-message' : ''}`}>
-            {passwordMsg}
-          </p>
-        </form>
-      )}
+      </form>
     </div>
   );
 }

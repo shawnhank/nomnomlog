@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router';
 import * as mealService from '../../services/meal';
 import * as restaurantService from '../../services/restaurant';
+import MultiImageUploader from '../../components/MultiImageUploader/MultiImageUploader';
 
 export default function EditMealPage() {
   const [formData, setFormData] = useState({
@@ -11,7 +12,7 @@ export default function EditMealPage() {
     isThumbsUp: null,
     isFavorite: false,
     notes: '',
-    imageUrl: ''
+    mealImages: []
   });
   
   const [restaurants, setRestaurants] = useState([]);
@@ -20,33 +21,38 @@ export default function EditMealPage() {
   
   const { id } = useParams();
   const navigate = useNavigate();
-  
-  // Load meal data and restaurants for dropdown
+
+  // Load meal data and restaurants
   useEffect(() => {
     async function fetchData() {
       try {
         setLoading(true);
         
-        // Fetch meal data
-        const mealData = await mealService.getById(id);
+        // Get meal data
+        const meal = await mealService.getById(id);
         
-        // Fetch restaurants for dropdown
-        const restaurantsData = await restaurantService.getAll();
+        // Convert legacy imageUrl to mealImages if needed
+        let mealImages = meal.mealImages || [];
+        if (meal.imageUrl && mealImages.length === 0) {
+          mealImages = [{
+            url: meal.imageUrl,
+            isPrimary: true,
+            caption: ''
+          }];
+        }
         
-        // Format date for input field (YYYY-MM-DD)
-        const formattedDate = new Date(mealData.date).toISOString().split('T')[0];
-        
-        // Update state
         setFormData({
-          name: mealData.name || '',
-          restaurantId: mealData.restaurantId?._id || '',
-          date: formattedDate,
-          isThumbsUp: mealData.isThumbsUp,
-          isFavorite: mealData.isFavorite || false,
-          notes: mealData.notes || '',
-          imageUrl: mealData.imageUrl || ''
+          name: meal.name,
+          restaurantId: meal.restaurantId,
+          date: new Date(meal.date).toISOString().split('T')[0],
+          isThumbsUp: meal.isThumbsUp,
+          isFavorite: meal.isFavorite,
+          notes: meal.notes || '',
+          mealImages
         });
         
+        // Get restaurants for dropdown
+        const restaurantsData = await restaurantService.getAll();
         setRestaurants(restaurantsData);
         setLoading(false);
       } catch (err) {
@@ -57,7 +63,21 @@ export default function EditMealPage() {
     
     fetchData();
   }, [id]);
-  
+
+  function handleChange(evt) {
+    const { name, value, type, checked } = evt.target;
+    
+    // Handle different input types
+    const newValue = type === 'checkbox' 
+      ? checked 
+      : value;
+    
+    setFormData({
+      ...formData,
+      [name]: newValue
+    });
+  }
+
   // Handle form submission
   async function handleSubmit(evt) {
     evt.preventDefault();

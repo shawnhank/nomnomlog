@@ -74,6 +74,13 @@ User (MVP)
   - passwordHash : string
   - socialLoginId : string (optional)
   - isAdmin : boolean
+  - userImages : array of {
+      url : string,
+      isPrimary : boolean,
+      caption : string,
+      createdAt : date,
+      updatedAt : date
+    }
   - createdAt : date
   - updatedAt : date
 
@@ -86,6 +93,13 @@ Restaurant (MVP)
   - website : string (optional)
   - lat : number (optional)
   - long : number (optional)
+  - restaurantImages : array of {
+      url : string,
+      isPrimary : boolean,
+      caption : string,
+      createdAt : date,
+      updatedAt : date
+    }
   - createdAt : date
   - updatedAt : date
 
@@ -99,7 +113,13 @@ Meal  (MVP)
   - isThumbsUp : boolean
   - starRating : number (optional)
   - isFavorite : boolean
-  - photoUrl : string (optional)
+  - mealImages : array of {
+      url : string,
+      isPrimary : boolean,
+      caption : string,
+      createdAt : date,
+      updatedAt : date
+    }
   - notes : string
   - dateEaten : date
   - createdAt : date

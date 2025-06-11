@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import * as mealService from '../../services/meal';
 import * as restaurantService from '../../services/restaurant';
+import MultiImageUploader from '../../components/MultiImageUploader/MultiImageUploader';
 import './NewMealPage.css';
 
 export default function NewMealPage() {
@@ -13,7 +14,7 @@ export default function NewMealPage() {
     isThumbsUp: null,
     isFavorite: false,
     notes: '',
-    imageUrl: ''
+    mealImages: []
   });
   
   // State for restaurants dropdown
@@ -43,8 +44,8 @@ export default function NewMealPage() {
     setLoading(true);
     
     try {
-      await mealService.create(formData);
-      navigate('/meals');
+      const newMeal = await mealService.create(formData);
+      navigate(`/meals/${newMeal._id}`);
     } catch (err) {
       setError('Failed to create meal');
     } finally {
@@ -55,9 +56,23 @@ export default function NewMealPage() {
   // Handle form input changes
   function handleChange(evt) {
     const { name, value, type, checked } = evt.target;
+    
+    // Handle different input types
+    const newValue = type === 'checkbox' 
+      ? checked 
+      : value;
+    
     setFormData({
       ...formData,
-      [name]: type === 'checkbox' ? checked : value
+      [name]: newValue
+    });
+  }
+
+  // Handle image updates from MultiImageUploader
+  function handleImagesUpdated(updatedData) {
+    setFormData({
+      ...formData,
+      ...updatedData
     });
   }
   
@@ -65,7 +80,7 @@ export default function NewMealPage() {
     <div className="NewMealPage">
       <h1>Add New Meal</h1>
       
-      {error && <p className="error-message">{error}</p>}
+      {error && <p className="text-red-500">{error}</p>}
       
       <form onSubmit={handleSubmit}>
         <div className="form-group">
@@ -152,22 +167,28 @@ export default function NewMealPage() {
           />
         </div>
         
-        <div className="form-group">
-          <label htmlFor="imageUrl">Image URL</label>
-          <input
-            type="url"
-            id="imageUrl"
-            name="imageUrl"
-            value={formData.imageUrl}
-            onChange={handleChange}
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700 mb-1">Meal Photos</label>
+          <MultiImageUploader 
+            images={formData.mealImages} 
+            onImagesUpdated={handleImagesUpdated}
+            entityType="meal"
           />
         </div>
         
-        <div className="form-actions meal-form-actions">
-          <button type="button" className="btn-cancel" onClick={() => navigate('/meals')}>
+        <div className="flex justify-end space-x-2">
+          <button 
+            type="button" 
+            className="py-2 px-4 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300"
+            onClick={() => navigate('/meals')}
+          >
             Cancel
           </button>
-          <button type="submit" className="btn-submit" disabled={loading}>
+          <button 
+            type="submit" 
+            className="py-2 px-4 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+            disabled={loading}
+          >
             {loading ? 'Saving...' : 'Save Meal'}
           </button>
         </div>

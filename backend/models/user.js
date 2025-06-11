@@ -4,6 +4,23 @@ const bcrypt = require('bcrypt');
 
 const SALT_ROUNDS = 6;
 
+const imageSchema = new Schema({
+  url: { 
+    type: String, 
+    required: true 
+  },
+  isPrimary: { 
+    type: Boolean, 
+    default: false 
+  },
+  caption: { 
+    type: String, 
+    default: '' 
+  }
+}, { 
+  timestamps: true
+});
+
 const userSchema = new Schema(
   {
     // New field for the simplified name approach
@@ -30,6 +47,7 @@ const userSchema = new Schema(
     isAdmin: { type: Boolean, default: false }, // For admin functionality
     resetPasswordToken: String,
     resetPasswordExpires: Date,
+    userImages: [imageSchema],
   },
   {
     timestamps: true,

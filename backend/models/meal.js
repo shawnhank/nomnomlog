@@ -1,6 +1,24 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
+// Define the image schema with timestamps
+const imageSchema = new Schema({
+  url: { 
+    type: String, 
+    required: true 
+  },
+  isPrimary: { 
+    type: Boolean, 
+    default: false 
+  },
+  caption: { 
+    type: String, 
+    default: '' 
+  }
+}, { 
+  timestamps: true
+});
+
 const mealSchema = new Schema({
   userId: {
     type: Schema.Types.ObjectId,
@@ -31,9 +49,15 @@ const mealSchema = new Schema({
     type: Date,
     default: Date.now
   },
+  
+  // Updated with more specific field name
+  mealImages: [imageSchema],
+  
+  // Keep imageUrl temporarily for backward compatibility
   imageUrl: {
     type: String
   },
+  
   isFavorite: {
     type: Boolean,
     default: false

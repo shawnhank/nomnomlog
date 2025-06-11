@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router';
 import * as restaurantService from '../../services/restaurant';
 import * as tagService from '../../services/tag';
 import * as restaurantTagService from '../../services/restaurantTag';
+import MultiImageUploader from '../../components/MultiImageUploader/MultiImageUploader';
 import './NewRestaurantPage.css';
 
 export default function NewRestaurantPage() {
@@ -11,7 +12,8 @@ export default function NewRestaurantPage() {
     name: '',
     address: '',
     phone: '',
-    website: ''
+    website: '',
+    restaurantImages: []
   });
   
   // State for tags
@@ -98,11 +100,19 @@ export default function NewRestaurantPage() {
     }
   }
   
+  // Handle image updates from MultiImageUploader
+  function handleImagesUpdated(updatedData) {
+    setFormData({
+      ...formData,
+      ...updatedData
+    });
+  }
+
   return (
     <div className="NewRestaurantPage">
       <h1>Add New Restaurant</h1>
       
-      {errorMsg && <p className="error-message">{errorMsg}</p>}
+      {errorMsg && <p className="text-red-500">{errorMsg}</p>}
       
       <form onSubmit={handleSubmit}>
         {/* Restaurant Name field (required) */}
@@ -152,6 +162,16 @@ export default function NewRestaurantPage() {
             value={formData.website}
             onChange={handleChange}
             placeholder="https://example.com"
+          />
+        </div>
+        
+        {/* Add MultiImageUploader */}
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700 mb-1">Restaurant Photos</label>
+          <MultiImageUploader 
+            images={formData.restaurantImages} 
+            onImagesUpdated={handleImagesUpdated}
+            entityType="restaurant"
           />
         </div>
         

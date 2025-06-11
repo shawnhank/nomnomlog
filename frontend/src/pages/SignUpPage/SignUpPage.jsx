@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router';
 import { signUp } from '../../services/authService';
+import MultiImageUploader from '../../components/MultiImageUploader/MultiImageUploader';
 
 export default function SignUpPage({ setUser }) {
   const [formData, setFormData] = useState({
@@ -8,7 +9,8 @@ export default function SignUpPage({ setUser }) {
     fullName: '',
     password: '',
     confirm: '',
-    newsletter: false
+    newsletter: false,
+    userImages: [] // Add this field
   });
   
   const [errorMsg, setErrorMsg] = useState('');
@@ -18,6 +20,14 @@ export default function SignUpPage({ setUser }) {
     const value = evt.target.type === 'checkbox' ? evt.target.checked : evt.target.value;
     setFormData({ ...formData, [evt.target.name]: value });
     setErrorMsg('');
+  }
+
+  // Handle image updates from MultiImageUploader
+  function handleImagesUpdated(updatedData) {
+    setFormData({
+      ...formData,
+      ...updatedData
+    });
   }
 
   async function handleSubmit(evt) {
@@ -129,6 +139,15 @@ export default function SignUpPage({ setUser }) {
           <label htmlFor="newsletter" className="mb-3 px-2 block text-sm text-gray-700 dark:text-gray-300">
             Get emails about product updates and news
           </label>
+        </div>
+        
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700 mb-1">Profile Photos</label>
+          <MultiImageUploader 
+            images={formData.userImages} 
+            onImagesUpdated={handleImagesUpdated}
+            entityType="user"
+          />
         </div>
         
         <button

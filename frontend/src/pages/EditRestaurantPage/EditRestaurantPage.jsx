@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router';
 import * as restaurantService from '../../services/restaurant';
 import * as tagService from '../../services/tag';
 import * as restaurantTagService from '../../services/restaurantTag';
+import MultiImageUploader from '../../components/MultiImageUploader/MultiImageUploader';
 import './EditRestaurantPage.css';
 
 export default function EditRestaurantPage() {
@@ -10,7 +11,8 @@ export default function EditRestaurantPage() {
     name: '',
     address: '',
     phone: '',
-    website: ''
+    website: '',
+    restaurantImages: []
   });
   
   const [tags, setTags] = useState([]);
@@ -54,7 +56,8 @@ export default function EditRestaurantPage() {
           name: restaurantData.name || '',
           address: restaurantData.address || '',
           phone: restaurantData.phone || '',
-          website: restaurantData.website || ''
+          website: restaurantData.website || '',
+          restaurantImages: restaurantData.restaurantImages || []
         });
         
         setTags(tagsData);
@@ -110,11 +113,13 @@ export default function EditRestaurantPage() {
   // Handle form submission
   async function handleSubmit(evt) {
     evt.preventDefault();
+    setLoading(true);
+    
     try {
-      // Update restaurant data
+      // Update restaurant
       await restaurantService.update(id, formData);
       
-      // Get current restaurant tags
+      // Handle tag updates
       const currentTagIds = restaurantTags.map(tag => tag._id);
       
       // Tags to add (in selectedTags but not in currentTagIds)
@@ -136,13 +141,22 @@ export default function EditRestaurantPage() {
       
       await Promise.all(addPromises);
       
-      // Navigate back to the detail page
       navigate(`/restaurants/${id}`);
     } catch (err) {
-      setError('Failed to update restaurant - Try again');
+      setError('Failed to update restaurant');
+    } finally {
+      setLoading(false);
     }
   }
   
+  // Handle image updates from MultiImageUploader
+  function handleImagesUpdated(updatedData) {
+    setFormData({
+      ...formData,
+      ...updatedData
+    });
+  }
+
   // Show loading state
   if (loading) {
     return <div className="EditRestaurantPage loading">Loading restaurant data...</div>;
@@ -202,6 +216,16 @@ export default function EditRestaurantPage() {
             value={formData.website}
             onChange={handleChange}
             placeholder="https://example.com"
+          />
+        </div>
+        
+        {/* Add MultiImageUploader */}
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700 mb-1">Restaurant Photos</label>
+          <MultiImageUploader 
+            images={formData.restaurantImages} 
+            onImagesUpdated={handleImagesUpdated}
+            entityType="restaurant"
           />
         </div>
         
