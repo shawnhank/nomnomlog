@@ -1,0 +1,98 @@
+/* Styles for the icons */
+.icon {
+  width: 24px;
+  height: 24px;
+  display: inline-block;
+}
+
+.heart-icon, .thumbs-icon {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  color: white; /* Default color for icons */
+}
+
+.heart-icon.filled {
+  color: #e11d48; /* red-600 for filled heart */
+}
+
+.thumbs-up-icon.filled {
+  color: white; /* Keep white for filled thumbs up */
+}
+
+.thumbs-down-icon.filled {
+  color: white; /* Keep white for filled thumbs down */
+}
+
+.action-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 4px;
+  background-color: #1a1a1a; /* Dark background like Edit button */
+  color: white; /* White text */
+  cursor: pointer;
+}
+
+.action-button:hover {
+  background-color: #333333; /* Slightly lighter on hover */
+}
+
+/* Remove these background color changes */
+/* 
+.action-button.favorite-active {
+  background-color: #e11d48;
+}
+*/
+
+.action-button.thumbs-up-active {
+  background-color: #16a34a; /* Green background when active */
+}
+
+.action-button.thumbs-down-active {
+  background-color: #dc2626; /* Red background when active */
+}
+
+.action-buttons-container {
+  display: flex;
+  gap: 12px;
+  margin: 16px 0;
+}
+
+.edit-button, .delete-button {
+  padding: 8px 12px;
+  font-size: 14px;
+  border-radius: 4px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.edit-button {
+  margin-right: 12px;
+  background-color: #1a1a1a; /* Dark background like action buttons */
+  color: white;
+  border: none;
+}
+
+.delete-button {
+  background-color: #1a1a1a; /* Dark background like Edit button */
+  color: white;
+  border: none;
+}
+
+.edit-button:hover {
+  background-color: #333333; /* Slightly lighter on hover */
+}
+
+.delete-button:hover {
+  background-color: #333333; /* Slightly lighter on hover */
+}
+
+.header-buttons {
+  display: flex;
+}

@@ -18,10 +18,15 @@
 
 .filter-controls button {
   padding: 8px 12px;
-  background-color: #f1f1f1;
-  border: 1px solid #ddd;
+  background-color: #1a1a1a;
+  color: white;
+  border: none;
   border-radius: 4px;
   cursor: pointer;
+}
+
+.filter-controls button:hover {
+  background-color: #333333;
 }
 
 .filter-controls button.active {
@@ -102,4 +107,105 @@
 .error-message {
   color: red;
   margin: 10px 0;
+}
+
+/* Add these styles for the icons */
+.icon {
+  width: 24px;
+  height: 24px;
+  display: inline-block;
+}
+
+.heart-icon, .thumbs-icon {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+}
+
+.heart-icon.filled {
+  color: #e11d48; /* red-600 */
+}
+
+.thumbs-up-icon.filled {
+  color: #16a34a; /* green-600 */
+}
+
+.thumbs-down-icon.filled {
+  color: #dc2626; /* red-600 */
+}
+
+/* Add this to your existing MealListPage.css */
+
+.page-header {
+  margin-bottom: 24px;
+}
+
+.page-header h2 {
+  text-align: center;
+  margin-bottom: 16px;
+  font-size: 1.8rem;
+}
+
+.tabs {
+  display: flex;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #ddd;
+}
+
+.tabs button {
+  padding: 10px 20px;
+  background-color: transparent;
+  border: none;
+  border-bottom: 3px solid transparent;
+  color: #555;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.tabs button:hover {
+  color: #1a1a1a;
+  background-color: transparent;
+}
+
+.tabs button.active {
+  color: #1a1a1a;
+  border-bottom-color: #1a1a1a;
+  background-color: transparent;
+}
+
+.action-button {
+  display: block;
+  width: 100%;
+  max-width: 200px;
+  margin: 0 auto 20px;
+  padding: 10px 15px;
+  background-color: #1a1a1a;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+.action-button:hover {
+  background-color: #333333;
+}
+
+@media (min-width: 768px) {
+  .page-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .tabs {
+    margin-bottom: 0;
+    border-bottom: none;
+  }
+  
+  .action-button {
+    margin: 0;
+  }
 }

@@ -6,52 +6,57 @@
 
 .detail-header {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-  border-bottom: 1px solid #eee;
-  padding-bottom: 15px;
+  flex-direction: column;
+  margin-bottom: 24px;
 }
 
-.detail-header h1 {
-  margin: 0;
+.detail-header h2 {
+  text-align: center;
+  margin-bottom: 16px;
+  font-size: 1.8rem;
 }
 
 .action-buttons {
   display: flex;
-  gap: 10px;
-}
-
-.btn-edit, .btn-delete {
-  padding: 8px 15px;
-  border-radius: 4px;
-  font-size: 14px;
-  cursor: pointer;
-  text-decoration: none;
-  display: inline-flex;
-  align-items: center;
   justify-content: center;
+  gap: 10px;
+  margin-top: 10px;
 }
 
-.btn-edit {
-  background-color: #4285f4;
+.action-button {
+  padding: 8px 16px;
+  background-color: #1a1a1a;
   color: white;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 4px;
+  font-weight: 500;
   border: none;
+  cursor: pointer;
 }
 
-.btn-delete {
-  background-color: #fff;
-  color: #d9534f;
-  border: 1px solid #d9534f;
+.action-button:hover {
+  background-color: #333333;
 }
 
-.btn-edit:hover {
-  background-color: #3367d6;
+.action-button.delete {
+  background-color: #dc3545;
 }
 
-.btn-delete:hover {
-  background-color: #d9534f;
-  color: white;
+.action-button.delete:hover {
+  background-color: #c82333;
+}
+
+@media (min-width: 768px) {
+  .detail-header {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .action-buttons {
+    margin-top: 0;
+  }
 }
 
 .restaurant-details {
