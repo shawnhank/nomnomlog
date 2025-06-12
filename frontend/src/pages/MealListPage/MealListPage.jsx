@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router';
+import { Link, useLocation } from 'react-router';
 import { HeartIcon as HeartSolid } from '@heroicons/react/24/solid';
 import { HeartIcon as HeartOutline } from '@heroicons/react/24/outline';
 import { HandThumbUpIcon, HandThumbDownIcon } from '@heroicons/react/24/outline';
 import { HandThumbUpIcon as HandThumbUpSolid, HandThumbDownIcon as HandThumbDownSolid } from '@heroicons/react/24/solid';
 import * as mealService from '../../services/meal';
+import * as restaurantService from '../../services/restaurant';
+import MealCard from '../../components/MealCard/MealCard';
 import './MealListPage.css';
 
 export default function MealListPage() {
@@ -132,77 +134,10 @@ export default function MealListPage() {
               : 'No meals added yet. Add your first meal!'}
         </div>
       ) : (
-        <ul className="meal-list">
+        <ul className="meal-list grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {filteredMeals.map(meal => (
-            <li key={meal._id} className="meal-item">
-              <Link to={`/meals/${meal._id}`}>
-                <div className="meal-header">
-                  <h3>{meal.name}</h3>
-                  <div className="meal-actions">
-                    {/* Favorite button */}
-                    <button 
-                      className={`btn-favorite ${meal.isFavorite ? 'active' : ''}`}
-                      onClick={(e) => handleToggleFavorite(meal._id, e)}
-                      title={meal.isFavorite ? "Remove from favorites" : "Add to favorites"}
-                    >
-                      <span className={`heart-icon ${meal.isFavorite ? 'filled' : ''}`}>
-                        {meal.isFavorite ? (
-                          <HeartSolid style={{ width: '24px', height: '24px' }} />
-                        ) : (
-                          <HeartOutline style={{ width: '24px', height: '24px' }} />
-                        )}
-                      </span>
-                    </button>
-                    
-                    {/* Thumbs up/down buttons */}
-                    <div className="thumbs-container">
-                      <button 
-                        className={`btn-thumbs-up ${meal.isThumbsUp === true ? 'active' : ''}`}
-                        onClick={(e) => handleThumbsRating(meal._id, true, e)}
-                        title="Would order again"
-                      >
-                        <span className={`thumbs-up-icon ${meal.isThumbsUp === true ? 'filled' : ''}`}>
-                          {meal.isThumbsUp === true ? (
-                            <HandThumbUpSolid style={{ width: '24px', height: '24px' }} />
-                          ) : (
-                            <HandThumbUpIcon style={{ width: '24px', height: '24px' }} />
-                          )}
-                        </span>
-                      </button>
-                      <button 
-                        className={`btn-thumbs-down ${meal.isThumbsUp === false ? 'active' : ''}`}
-                        onClick={(e) => handleThumbsRating(meal._id, false, e)}
-                        title="Would not order again"
-                      >
-                        <span className={`thumbs-down-icon ${meal.isThumbsUp === false ? 'filled' : ''}`}>
-                          {meal.isThumbsUp === false ? (
-                            <HandThumbDownSolid style={{ width: '24px', height: '24px' }} />
-                          ) : (
-                            <HandThumbDownIcon style={{ width: '24px', height: '24px' }} />
-                          )}
-                        </span>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-                
-                {/* Restaurant name */}
-                {meal.restaurantId && <p>at {meal.restaurantId.name}</p>}
-                
-                {/* Meal date */}
-                <p className="meal-date">
-                  {new Date(meal.date).toLocaleDateString()}
-                </p>
-                
-                {/* Meal image if available */}
-                {meal.imageUrl && (
-                  <img 
-                    src={meal.imageUrl} 
-                    alt={meal.name} 
-                    className="meal-image"
-                  />
-                )}
-              </Link>
+            <li key={meal._id}>
+              <MealCard meal={meal} />
             </li>
           ))}
         </ul>

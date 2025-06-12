@@ -3,11 +3,14 @@ import { useParams, Link, useNavigate } from 'react-router';
 import { HeartIcon as HeartSolid } from '@heroicons/react/24/solid';
 import { HeartIcon as HeartOutline } from '@heroicons/react/24/outline';
 import * as restaurantService from '../../services/restaurant';
+import * as mealService from '../../services/meal';
 import MultiImageUploader from '../../components/MultiImageUploader/MultiImageUploader';
+import MealCard from '../../components/MealCard/MealCard';
 import './RestaurantDetailPage.css';
 
 export default function RestaurantDetailPage() {
   const [restaurant, setRestaurant] = useState(null);
+  const [meals, setMeals] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const { id } = useParams();
@@ -15,11 +18,18 @@ export default function RestaurantDetailPage() {
 
   // Fetch restaurant details when component mounts
   useEffect(() => {
-    async function fetchRestaurant() {
+    async function fetchData() {
       try {
         setLoading(true);
         const restaurantData = await restaurantService.getById(id);
         setRestaurant(restaurantData);
+        
+        // Fetch meals for this restaurant
+        const allMeals = await mealService.getAll();
+        const restaurantMeals = allMeals.filter(meal => 
+          meal.restaurantId && meal.restaurantId._id === id
+        );
+        setMeals(restaurantMeals);
       } catch (err) {
         setError('Failed to load restaurant details');
         console.error(err);
@@ -28,7 +38,7 @@ export default function RestaurantDetailPage() {
       }
     }
 
-    fetchRestaurant();
+    fetchData();
   }, [id]);
 
   // Handle delete restaurant
@@ -75,6 +85,22 @@ export default function RestaurantDetailPage() {
       {/* Header with restaurant name and action buttons */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b pb-4 mb-6">
         <h1 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-0">{restaurant.name}</h1>
+        {/* Favorite button */}
+        <div className="action-buttons-container">
+          <button 
+            onClick={handleToggleFavorite}
+            className="action-button"
+            title={restaurant.isFavorite ? "Remove from favorites" : "Add to favorites"}
+          >
+            <span className={`heart-icon ${restaurant.isFavorite ? 'filled' : ''}`}>
+              {restaurant.isFavorite ? (
+                <HeartSolid style={{ width: '24px', height: '24px', color: '#e11d48' }} />
+              ) : (
+                <HeartOutline style={{ width: '24px', height: '24px', color: 'white' }} />
+              )}
+            </span>
+          </button>
+        </div>
         <div className="flex gap-3">
           <Link 
             to="/restaurants/new"
@@ -129,53 +155,9 @@ export default function RestaurantDetailPage() {
             </div>
           )}
         </div>
-
-        {/* Favorite button */}
-        <div className="action-buttons-container">
-          <button 
-            onClick={handleToggleFavorite}
-            className="action-button"
-            title={restaurant.isFavorite ? "Remove from favorites" : "Add to favorites"}
-          >
-            <span className={`heart-icon ${restaurant.isFavorite ? 'filled' : ''}`}>
-              {restaurant.isFavorite ? (
-                <HeartSolid style={{ width: '24px', height: '24px', color: '#e11d48' }} />
-              ) : (
-                <HeartOutline style={{ width: '24px', height: '24px', color: 'white' }} />
-              )}
-            </span>
-          </button>
-        </div>
-
-        {/* Restaurant images section with MultiImageUploader */}
-        <div className="my-6">
-          <h3 className="text-lg font-medium mb-2">Photos</h3>
-          
-          {/* Display primary image prominently if available */}
-          {restaurant.restaurantImages && restaurant.restaurantImages.length > 0 && restaurant.restaurantImages.find(img => img.isPrimary) && (
-            <div className="mb-4">
-              <img 
-                src={restaurant.restaurantImages.find(img => img.isPrimary).url} 
-                alt={restaurant.name} 
-                className="w-full max-h-96 object-cover rounded-lg shadow-md"
-              />
-              {restaurant.restaurantImages.find(img => img.isPrimary).caption && (
-                <p className="text-sm text-gray-600 mt-1">
-                  {restaurant.restaurantImages.find(img => img.isPrimary).caption}
-                </p>
-              )}
-            </div>
-          )}
-          
-          {/* MultiImageUploader for managing images */}
-          <MultiImageUploader 
-            images={restaurant.restaurantImages || []} 
-            onImagesUpdated={handleImagesUpdated}
-            entityType="restaurant"
-          />
-        </div>
-
-        {/* Link to meals at this restaurant */}
+      </div>
+      <div>
+       {/* Link to meals at this restaurant */}
         <div className="mt-8 pt-4 border-t">
           <Link 
             to={`/meals?restaurant=${restaurant._id}`}
@@ -183,7 +165,36 @@ export default function RestaurantDetailPage() {
           >
             View Meals at {restaurant.name}
           </Link>
-        </div>
+        </div>    
+      </div>
+
+      {/* Meals at this restaurant section - Moving above restaurant photos */}
+      <div className="mt-8 pt-4 border-t">
+        <h3 className="text-xl font-semibold mb-4">Meals at {restaurant.name}</h3>
+        
+        {meals.length === 0 ? (
+          <p className="text-gray-500 text-center py-4">No meals logged at this restaurant yet.</p>
+        ) : (
+          <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {meals.map(meal => (
+              <li key={meal._id}>
+                <MealCard meal={meal} />
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+
+      {/* Restaurant images section */}
+      <div className="my-6 pt-4 border-t">
+        <h3 className="text-xl font-semibold mb-4">Restaurant Photos</h3>
+        
+        {/* MultiImageUploader for managing images - No special primary image display */}
+        <MultiImageUploader 
+          images={restaurant.restaurantImages || []} 
+          onImagesUpdated={handleImagesUpdated}
+          entityType="restaurant"
+        />
       </div>
     </div>
   );
