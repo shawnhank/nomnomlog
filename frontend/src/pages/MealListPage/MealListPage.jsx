@@ -26,15 +26,25 @@ export default function MealListPage() {
     async function fetchMeals() {
       try {
         setLoading(true);
-        // Call the appropriate service method based on filter
-        const mealsData = showFavoritesOnly 
-          ? await mealService.getFavorites()
-          : await mealService.getAll();
+        let mealsData;
+        
+        if (showFavoritesOnly) {
+          mealsData = await mealService.getFavorites();
+        } else {
+          mealsData = await mealService.getAll();
+        }
+        
+        // Debug: Log the meals data to see if mealImages is populated
+        console.log('Fetched meals:', mealsData);
+        if (mealsData.length > 0) {
+          console.log('First meal mealImages:', mealsData[0].mealImages);
+        }
         
         setMeals(mealsData);
-        setLoading(false);
       } catch (err) {
         setError('Failed to load meals');
+        console.error(err);
+      } finally {
         setLoading(false);
       }
     }

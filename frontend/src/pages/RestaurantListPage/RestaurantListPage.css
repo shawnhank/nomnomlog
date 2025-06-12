@@ -1,7 +1,14 @@
 .RestaurantListPage {
-  max-width: 800px;
+  max-width: 100%;
   margin: 0 auto;
-  padding: 20px;
+  padding: 10px;
+}
+
+@media (min-width: 640px) {
+  .RestaurantListPage {
+    max-width: 800px;
+    padding: 20px;
+  }
 }
 
 .btn-add {
@@ -21,6 +28,18 @@
   display: grid;
   grid-template-columns: 1fr;
   gap: 1rem;
+}
+
+@media (min-width: 640px) {
+  .restaurant-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .restaurant-list {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 
 .page-header {
@@ -43,15 +62,10 @@
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
   -ms-overflow-style: none;
-  justify-content: center;
-}
-
-.tabs::-webkit-scrollbar {
-  display: none;
 }
 
 .tabs button, .tabs .action-button {
-  padding: 10px 20px;
+  padding: 8px 12px;
   background: none;
   border: none;
   border-bottom: 3px solid transparent;
@@ -60,6 +74,18 @@
   cursor: pointer;
   white-space: nowrap;
   transition: all 0.2s ease;
+  font-size: 0.875rem;
+}
+
+@media (min-width: 640px) {
+  .tabs button, .tabs .action-button {
+    padding: 10px 20px;
+    font-size: 1rem;
+  }
+  
+  .tabs {
+    justify-content: center;
+  }
 }
 
 .tabs button:hover {
@@ -83,18 +109,6 @@
 
 .tabs .action-button:hover {
   background-color: #2563eb;
-}
-
-@media (min-width: 640px) {
-  .restaurant-list {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (min-width: 1024px) {
-  .restaurant-list {
-    grid-template-columns: repeat(3, 1fr);
-  }
 }
 
 .restaurant-item {

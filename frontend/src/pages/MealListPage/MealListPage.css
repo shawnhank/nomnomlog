@@ -1,7 +1,14 @@
 .MealListPage {
-  max-width: 800px;
+  max-width: 100%;
   margin: 0 auto;
-  padding: 20px;
+  padding: 10px;
+}
+
+@media (min-width: 640px) {
+  .MealListPage {
+    max-width: 800px;
+    padding: 20px;
+  }
 }
 
 .btn-add {
@@ -42,6 +49,20 @@
   display: grid;
   grid-template-columns: 1fr;
   gap: 1rem;
+}
+
+/* Adjust to two columns at medium screens */
+@media (min-width: 640px) {
+  .meal-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Keep at two columns even on large screens */
+@media (min-width: 1024px) {
+  .meal-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 .meal-item {
@@ -170,7 +191,6 @@
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
   -ms-overflow-style: none;
-  justify-content: center; /* Center the tabs */
 }
 
 .tabs::-webkit-scrollbar {
@@ -178,12 +198,12 @@
 }
 
 .tabs button, .tabs a {
-  padding: 10px 15px; /* Reduced from 10px 20px */
+  padding: 8px 12px; /* Smaller padding on mobile */
   background-color: transparent;
   border: none;
   border-bottom: 3px solid transparent;
   color: #555;
-  font-size: 16px;
+  font-size: 0.875rem; /* Smaller font on mobile */
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -193,6 +213,17 @@
   white-space: nowrap;
   flex-shrink: 0;
   min-width: fit-content;
+}
+
+@media (min-width: 640px) {
+  .tabs button, .tabs a {
+    padding: 10px 15px; /* Larger padding on desktop */
+    font-size: 1rem; /* Larger font on desktop */
+  }
+  
+  .tabs {
+    justify-content: center;
+  }
 }
 
 .tabs button:hover, .tabs a:hover {
@@ -240,17 +271,4 @@
   text-align: center;
   padding: 20px;
   color: #666;
-}
-
-/* Add responsive grid layout like in RestaurantListPage */
-@media (min-width: 640px) {
-  .meal-list {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (min-width: 1024px) {
-  .meal-list {
-    grid-template-columns: repeat(3, 1fr);
-  }
 }
