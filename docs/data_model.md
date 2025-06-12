@@ -109,7 +109,6 @@ Meal  (MVP)
   - userId : ObjectId (FK → User)
   - restaurantId : ObjectId (FK → Restaurant)
   - mealName : string
-  - mealCategoryId : ObjectId (FK → MealCategory)
   - mealMethodId : ObjectId (FK → MealMethod)
   - isThumbsUp : boolean
   - starRating : number (optional)
