@@ -93,6 +93,7 @@ Restaurant (MVP)
   - website : string (optional)
   - lat : number (optional)
   - long : number (optional)
+  - isFavorite: boolean
   - restaurantImages : array of {
       url : string,
       isPrimary : boolean,
