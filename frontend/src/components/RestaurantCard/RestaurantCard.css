@@ -1,0 +1,7 @@
+.restaurant-card {
+  transition: transform 0.2s ease-in-out;
+}
+
+.restaurant-card:hover {
+  transform: translateY(-2px);
+}

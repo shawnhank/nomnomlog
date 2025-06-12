@@ -4,6 +4,7 @@ import { HeartIcon as HeartSolid } from '@heroicons/react/24/solid';
 import { HeartIcon as HeartOutline } from '@heroicons/react/24/outline';
 import * as restaurantService from '../../services/restaurant';
 import './RestaurantListPage.css';
+import RestaurantCard from '../../components/RestaurantCard/RestaurantCard';
 
 export default function RestaurantListPage() {
   const [restaurants, setRestaurants] = useState([]);
@@ -108,45 +109,10 @@ export default function RestaurantListPage() {
         <ul className="restaurant-list">
           {filteredRestaurants.map(restaurant => (
             <li key={restaurant._id} className="restaurant-item">
-              <Link to={`/restaurants/${restaurant._id}`} className="block">
-                <div className="p-4 border rounded-lg shadow-sm hover:shadow-md transition-shadow">
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <h2 className="text-xl font-semibold">{restaurant.name}</h2>
-                      
-                      {restaurant.address && (
-                        <p className="text-gray-600 text-sm mt-1">{restaurant.address}</p>
-                      )}
-                      
-                      {restaurant.phone && (
-                        <p className="text-gray-600 text-sm mt-1">{restaurant.phone}</p>
-                      )}
-                    </div>
-                    
-                    <button 
-                      onClick={(e) => handleToggleFavorite(restaurant._id, e)}
-                      className="text-gray-400 hover:text-red-500 ml-2"
-                      title={restaurant.isFavorite ? "Remove from favorites" : "Add to favorites"}
-                    >
-                      {restaurant.isFavorite ? (
-                        <HeartSolid className="w-6 h-6 text-red-500" />
-                      ) : (
-                        <HeartOutline className="w-6 h-6" />
-                      )}
-                    </button>
-                  </div>
-                  
-                  {restaurant.restaurantImages && restaurant.restaurantImages.length > 0 && restaurant.restaurantImages.find(img => img.isPrimary) && (
-                    <div className="mt-3">
-                      <img 
-                        src={restaurant.restaurantImages.find(img => img.isPrimary).url} 
-                        alt={restaurant.name} 
-                        className="w-full h-48 object-cover rounded-md"
-                      />
-                    </div>
-                  )}
-                </div>
-              </Link>
+              <RestaurantCard 
+                restaurant={restaurant} 
+                onToggleFavorite={handleToggleFavorite} 
+              />
             </li>
           ))}
         </ul>
