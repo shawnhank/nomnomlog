@@ -1,4 +1,5 @@
 import sendRequest from './sendRequest';
+import { getToken } from './authService';
 
 const BASE_URL = '/api/restaurants';
 
@@ -29,4 +30,35 @@ export function update(id, restaurantData) {
 
 export function deleteRestaurant(id) {
   return sendRequest(`${BASE_URL}/${id}`, 'DELETE');
+}
+
+// Toggle favorite status
+export async function toggleFavorite(id) {
+  const res = await fetch(`${BASE_URL}/${id}/favorite`, {
+    method: 'PUT',
+    headers: {
+      'Authorization': `Bearer ${getToken()}`
+    }
+  });
+  
+  if (res.ok) {
+    return res.json();
+  } else {
+    throw new Error('Failed to toggle favorite status');
+  }
+}
+
+// Get all favorite restaurants
+export async function getFavorites() {
+  const res = await fetch(`${BASE_URL}/favorites`, {
+    headers: {
+      'Authorization': `Bearer ${getToken()}`
+    }
+  });
+  
+  if (res.ok) {
+    return res.json();
+  } else {
+    throw new Error('Failed to fetch favorite restaurants');
+  }
 }

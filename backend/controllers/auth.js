@@ -63,6 +63,11 @@ async function updateProfile(req, res) {
     // Update email if provided
     if (req.body.email) user.email = req.body.email;
     
+    // Update userImages if provided
+    if (req.body.userImages) {
+      user.userImages = req.body.userImages;
+    }
+    
     // Migration: If user doesn't have fullName but has fname/lname, create fullName
     if (!user.fullName && (user.fname || user.lname)) {
       user.fullName = [user.fname, user.lname].filter(Boolean).join(' ');
@@ -72,7 +77,7 @@ async function updateProfile(req, res) {
     
     // Create a new token with the updated user info
     const token = createJWT(user);
-    res.json(token);
+    res.json({ token });
   } catch (err) {
     console.log(err);
     res.status(400).json({ message: 'Failed to update profile' });

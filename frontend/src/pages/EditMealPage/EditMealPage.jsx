@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router';
 import * as mealService from '../../services/meal';
 import * as restaurantService from '../../services/restaurant';
 import MultiImageUploader from '../../components/MultiImageUploader/MultiImageUploader';
+import './EditMealPage.css';
 
 export default function EditMealPage() {
   const [formData, setFormData] = useState({
@@ -64,20 +65,6 @@ export default function EditMealPage() {
     fetchData();
   }, [id]);
 
-  function handleChange(evt) {
-    const { name, value, type, checked } = evt.target;
-    
-    // Handle different input types
-    const newValue = type === 'checkbox' 
-      ? checked 
-      : value;
-    
-    setFormData({
-      ...formData,
-      [name]: newValue
-    });
-  }
-
   // Handle form submission
   async function handleSubmit(evt) {
     evt.preventDefault();
@@ -113,6 +100,14 @@ export default function EditMealPage() {
     setFormData({
       ...formData,
       isThumbsUp
+    });
+  }
+  
+  // Handle image updates from MultiImageUploader
+  function handleImagesUpdated(updatedData) {
+    setFormData({
+      ...formData,
+      ...updatedData
     });
   }
   
@@ -248,33 +243,30 @@ export default function EditMealPage() {
         </div>
         
         <div>
-          <label htmlFor="imageUrl" className="block text-sm font-medium text-gray-700 mb-1">
-            Image URL
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Meal Photos
           </label>
-          <input
-            type="url"
-            id="imageUrl"
-            name="imageUrl"
-            value={formData.imageUrl}
-            onChange={handleChange}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+          <MultiImageUploader 
+            images={formData.mealImages} 
+            onImagesUpdated={handleImagesUpdated}
+            entityType="meal"
           />
         </div>
-        
         <div className="flex justify-end gap-3 pt-4">
-          <button
-            type="button"
-            onClick={() => navigate(`/meals/${id}`)}
-            className="px-4 py-2 bg-white text-gray-700 border border-gray-300 rounded-md hover:bg-gray-50"
-          >
-            Cancel
-          </button>
           <button
             type="submit"
             disabled={loading}
             className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 disabled:opacity-50"
           >
             {loading ? 'Saving...' : 'Save Changes'}
+          </button>
+        
+          <button
+            type="button"
+            onClick={() => navigate(`/meals/${id}`)}
+            className="px-4 py-2 bg-white text-gray-700 border border-gray-300 rounded-md hover:bg-gray-50"
+          >
+            Cancel
           </button>
         </div>
       </form>

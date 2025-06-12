@@ -20,6 +20,7 @@ export default function NavBar({ user, setUser }) {
   function handleLogOut() {
     logOut()
     setUser(null)
+    navigate('/login') // Redirect to login page instead of home
   }
 
   function handleToggleTheme() {
@@ -110,9 +111,17 @@ export default function NavBar({ user, setUser }) {
                           <span className="hidden sm:inline-block text-sm font-medium text-gray-700 dark:text-gray-300 mr-2">
                             {user.name}
                           </span>
-                          <div className="h-8 w-8 rounded-full bg-gray-200 dark:bg-gray-600 flex items-center justify-center text-gray-700 dark:text-gray-200">
-                            {user.name.charAt(0).toUpperCase()}
-                          </div>
+                          {user.userImages && user.userImages.length > 0 ? (
+                            <img 
+                              src={user.userImages[0].url} 
+                              alt={user.name}
+                              className="h-8 w-8 rounded-full object-cover"
+                            />
+                          ) : (
+                            <div className="h-8 w-8 rounded-full bg-gray-200 dark:bg-gray-600 flex items-center justify-center text-gray-700 dark:text-gray-200">
+                              {user.name.charAt(0).toUpperCase()}
+                            </div>
+                          )}
                         </div>
                       </MenuButton>
                     </div>
@@ -125,7 +134,7 @@ export default function NavBar({ user, setUser }) {
                           to="/profile"
                           className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600"
                         >
-                          Your Profile
+                          Edit Profile
                         </Link>
                       </MenuItem>
                       <MenuItem>
@@ -161,25 +170,7 @@ export default function NavBar({ user, setUser }) {
                   {item.name}
                 </DisclosureButton>
               ))}
-              {user && (
-                <DisclosureButton
-                  as={Link}
-                  to="/profile"
-                  className="block rounded-md px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700"
-                >
-                  Profile
-                </DisclosureButton>
-              )}
-              {user && (
-                <DisclosureButton
-                  as={Link}
-                  to="/"
-                  onClick={handleLogOut}
-                  className="block rounded-md px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700"
-                >
-                  Log Out
-                </DisclosureButton>
-              )}
+              {/* Remove all user-related content from mobile menu */}
             </div>
           </DisclosurePanel>
         </>

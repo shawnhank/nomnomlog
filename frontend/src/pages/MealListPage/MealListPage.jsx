@@ -16,6 +16,8 @@ export default function MealListPage() {
   const [error, setError] = useState('');
   // State to track if we're showing favorites only
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
+  // State for search term
+  const [searchTerm, setSearchTerm] = useState('');
 
   // Fetch meals when component mounts or when showFavoritesOnly changes
   useEffect(() => {
@@ -74,6 +76,13 @@ export default function MealListPage() {
     }
   }
 
+  // Filter meals based on search term
+  const filteredMeals = meals.filter(meal =>
+    meal.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    (meal.restaurantId && meal.restaurantId.name && 
+     meal.restaurantId.name.toLowerCase().includes(searchTerm.toLowerCase()))
+  );
+
   return (
     <div className="MealListPage">
       <div className="page-header">
@@ -98,21 +107,33 @@ export default function MealListPage() {
         </Link>
       </div>
       
-      {/* Show loading message while fetching data */}
-      {loading && <p>Loading meals...</p>}
+      {/* Add search input */}
+      <div className="search-container">
+        <input
+          type="text"
+          placeholder="Search meals..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="search-input"
+        />
+      </div>
       
       {/* Show error message if fetch failed */}
-      {error && <p className="error-message">{error}</p>}
+      {error && <div className="error-message">{error}</div>}
       
-      {/* Show message if no meals found */}
-      {!loading && !error && meals.length === 0 && (
-        <p>No meals added yet. Add your first meal!</p>
-      )}
-      
-      {/* Display list of meals */}
-      {meals.length > 0 && (
+      {loading ? (
+        <div className="text-center py-8">Loading meals...</div>
+      ) : filteredMeals.length === 0 ? (
+        <div className="no-results">
+          {searchTerm 
+            ? 'No meals match your search.' 
+            : showFavoritesOnly 
+              ? 'No favorite meals yet. Mark some as favorites!' 
+              : 'No meals added yet. Add your first meal!'}
+        </div>
+      ) : (
         <ul className="meal-list">
-          {meals.map(meal => (
+          {filteredMeals.map(meal => (
             <li key={meal._id} className="meal-item">
               <Link to={`/meals/${meal._id}`}>
                 <div className="meal-header">

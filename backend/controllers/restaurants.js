@@ -5,7 +5,9 @@ module.exports = {
   index,
   show,
   update,
-  delete: deleteRestaurant
+  delete: deleteRestaurant,
+  toggleFavorite,
+  getFavorites
 };
 
 async function create(req, res) {
@@ -104,5 +106,41 @@ async function deleteRestaurant(req, res) {
     res.json({ message: 'Restaurant deleted successfully' });
   } catch (err) {
     res.status(400).json({ message: err.message });
+  }
+}
+
+// Toggle favorite status
+async function toggleFavorite(req, res) {
+  try {
+    const restaurant = await Restaurant.findOne({
+      _id: req.params.id,
+      userId: req.user._id
+    });
+    
+    if (!restaurant) {
+      return res.status(404).json({ message: 'Restaurant not found' });
+    }
+    
+    // Toggle the favorite status
+    restaurant.isFavorite = !restaurant.isFavorite;
+    await restaurant.save();
+    
+    res.json(restaurant);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+}
+
+// Get all favorite restaurants
+async function getFavorites(req, res) {
+  try {
+    const restaurants = await Restaurant.find({ 
+      userId: req.user._id,
+      isFavorite: true 
+    }).sort({ updatedAt: -1 });
+    
+    res.json(restaurants);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
 }

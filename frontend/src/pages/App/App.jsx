@@ -23,8 +23,30 @@ import ResetPasswordPage from '../ResetPasswordPage/ResetPasswordPage';
 
 export default function App() {
   const [user, setUser] = useState(getUser());
+  
   useEffect(() => {
     initializeTheme();
+    
+    // Get the token from localStorage
+    const token = localStorage.getItem('token');
+    
+    if (token) {
+      // Get the user from localStorage
+      const userFromStorage = localStorage.getItem('user');
+      
+      if (userFromStorage) {
+        // Parse the user data and set it in state
+        setUser(JSON.parse(userFromStorage));
+      } else {
+        // If we have a token but no user data, use getUser()
+        const userData = getUser();
+        if (userData) {
+          setUser(userData);
+          // Store user data in localStorage for future refreshes
+          localStorage.setItem('user', JSON.stringify(userData));
+        }
+      }
+    }
   }, []);
 
   return user ? (

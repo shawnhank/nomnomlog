@@ -26,37 +26,33 @@ export default function MultiImageUploader({
       setUploading(true);
       setError(null);
       
-      // Get a signed URL from our backend
-      const response = await fetch(`/api/uploads/sign?fileType=${encodeURIComponent(file.type)}`, {
-        method: 'GET',
+      // Create a FormData object to send the file
+      const formData = new FormData();
+      formData.append('file', file);
+      
+      console.log('Uploading file via proxy:', file.name);
+      
+      // Upload through our proxy endpoint
+      const response = await fetch('/api/uploads/proxy', {
+        method: 'POST',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
-        }
+        },
+        body: formData
       });
       
       if (!response.ok) {
-        throw new Error('Failed to get upload URL');
+        const errorData = await response.json().catch(() => ({}));
+        console.error('Upload failed:', response.status, errorData);
+        throw new Error(errorData.message || 'Failed to upload image');
       }
       
       const data = await response.json();
-      const { signedUrl, fileUrl } = data;
-      
-      // Upload the file directly to S3 using the signed URL
-      const uploadResponse = await fetch(signedUrl, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': file.type
-        },
-        body: file
-      });
-      
-      if (!uploadResponse.ok) {
-        throw new Error('Failed to upload image');
-      }
+      console.log('Upload successful:', data);
       
       // Create a new image object
       const newImage = {
-        url: fileUrl,
+        url: data.fileUrl,
         isPrimary: images.length === 0, // First image is primary by default
         caption: ''
       };
@@ -69,7 +65,7 @@ export default function MultiImageUploader({
       
     } catch (err) {
       console.error('Error uploading image:', err);
-      setError('Failed to upload image. Please try again.');
+      setError('Failed to upload image: ' + (err.message || 'Unknown error'));
     } finally {
       setUploading(false);
     }

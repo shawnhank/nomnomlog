@@ -1,4 +1,6 @@
 .MealListPage {
+  max-width: 800px;
+  margin: 0 auto;
   padding: 20px;
 }
 
@@ -37,13 +39,23 @@
 .meal-list {
   list-style: none;
   padding: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
 }
 
 .meal-item {
-  margin-bottom: 15px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  border-radius: 0.5rem;
   overflow: hidden;
+  transition: transform 0.2s ease;
+  border: 1px solid #ddd;
+  background-color: white;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.meal-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
 
 .meal-item a {
@@ -95,6 +107,7 @@
 .meal-date {
   color: #666;
   font-size: 0.9rem;
+  margin-top: 5px;
 }
 
 .meal-image {
@@ -102,6 +115,7 @@
   height: 200px;
   object-fit: cover;
   margin-top: 10px;
+  border-radius: 4px;
 }
 
 .error-message {
@@ -193,23 +207,50 @@
 
 /* Style the action button the same as other tabs */
 .tabs .action-button {
-  background-color: transparent;
-  color: #555;
-  border-radius: 0;
-  padding: 10px 15px; /* Reduced from 10px 20px */
-  font-size: 16px;
-  white-space: nowrap;
-  min-width: fit-content;
-  border-bottom: 3px solid transparent;
+  margin-left: auto;
+  background-color: #3b82f6;
+  color: white;
+  border-radius: 0.375rem;
+  padding: 0.5rem 1rem;
+  font-weight: 500;
+  text-decoration: none;
+  border-bottom: none;
 }
 
 .tabs .action-button:hover {
-  color: #1a1a1a;
-  background-color: transparent;
-  border-bottom-color: #1a1a1a; /* Add underline effect on hover */
+  background-color: #2563eb;
+  color: white;
+  border-bottom: none;
 }
 
-/* Remove the tab-spacer since we're centering everything */
-.tab-spacer {
-  display: none; /* Hide the spacer when centering */
+/* Add these styles for the search functionality */
+.search-container {
+  margin-bottom: 20px;
+}
+
+.search-input {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+.no-results {
+  text-align: center;
+  padding: 20px;
+  color: #666;
+}
+
+/* Add responsive grid layout like in RestaurantListPage */
+@media (min-width: 640px) {
+  .meal-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .meal-list {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }

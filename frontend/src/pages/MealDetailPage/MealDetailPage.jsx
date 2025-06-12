@@ -5,6 +5,7 @@ import { HeartIcon as HeartOutline } from '@heroicons/react/24/outline';
 import { HandThumbUpIcon, HandThumbDownIcon } from '@heroicons/react/24/outline';
 import { HandThumbUpIcon as HandThumbUpSolid, HandThumbDownIcon as HandThumbDownSolid } from '@heroicons/react/24/solid';
 import * as mealService from '../../services/meal';
+import MultiImageUploader from '../../components/MultiImageUploader/MultiImageUploader';
 import './MealDetailPage.css';
 
 export default function MealDetailPage() {
@@ -20,6 +21,16 @@ export default function MealDetailPage() {
       try {
         setLoading(true);
         const mealData = await mealService.getById(id);
+        
+        // Convert legacy imageUrl to mealImages if needed
+        if (mealData.imageUrl && (!mealData.mealImages || mealData.mealImages.length === 0)) {
+          mealData.mealImages = [{
+            url: mealData.imageUrl,
+            isPrimary: true,
+            caption: ''
+          }];
+        }
+        
         setMeal(mealData);
       } catch (err) {
         setError('Failed to load meal details');
@@ -64,6 +75,19 @@ export default function MealDetailPage() {
     }
   }
 
+  // Handle image updates
+  async function handleImagesUpdated(updatedData) {
+    try {
+      const updatedMeal = await mealService.update(id, {
+        ...meal,
+        ...updatedData
+      });
+      setMeal(updatedMeal);
+    } catch (err) {
+      setError('Failed to update meal images');
+    }
+  }
+
   // Add this function to handle edit navigation
   function handleEdit() {
     navigate(`/meals/${id}/edit`);
@@ -79,6 +103,12 @@ export default function MealDetailPage() {
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b pb-4 mb-6">
         <h1 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-0">{meal.name}</h1>
         <div className="flex gap-3">
+          <Link 
+            to="/meals/new"
+            className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md text-sm"
+          >
+            Add New Meal
+          </Link>
           <button 
             onClick={handleEdit}
             className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md text-sm"
@@ -163,16 +193,33 @@ export default function MealDetailPage() {
           </button>
         </div>
 
-        {/* Meal image */}
-        {meal.imageUrl && (
-          <div className="my-6">
-            <img 
-              src={meal.imageUrl} 
-              alt={meal.name} 
-              className="w-full max-h-96 object-cover rounded-lg shadow-md"
-            />
-          </div>
-        )}
+        {/* Meal images section with MultiImageUploader */}
+        <div className="my-6">
+          <h3 className="text-lg font-medium mb-2">Photos</h3>
+          
+          {/* Display primary image prominently if available */}
+          {meal.mealImages && meal.mealImages.length > 0 && meal.mealImages.find(img => img.isPrimary) && (
+            <div className="mb-4">
+              <img 
+                src={meal.mealImages.find(img => img.isPrimary).url} 
+                alt={meal.name} 
+                className="w-full max-h-96 object-cover rounded-lg shadow-md"
+              />
+              {meal.mealImages.find(img => img.isPrimary).caption && (
+                <p className="text-sm text-gray-600 mt-1">
+                  {meal.mealImages.find(img => img.isPrimary).caption}
+                </p>
+              )}
+            </div>
+          )}
+          
+          {/* MultiImageUploader for managing images */}
+          <MultiImageUploader 
+            images={meal.mealImages || []} 
+            onImagesUpdated={handleImagesUpdated}
+            entityType="meal"
+          />
+        </div>
 
         {/* Notes */}
         {meal.notes && (

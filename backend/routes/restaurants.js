@@ -8,19 +8,25 @@ const ensureLoggedIn = require('../middleware/ensureLoggedIn');
 // Protected routes - require authentication
 router.use(ensureLoggedIn);
 
-// GET /api/restaurants - Get all restaurants for the logged-in user
-router.get('/', (req, res, next) => {
-  console.log('GET /api/restaurants request received');
-  console.log('User:', req.user);
-  next();
-}, restaurantsCtrl.index);
-// POST /api/restaurants - Create a new restaurant
-router.post('/', restaurantsCtrl.create);
-// GET /api/restaurants/:id - Get a specific restaurant
+// Get all restaurants
+router.get('/', restaurantsCtrl.index);
+
+// Get all favorite restaurants
+router.get('/favorites', restaurantsCtrl.getFavorites);
+
+// Get one restaurant
 router.get('/:id', restaurantsCtrl.show);
-// PUT /api/restaurants/:id - Update a restaurant
+
+// Create a restaurant
+router.post('/', restaurantsCtrl.create);
+
+// Update a restaurant
 router.put('/:id', restaurantsCtrl.update);
-// DELETE /api/restaurants/:id - Delete a restaurant
+
+// Delete a restaurant
 router.delete('/:id', restaurantsCtrl.delete);
+
+// Toggle favorite status
+router.put('/:id/favorite', restaurantsCtrl.toggleFavorite);
 
 module.exports = router;

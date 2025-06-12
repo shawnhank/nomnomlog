@@ -32,10 +32,28 @@ export function getToken() {
   return token;
 }
 
+// Update user profile
 export async function updateProfile(userData) {
-  const token = await sendRequest(`${BASE_URL}/profile`, 'PUT', userData);
-  localStorage.setItem('token', token);
-  return getUser();
+  try {
+    // Change from /users/profile to /profile which matches the backend route
+    const response = await sendRequest(`${BASE_URL}/profile`, 'PUT', userData);
+    
+    // Update the stored token with the response
+    if (response.token) {
+      localStorage.setItem('token', response.token);
+    }
+    
+    // Get the updated user from the token
+    const updatedUser = getUser();
+    
+    // Store the user data in localStorage
+    localStorage.setItem('user', JSON.stringify(updatedUser));
+    
+    return updatedUser;
+  } catch (err) {
+    console.error('Error updating profile:', err);
+    throw new Error(err.message);
+  }
 }
 
 export async function changePassword(passwordData) {
