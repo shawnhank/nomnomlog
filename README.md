@@ -1,7 +1,7 @@
 <table>
   <tr>
     <td>
-      <img src="https://github.com/shawnhank/nomnomlog/blob/c8a200e6178f17b36abe3e2ebf726d53792a82ca/frontend/public/images/nnl_logo_v1_.png" width="150" alt="NomNomLog logo">
+      <img src="/Users/swh2/code/ga/projects/nomnomlog/frontend/public/images/nnl_logo_v2_t_bg.png" width="150" alt="NomNomLog logo">
     </td>
     <td valign="middle" style="padding-left: 1em;">
       <div align="center">
@@ -11,6 +11,7 @@
     </td>
   </tr>
 </table>
+
 
 ---
 > NOTE: Use CMD + Click or CTRL+Click to open links in a new tab.
@@ -83,11 +84,11 @@ Whether dining in, carrying out, or having it delivered, NomNomLog is The smarte
 
 ### Entity Relationship Diagrams
 
-###    ![MVP ERD](planning/erd/mvp_erd_v5.png)
+###    ![MVP ERD](planning/erd/mvp_erd_v6.png)
 
-   ![ICEBOX ERD](planning/erd/icebox_erd_v5.png)
+   ![ICEBOX ERD](planning/erd/icebox_erd_v6.png)
 
-![ICEBOX ERD](planning/erd/lookup_erd_v5.png)
+![ICEBOX ERD](planning/erd/lookup_erd_v6.png)
 
 ---
 ---
