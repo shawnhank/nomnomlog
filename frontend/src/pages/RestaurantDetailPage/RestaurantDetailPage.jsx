@@ -156,32 +156,36 @@ export default function RestaurantDetailPage() {
           )}
         </div>
       </div>
-      <div>
-       {/* Link to meals at this restaurant */}
-        <div className="mt-8 pt-4 border-t">
-          <Link 
-            to={`/meals?restaurant=${restaurant._id}`}
-            className="inline-block bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md"
-          >
-            View Meals at {restaurant.name}
-          </Link>
-        </div>    
-      </div>
 
-      {/* Meals at this restaurant section - Moving above restaurant photos */}
+      {/* Meals at this restaurant section - Limited preview */}
       <div className="mt-8 pt-4 border-t">
-        <h3 className="text-xl font-semibold mb-4">Meals at {restaurant.name}</h3>
+        <h3 className="text-xl font-semibold mb-4">Recent Meals at {restaurant.name}</h3>
         
         {meals.length === 0 ? (
           <p className="text-gray-500 text-center py-4">No meals logged at this restaurant yet.</p>
         ) : (
-          <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {meals.map(meal => (
-              <li key={meal._id}>
-                <MealCard meal={meal} />
-              </li>
-            ))}
-          </ul>
+          <>
+            <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {/* Show only up to 3 most recent meals */}
+              {meals.slice(0, 3).map(meal => (
+                <li key={meal._id}>
+                  <MealCard meal={meal} />
+                </li>
+              ))}
+            </ul>
+            
+            {/* View all meals button - Only show if there are meals */}
+            {meals.length > 0 && (
+              <div className="mt-6 text-center">
+                <Link 
+                  to={`/meals?restaurant=${restaurant._id}`}
+                  className="inline-block bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md"
+                >
+                  {meals.length > 3 ? `View All ${meals.length} Meals` : `View All Meals`} at {restaurant.name}
+                </Link>
+              </div>
+            )}
+          </>
         )}
       </div>
 
@@ -189,7 +193,7 @@ export default function RestaurantDetailPage() {
       <div className="my-6 pt-4 border-t">
         <h3 className="text-xl font-semibold mb-4">Restaurant Photos</h3>
         
-        {/* MultiImageUploader for managing images - No special primary image display */}
+        {/* MultiImageUploader for managing images */}
         <MultiImageUploader 
           images={restaurant.restaurantImages || []} 
           onImagesUpdated={handleImagesUpdated}
