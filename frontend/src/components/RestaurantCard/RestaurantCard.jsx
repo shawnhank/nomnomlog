@@ -1,13 +1,14 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router';
 import { HandThumbUpIcon as HandThumbUpSolid, HandThumbDownIcon as HandThumbDownSolid } from '@heroicons/react/24/solid';
-import { HandThumbUpIcon, HandThumbDownIcon, XMarkIcon, MapPinIcon, PhoneIcon, GlobeAltIcon } from '@heroicons/react/24/outline';
+import { HandThumbUpIcon, HandThumbDownIcon, XMarkIcon, MapPinIcon, PhoneIcon, GlobeAltIcon, EllipsisVerticalIcon, PencilSquareIcon, TrashIcon } from '@heroicons/react/24/outline';
 import DeleteConfirmationModal from '../DeleteConfirmationModal/DeleteConfirmationModal';
 import { Button } from '../catalyst/button';
 import './RestaurantCard.css';
 
 export default function RestaurantCard({ restaurant, onThumbsRating, onDelete }) {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showMenu, setShowMenu] = useState(false);
   
   // Find primary image if available
   const primaryImage = restaurant.restaurantImages && restaurant.restaurantImages.length > 0 
@@ -29,6 +30,7 @@ export default function RestaurantCard({ restaurant, onThumbsRating, onDelete })
   const handleDeleteClick = (e) => {
     e.preventDefault(); // Prevent navigation
     e.stopPropagation(); // Prevent event bubbling
+    setShowMenu(false);
     setShowDeleteModal(true);
   };
   
@@ -42,6 +44,26 @@ export default function RestaurantCard({ restaurant, onThumbsRating, onDelete })
     }
     setShowDeleteModal(false);
   };
+
+  const toggleMenu = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setShowMenu(!showMenu);
+  };
+
+  const handleClickOutside = () => {
+    setShowMenu(false);
+  };
+
+  // Close menu when clicking outside
+  useEffect(() => {
+    if (showMenu) {
+      document.addEventListener('click', handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, [showMenu]);
 
   // Handle external links
   const openGoogleMaps = (e) => {
@@ -81,15 +103,39 @@ export default function RestaurantCard({ restaurant, onThumbsRating, onDelete })
   return (
     <>
       <div className="relative overflow-hidden bg-white shadow-sm sm:rounded-lg border border-gray-200 hover:shadow-md transition-all duration-200 hover:-translate-y-1">
-        {onDelete && (
+        {/* Replace delete button with ellipsis menu */}
+        <div className="absolute top-2 right-2 z-10">
           <button
-            onClick={handleDeleteClick}
-            className="absolute top-2 right-2 z-10 p-1.5 bg-white rounded-full shadow-sm hover:bg-red-500 transition-colors duration-150"
-            title="Delete restaurant"
+            onClick={toggleMenu}
+            className="p-1.5 bg-white rounded-full shadow-sm hover:bg-gray-100 transition-colors duration-150"
+            title="Options"
           >
-            <XMarkIcon className="w-4 h-4 text-red-500 hover:text-white" />
+            <EllipsisVerticalIcon className="w-4 h-4 text-gray-600" />
           </button>
-        )}
+          
+          {/* Dropdown menu */}
+          {showMenu && (
+            <div className="absolute right-0 mt-1 w-36 bg-white rounded-md shadow-lg z-20 overflow-hidden">
+              <Link 
+                to={`/restaurants/${restaurant._id}/edit`}
+                className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <PencilSquareIcon className="w-4 h-4 mr-2" />
+                Edit
+              </Link>
+              {onDelete && (
+                <button
+                  onClick={handleDeleteClick}
+                  className="flex items-center w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
+                >
+                  <TrashIcon className="w-4 h-4 mr-2" />
+                  Delete
+                </button>
+              )}
+            </div>
+          )}
+        </div>
         
         {/* Main card content - wrapped in a div instead of Link */}
         <div className="cursor-pointer" onClick={navigateToDetail}>

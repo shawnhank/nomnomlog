@@ -66,6 +66,22 @@ export default function RestaurantListPage() {
     }
   }
 
+  // Add delete restaurant handler
+  async function handleDeleteRestaurant(id) {
+    try {
+      await restaurantService.deleteRestaurant(id);
+      
+      // Remove the deleted restaurant from the state
+      setRestaurants(restaurants.filter(restaurant => restaurant._id !== id));
+    } catch (err) {
+      console.error('Error deleting restaurant:', err);
+      setError(`Failed to delete restaurant: ${err.message || 'Unknown error'}`);
+      
+      // Clear error after 3 seconds
+      setTimeout(() => setError(''), 3000);
+    }
+  }
+
   // Filter restaurants based on search term
   const filteredRestaurants = restaurants.filter(restaurant =>
     restaurant.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -168,6 +184,7 @@ export default function RestaurantListPage() {
               <RestaurantCard 
                 restaurant={restaurant} 
                 onThumbsRating={handleThumbsRating} 
+                onDelete={handleDeleteRestaurant} 
               />
             </li>
           ))}
