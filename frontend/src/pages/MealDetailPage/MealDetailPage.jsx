@@ -58,7 +58,9 @@ export default function MealDetailPage() {
   // Handle thumbs rating with toggle functionality
   async function handleThumbsRating(isThumbsUp) {
     try {
-      const updatedMeal = await mealService.setThumbsRating(id, isThumbsUp);
+      // If the current state matches the requested state, clear it (set to null)
+      const newValue = meal.isThumbsUp === isThumbsUp ? null : isThumbsUp;
+      const updatedMeal = await mealService.setThumbsRating(id, newValue);
       setMeal(updatedMeal);
     } catch (err) {
       setError('Failed to update thumbs rating');
@@ -136,16 +138,26 @@ export default function MealDetailPage() {
             onClick={() => handleThumbsRating(true)}
             color={meal.isThumbsUp === true ? 'green' : 'zinc'}
             aria-label="Would Order Again"
-            icon={meal.isThumbsUp === true ? HandThumbUpSolid : HandThumbUpIcon}
-          />
+          >
+            {meal.isThumbsUp === true ? (
+              <HandThumbUpSolid className="w-5 h-5" />
+            ) : (
+              <HandThumbUpIcon className="w-5 h-5" />
+            )}
+          </Button>
           
           {/* Thumbs down button */}
           <Button 
             onClick={() => handleThumbsRating(false)}
             color={meal.isThumbsUp === false ? 'red' : 'zinc'}
             aria-label="Would Not Order Again"
-            icon={meal.isThumbsUp === false ? HandThumbDownSolid : HandThumbDownIcon}
-          />
+          >
+            {meal.isThumbsUp === false ? (
+              <HandThumbDownSolid className="w-5 h-5" />
+            ) : (
+              <HandThumbDownIcon className="w-5 h-5" />
+            )}
+          </Button>
         </div>
 
         {/* Primary image display */}

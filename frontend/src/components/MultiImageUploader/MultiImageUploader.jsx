@@ -127,16 +127,14 @@ export default function MultiImageUploader({
                   alt={image.caption || `Image ${index + 1}`}
                   className="w-full h-32 object-cover rounded-md"
                 />
-                <Button
+                <button
                   type="button"
                   onClick={() => handleRemoveImage(index)}
-                  color="red"
-                  plain
-                  className="absolute top-1 right-1 p-1 bg-white/80 dark:bg-gray-800/80 rounded-full"
+                  className="absolute top-1 right-1 p-1 rounded-full border border-red-500 bg-white hover:bg-red-500 hover:text-white text-red-500 transition-colors"
                   aria-label="Remove image"
                 >
                   <XMarkIcon className="w-4 h-4" />
-                </Button>
+                </button>
               </div>
 
               <div className="mt-2 space-y-2">

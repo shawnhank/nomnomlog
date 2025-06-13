@@ -1,5 +1,8 @@
 import { useState, useEffect } from 'react';
 import MultiImageUploader from '../MultiImageUploader/MultiImageUploader';
+import TagSelector from '../TagSelector/TagSelector';
+import * as tagService from '../../services/tag';
+import * as mealTagService from '../../services/mealTag';
 import { Button } from '../catalyst/button';
 import { Input } from '../catalyst/input';
 import { Select } from '../catalyst/select';
@@ -17,36 +20,74 @@ export default function MealForm({ initialData, onSubmit, buttonLabel = 'Save', 
     notes: '',
     mealImages: [] // Changed from imageUrl to mealImages array
   };
-  
-  // Initialize with provided data or defaults
-  const [formData, setFormData] = useState({...defaultFormData, ...initialData});
+
+  const [formData, setFormData] = useState(initialData || defaultFormData);
   const [restaurants, setRestaurants] = useState([]);
-  
-  // Load restaurants for dropdown (assuming restaurant service is passed or imported)
+  const [selectedTags, setSelectedTags] = useState([]);
+  const [errorMsg, setErrorMsg] = useState('');
+
+  // Load restaurants and tags when component mounts
   useEffect(() => {
-    async function fetchRestaurants() {
+    async function loadData() {
       try {
-        // This would need to be adjusted based on how restaurant service is provided
-        const restaurantService = await import('../../services/restaurant');
-        const restaurantsData = await restaurantService.getAll();
-        setRestaurants(restaurantsData);
+        // Load restaurants (assuming this is already implemented)
+        // ...
+
+        // Load tags for this meal if editing
+        if (initialData?._id) {
+          const mealTags = await mealTagService.getAllForMeal(initialData._id);
+          setSelectedTags(mealTags.map(mt => mt.tagId._id));
+        }
       } catch (err) {
-        console.error('Failed to load restaurants:', err);
+        console.error('Error loading form data:', err);
       }
     }
     
-    fetchRestaurants();
-  }, []);
-  
+    loadData();
+  }, [initialData]);
+
   // Handle form input changes
   function handleChange(evt) {
-    const { name, value, type, checked } = evt.target;
-    setFormData({
-      ...formData,
-      [name]: type === 'checkbox' ? checked : value
-    });
+    const { name, value } = evt.target;
+    setFormData({ ...formData, [name]: value });
+    setErrorMsg('');
   }
-  
+
+  // Handle tag selection changes
+  function handleTagsChange(tagIds) {
+    setSelectedTags(tagIds);
+  }
+
+  // Handle form submission
+  async function handleSubmit(evt) {
+    evt.preventDefault();
+    try {
+      // Submit the form data
+      const savedMeal = await onSubmit(formData);
+      
+      // Handle tags if we have a meal ID
+      if (savedMeal?._id) {
+        // First, remove any existing tags
+        if (initialData?._id) {
+          await mealTagService.deleteAllForMeal(savedMeal._id);
+        }
+        
+        // Then add the selected tags
+        const tagPromises = selectedTags.map(tagId => 
+          mealTagService.create({
+            mealId: savedMeal._id,
+            tagId
+          })
+        );
+        
+        await Promise.all(tagPromises);
+      }
+    } catch (err) {
+      setErrorMsg('Error saving meal');
+      console.error(err);
+    }
+  }
+
   // Handle image updates from MultiImageUploader
   function handleImagesUpdated(updatedData) {
     setFormData({
@@ -54,27 +95,7 @@ export default function MealForm({ initialData, onSubmit, buttonLabel = 'Save', 
       ...updatedData
     });
   }
-  
-  // Handle form submission
-  function handleSubmit(evt) {
-    evt.preventDefault();
-    onSubmit(formData);
-  }
-  
-  // Convert legacy imageUrl to mealImages if needed (for backward compatibility)
-  useEffect(() => {
-    if (initialData && initialData.imageUrl && (!initialData.mealImages || initialData.mealImages.length === 0)) {
-      setFormData(prev => ({
-        ...prev,
-        mealImages: [{
-          url: initialData.imageUrl,
-          isPrimary: true,
-          caption: ''
-        }]
-      }));
-    }
-  }, [initialData]);
-  
+
   return (
     <div className="w-full bg-white dark:bg-gray-800 rounded-lg shadow-md">
       <form onSubmit={handleSubmit} className="space-y-6">
@@ -115,37 +136,49 @@ export default function MealForm({ initialData, onSubmit, buttonLabel = 'Save', 
         </Fieldset>
 
         <Fieldset>
-          <Legend>Preferences</Legend>
-
+          <Legend>Comments</Legend>
           <div className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-900 dark:text-gray-100 mb-3">
+            <Textarea
+              name="notes"
+              value={formData.notes}
+              onChange={handleChange}
+              rows={4}
+              placeholder="Add any notes about this meal..."
+            />
+          </div>
+        </Fieldset>
+
+        <Fieldset>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-2">
+              <Legend className="mb-0 mr-2">Preferences</Legend>
+              <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
                 Would order again?
-              </label>
-              <div className="flex items-center space-x-3">
-                <Button
-                  type="button"
-                  color={formData.isThumbsUp === true ? 'green' : 'zinc'}
-                  outline={formData.isThumbsUp !== true}
-                  onClick={() => setFormData({...formData, isThumbsUp: true})}
-                >
-                  👍 Yes
-                </Button>
-                <Button
-                  type="button"
-                  color={formData.isThumbsUp === false ? 'red' : 'zinc'}
-                  outline={formData.isThumbsUp !== false}
-                  onClick={() => setFormData({...formData, isThumbsUp: false})}
-                >
-                  👎 No
-                </Button>
-              </div>
+              </span>
+            </div>
+            <div className="flex items-center space-x-3">
+              <Button
+                type="button"
+                color={formData.isThumbsUp === true ? 'green' : 'zinc'}
+                outline={formData.isThumbsUp !== true}
+                onClick={() => setFormData({...formData, isThumbsUp: true})}
+              >
+                👍 Yes
+              </Button>
+              <Button
+                type="button"
+                color={formData.isThumbsUp === false ? 'red' : 'zinc'}
+                outline={formData.isThumbsUp !== false}
+                onClick={() => setFormData({...formData, isThumbsUp: false})}
+              >
+                👎 No
+              </Button>
             </div>
           </div>
         </Fieldset>
 
         <Fieldset>
-          <Legend>Photos & Notes</Legend>
+          <Legend>Photos</Legend>
 
           <div className="space-y-4">
             <div>
@@ -158,16 +191,20 @@ export default function MealForm({ initialData, onSubmit, buttonLabel = 'Save', 
                 entityType="meal"
               />
             </div>
-
-            <Textarea
-              name="notes"
-              value={formData.notes}
-              onChange={handleChange}
-              rows={4}
-              placeholder="Add any notes about this meal..."
-            />
           </div>
         </Fieldset>
+
+        <Fieldset>
+          <Legend>Tags</Legend>
+          <TagSelector 
+            selectedTags={selectedTags}
+            onTagsChange={handleTagsChange}
+          />
+        </Fieldset>
+
+        {errorMsg && (
+          <p className="text-red-600">{errorMsg}</p>
+        )}
 
         <div className="flex justify-end gap-3 pt-4">
           {onCancel && (
