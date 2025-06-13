@@ -6,7 +6,6 @@ import { PencilIcon, TrashIcon, PlusIcon, XMarkIcon } from '@heroicons/react/24/
 import * as tagService from '../../services/tag';
 import DeleteConfirmationModal from '../../components/DeleteConfirmationModal/DeleteConfirmationModal';
 import SimpleBreadcrumbs from '../../components/SimpleBreadcrumbs/SimpleBreadcrumbs';
-import SearchBar from '../../components/SearchBar/SearchBar';
 
 export default function TagsPage() {
   const [tags, setTags] = useState([]);
@@ -174,10 +173,10 @@ export default function TagsPage() {
   const hasSearchResults = searchTerm && filteredTags.length === 0;
 
   return (
-    <div className="max-w-3xl mx-auto px-4 py-6">
+    <div className="max-w-3xl mx-auto px-4 py-6" style={{ width: '100%', minWidth: '320px' }}>
       {/* Breadcrumbs */}
       <div className="mb-4">
-        <SimpleBreadcrumbs 
+        <SimpleBreadcrumbs
           customCrumbs={[
             { name: 'Tags', path: '/tags', current: true }
           ]}
@@ -203,7 +202,7 @@ export default function TagsPage() {
                 setSelectedTags(new Set());
               }}
               negative
-              className="flex items-center gap-2 px-3 py-2"
+              className="flex items-center gap-2"
               title="Clear selection"
             >
               <XMarkIcon className="w-4 h-4" />
@@ -215,7 +214,7 @@ export default function TagsPage() {
             <Button
               onClick={handleBulkDelete}
               negative
-              className="flex items-center justify-center w-10 h-10"
+              className="flex items-center justify-center"
               title={`Delete ${selectedCount} tag${selectedCount > 1 ? 's' : ''}`}
             >
               <TrashIcon className="w-5 h-5" />
@@ -225,34 +224,32 @@ export default function TagsPage() {
       </div>
 
       {/* Search Bar */}
-      <div className="mb-6 w-full">
-        <SearchBar
-          value={searchTerm}
-          onChange={setSearchTerm}
+      <div className="mb-6">
+        <input
+          type="text"
           placeholder="Search tags..."
-          className="w-full"
-          autoFocus={false}
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="w-full p-2 border border-gray-300 rounded"
         />
 
-        {/* Create tag from search - Fixed height container to prevent layout shift */}
-        <div className="mt-3 min-h-0">
-          {hasSearchResults && (
-            <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg dark:bg-blue-900/20 dark:border-blue-800">
-              <p className="text-sm text-blue-700 dark:text-blue-300 mb-2">
-                No tags found for "{searchTerm}"
-              </p>
-              <Button
-                onClick={addTagFromSearch}
-                positive
-                size="sm"
-                className="flex items-center"
-              >
-                <PlusIcon className="w-4 h-4 mr-1" />
-                <span>Create "{searchTerm}" tag</span>
-              </Button>
-            </div>
-          )}
-        </div>
+        {/* Create tag from search */}
+        {hasSearchResults && (
+          <div className="mt-3 p-3 bg-blue-50 border border-blue-200 rounded-lg dark:bg-blue-900/20 dark:border-blue-800">
+            <p className="text-sm text-blue-700 dark:text-blue-300 mb-2">
+              No tags found for "{searchTerm}"
+            </p>
+            <Button
+              onClick={addTagFromSearch}
+              positive
+              size="sm"
+              className="flex items-center"
+            >
+              <PlusIcon className="w-4 h-4 mr-1" />
+              <span>Create "{searchTerm}" tag</span>
+            </Button>
+          </div>
+        )}
       </div>
 
       {/* Error message */}
