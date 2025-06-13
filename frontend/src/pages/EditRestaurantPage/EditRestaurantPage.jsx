@@ -4,7 +4,11 @@ import * as restaurantService from '../../services/restaurant';
 import * as tagService from '../../services/tag';
 import * as restaurantTagService from '../../services/restaurantTag';
 import MultiImageUploader from '../../components/MultiImageUploader/MultiImageUploader';
-import './EditRestaurantPage.css';
+import { Button } from '../../components/catalyst/button';
+import { Input } from '../../components/catalyst/input';
+import { Fieldset, Legend } from '../../components/catalyst/fieldset';
+import { Alert } from '../../components/catalyst/alert';
+import { Checkbox } from '../../components/catalyst/checkbox';
 
 export default function EditRestaurantPage() {
   const [formData, setFormData] = useState({
@@ -159,123 +163,125 @@ export default function EditRestaurantPage() {
 
   // Show loading state
   if (loading) {
-    return <div className="EditRestaurantPage loading">Loading restaurant data...</div>;
+    return (
+      <div className="flex justify-center items-center h-64 text-gray-600 dark:text-gray-400">
+        Loading restaurant data...
+      </div>
+    );
   }
-  
+
   return (
-    <div className="EditRestaurantPage">
-      <h1>Edit Restaurant</h1>
+    <div className="max-w-2xl mx-auto p-4 sm:p-6">
+      <h1 className="text-2xl sm:text-3xl font-bold mb-6 text-gray-900 dark:text-white">Edit Restaurant</h1>
+
+      {error && (
+        <Alert className="mb-6">
+          {error}
+        </Alert>
+      )}
       
-      {error && <p className="error-message">{error}</p>}
-      
-      <form onSubmit={handleSubmit}>
-        {/* Restaurant Name field (required) */}
-        <div className="form-group">
-          <label htmlFor="name">Restaurant Name</label>
-          <input
-            type="text"
-            id="name"
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <Fieldset>
+          <Legend>Restaurant Name</Legend>
+          <Input
             name="name"
             value={formData.name}
             onChange={handleChange}
             required
+            placeholder="Enter restaurant name"
           />
-        </div>
-        
-        {/* Address field (optional) */}
-        <div className="form-group">
-          <label htmlFor="address">Address</label>
-          <input
-            type="text"
-            id="address"
+        </Fieldset>
+
+        <Fieldset>
+          <Legend>Address</Legend>
+          <Input
             name="address"
             value={formData.address}
             onChange={handleChange}
+            placeholder="Enter restaurant address"
           />
-        </div>
-        
-        {/* Phone field (optional) */}
-        <div className="form-group">
-          <label htmlFor="phone">Phone</label>
-          <input
+        </Fieldset>
+
+        <Fieldset>
+          <Legend>Phone</Legend>
+          <Input
             type="tel"
-            id="phone"
             name="phone"
             value={formData.phone}
             onChange={handleChange}
+            placeholder="Enter phone number"
           />
-        </div>
-        
-        {/* Website field (optional) */}
-        <div className="form-group">
-          <label htmlFor="website">Website</label>
-          <input
+        </Fieldset>
+
+        <Fieldset>
+          <Legend>Website</Legend>
+          <Input
             type="url"
-            id="website"
             name="website"
             value={formData.website}
             onChange={handleChange}
             placeholder="https://example.com"
           />
-        </div>
-        
-        {/* Add MultiImageUploader */}
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700 mb-1">Restaurant Photos</label>
-          <MultiImageUploader 
-            images={formData.restaurantImages} 
+        </Fieldset>
+
+        <Fieldset>
+          <Legend>Restaurant Photos</Legend>
+          <MultiImageUploader
+            images={formData.restaurantImages}
             onImagesUpdated={handleImagesUpdated}
             entityType="restaurant"
           />
-        </div>
-        
-        {/* Tags section */}
-        <div className="form-group">
-          <label>Tags</label>
-          <div className="tags-container">
-            {tags.map(tag => (
-              <div key={tag._id} className="tag-item">
-                <input
-                  type="checkbox"
-                  id={`tag-${tag._id}`}
+        </Fieldset>
+
+        <Fieldset>
+          <Legend>Tags</Legend>
+          <div className="space-y-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {tags.map(tag => (
+                <Checkbox
+                  key={tag._id}
                   checked={selectedTags.includes(tag._id)}
                   onChange={() => handleTagSelect(tag._id)}
-                />
-                <label htmlFor={`tag-${tag._id}`}>{tag.name}</label>
-              </div>
-            ))}
+                >
+                  {tag.name}
+                </Checkbox>
+              ))}
+            </div>
+
+            {/* Add new tag */}
+            <div className="flex gap-2 pt-3 border-t border-gray-200 dark:border-gray-700">
+              <Input
+                value={newTag}
+                onChange={handleNewTagChange}
+                placeholder="Add a new tag"
+                className="flex-1"
+              />
+              <Button
+                type="button"
+                onClick={handleCreateTag}
+                color="blue"
+              >
+                Add
+              </Button>
+            </div>
           </div>
-          
-          {/* Add new tag */}
-          <div className="add-tag-container">
-            <input
-              type="text"
-              value={newTag}
-              onChange={handleNewTagChange}
-              placeholder="Add a new tag"
-            />
-            <button 
-              type="button" 
-              onClick={handleCreateTag}
-              className="btn-add-tag"
-            >
-              Add
-            </button>
-          </div>
-        </div>
-        
-        {/* Form actions */}
-        <div className="form-actions">
-          <button 
-            type="button" 
-            className="btn-cancel" 
+        </Fieldset>
+
+        <div className="flex flex-col-reverse sm:flex-row justify-end gap-3 pt-4">
+          <Button
+            type="button"
+            color="white"
             onClick={() => navigate(`/restaurants/${id}`)}
           >
             Cancel
-          </button>
-          <button type="submit" className="btn-submit">
-            Save Changes
-          </button>
+          </Button>
+          <Button
+            type="submit"
+            disabled={loading}
+            className="w-full sm:w-auto"
+          >
+            {loading ? 'Saving...' : 'Save Changes'}
+          </Button>
         </div>
       </form>
     </div>

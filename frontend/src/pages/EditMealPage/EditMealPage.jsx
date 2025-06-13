@@ -3,7 +3,12 @@ import { useParams, useNavigate } from 'react-router';
 import * as mealService from '../../services/meal';
 import * as restaurantService from '../../services/restaurant';
 import MultiImageUploader from '../../components/MultiImageUploader/MultiImageUploader';
-import './EditMealPage.css';
+import { Button } from '../../components/catalyst/button';
+import { Input } from '../../components/catalyst/input';
+import { Select } from '../../components/catalyst/select';
+import { Textarea } from '../../components/catalyst/textarea';
+import { Fieldset, Legend } from '../../components/catalyst/fieldset';
+import { Alert } from '../../components/catalyst/alert';
 
 export default function EditMealPage() {
   const [formData, setFormData] = useState({
@@ -118,41 +123,39 @@ export default function EditMealPage() {
     });
   }
   
-  if (loading) return <div className="flex justify-center items-center h-64">Loading meal data...</div>;
-  
+  if (loading) return (
+    <div className="flex justify-center items-center h-64 text-gray-600 dark:text-gray-400">
+      Loading meal data...
+    </div>
+  );
+
   return (
-    <div className="max-w-2xl mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-6">Edit Meal</h1>
-      
-      {error && <div className="bg-red-100 text-red-700 p-3 rounded-md mb-4">{error}</div>}
+    <div className="max-w-2xl mx-auto p-4 sm:p-6">
+      <h1 className="text-2xl sm:text-3xl font-bold mb-6 text-gray-900 dark:text-white">Edit Meal</h1>
+
+      {error && (
+        <Alert className="mb-6">
+          {error}
+        </Alert>
+      )}
       
       <form onSubmit={handleSubmit} className="space-y-6">
-        <div>
-          <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
-            Meal Name
-          </label>
-          <input
-            type="text"
-            id="name"
+        <Fieldset>
+          <Input
             name="name"
             value={formData.name}
             onChange={handleChange}
             required
-            className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+            placeholder="Enter meal name"
           />
-        </div>
-        
-        <div>
-          <label htmlFor="restaurantId" className="block text-sm font-medium text-gray-700 mb-1">
-            Restaurant
-          </label>
-          <select
-            id="restaurantId"
+        </Fieldset>
+
+        <Fieldset>
+          <Select
             name="restaurantId"
             value={formData.restaurantId}
             onChange={handleChange}
             required
-            className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
           >
             <option value="">Select a restaurant</option>
             {restaurants.map(restaurant => (
@@ -160,34 +163,29 @@ export default function EditMealPage() {
                 {restaurant.name}
               </option>
             ))}
-          </select>
-        </div>
-        
-        <div>
-          <label htmlFor="date" className="block text-sm font-medium text-gray-700 mb-1">
-            Date
-          </label>
-          <input
+          </Select>
+        </Fieldset>
+
+        <Fieldset>
+          <Input
             type="date"
-            id="date"
             name="date"
             value={formData.date}
             onChange={handleChange}
             required
-            className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
           />
-        </div>
-        
-        <div>
-          <span className="block text-sm font-medium text-gray-700 mb-2">Would Order Again?</span>
-          <div className="flex gap-4">
+        </Fieldset>
+
+        <Fieldset>
+          <Legend>Would Order Again?</Legend>
+          <div className="flex flex-wrap gap-2 sm:gap-4">
             <button
               type="button"
               onClick={() => handleThumbsChange(true)}
-              className={`px-4 py-2 rounded-md flex items-center gap-2 ${
+              className={`px-3 py-2 sm:px-4 rounded-md flex items-center gap-2 text-sm transition-colors ${
                 formData.isThumbsUp === true
-                  ? 'bg-green-100 text-green-800 border border-green-300'
-                  : 'bg-white text-gray-700 border border-gray-300'
+                  ? 'bg-green-100 text-green-800 border border-green-300 dark:bg-green-900 dark:text-green-200 dark:border-green-700'
+                  : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-700'
               }`}
             >
               <span>👍</span>
@@ -196,10 +194,10 @@ export default function EditMealPage() {
             <button
               type="button"
               onClick={() => handleThumbsChange(false)}
-              className={`px-4 py-2 rounded-md flex items-center gap-2 ${
+              className={`px-3 py-2 sm:px-4 rounded-md flex items-center gap-2 text-sm transition-colors ${
                 formData.isThumbsUp === false
-                  ? 'bg-red-100 text-red-800 border border-red-300'
-                  : 'bg-white text-gray-700 border border-gray-300'
+                  ? 'bg-red-100 text-red-800 border border-red-300 dark:bg-red-900 dark:text-red-200 dark:border-red-700'
+                  : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-700'
               }`}
             >
               <span>👎</span>
@@ -208,57 +206,52 @@ export default function EditMealPage() {
             <button
               type="button"
               onClick={() => handleThumbsChange(null)}
-              className={`px-4 py-2 rounded-md ${
+              className={`px-3 py-2 sm:px-4 rounded-md text-sm transition-colors ${
                 formData.isThumbsUp === null
-                  ? 'bg-gray-100 text-gray-800 border border-gray-300'
-                  : 'bg-white text-gray-700 border border-gray-300'
+                  ? 'bg-gray-100 text-gray-800 border border-gray-300 dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600'
+                  : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-700'
               }`}
             >
               <span>Clear</span>
             </button>
           </div>
-        </div>
-        
-        <div>
-          <label htmlFor="notes" className="block text-sm font-medium text-gray-700 mb-1">
-            Notes
-          </label>
-          <textarea
-            id="notes"
+        </Fieldset>
+
+        <Fieldset>
+          <Legend>Notes</Legend>
+          <Textarea
             name="notes"
             value={formData.notes}
             onChange={handleChange}
-            rows="4"
-            className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+            rows={4}
+            placeholder="Add any notes about this meal..."
           />
-        </div>
-        
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Meal Photos
-          </label>
-          <MultiImageUploader 
-            images={formData.mealImages} 
+        </Fieldset>
+
+        <Fieldset>
+          <Legend>Meal Photos</Legend>
+          <MultiImageUploader
+            images={formData.mealImages}
             onImagesUpdated={handleImagesUpdated}
             entityType="meal"
           />
-        </div>
-        <div className="flex justify-end gap-3 pt-4">
-          <button
-            type="submit"
-            disabled={loading}
-            className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 disabled:opacity-50"
-          >
-            {loading ? 'Saving...' : 'Save Changes'}
-          </button>
-        
-          <button
+        </Fieldset>
+
+        <div className="flex flex-col-reverse sm:flex-row justify-end gap-3 pt-4">
+          <Button
             type="button"
+            color="white"
             onClick={() => navigate(`/meals/${id}`)}
-            className="px-4 py-2 bg-white text-gray-700 border border-gray-300 rounded-md hover:bg-gray-50"
           >
             Cancel
-          </button>
+          </Button>
+          <Button
+            type="submit"
+            disabled={loading}
+            className="w-full sm:w-auto"
+          >
+            {loading ? 'Saving...' : 'Save Changes'}
+          </Button>
         </div>
       </form>
     </div>

@@ -1,42 +1,4 @@
-.EditRestaurantPage {
-  max-width: 600px;
-  margin: 0 auto;
-  padding: 20px;
-}
-
-.EditRestaurantPage h1 {
-  margin-bottom: 20px;
-}
-
-.form-group {
-  margin-bottom: 15px;
-}
-
-.form-group label {
-  display: block;
-  margin-bottom: 5px;
-  font-weight: bold;
-}
-
-.form-group input,
-.form-group select {
-  width: 100%;
-  padding: 8px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 16px;
-}
-
-/* Reset form actions container */
-.EditRestaurantPage .form-actions {
-  display: flex !important;
-  flex-direction: row-reverse !important; /* Reverse the order of the buttons */
-  gap: 10px !important;
-  margin-top: 20px !important;
-  align-items: center !important;
-  justify-content: flex-start !important;
-  width: 100% !important;
-}
+/* This file can be deleted as we've converted to Tailwind CSS */
 
 /* Reset both buttons to have consistent base styling */
 .EditRestaurantPage .form-actions .btn-cancel,
