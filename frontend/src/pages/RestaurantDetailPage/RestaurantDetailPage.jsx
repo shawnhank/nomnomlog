@@ -8,6 +8,7 @@ import * as mealService from '../../services/meal';
 import MealCard from '../../components/MealCard/MealCard';
 import DeleteConfirmationModal from '../../components/DeleteConfirmationModal/DeleteConfirmationModal';
 import ThumbsRating from '../../components/ThumbsRating/ThumbsRating';
+import SimpleBreadcrumbs from '../../components/SimpleBreadcrumbs/SimpleBreadcrumbs';
 
 export default function RestaurantDetailPage() {
   const [restaurant, setRestaurant] = useState(null);
@@ -67,6 +68,32 @@ export default function RestaurantDetailPage() {
     }
   }
 
+  // Add these handler functions
+  async function handleMealThumbsRating(mealId, isThumbsUp, e) {
+    try {
+      const updatedMeal = await mealService.setThumbsRating(mealId, isThumbsUp);
+      // Update the meals state with the updated meal
+      setMeals(meals.map(meal => 
+        meal._id === updatedMeal._id ? updatedMeal : meal
+      ));
+    } catch (err) {
+      setError('Failed to update meal thumbs rating');
+      console.error(err);
+    }
+  }
+
+  // Add delete meal handler function
+  async function handleDeleteMeal(mealId) {
+    try {
+      await mealService.deleteMeal(mealId);
+      // Remove the deleted meal from the state
+      setMeals(meals.filter(meal => meal._id !== mealId));
+    } catch (err) {
+      setError('Failed to delete meal');
+      console.error(err);
+    }
+  }
+
   if (loading) return <div className="flex justify-center items-center h-64">Loading restaurant details...</div>;
   if (error) return <div className="text-red-600 p-4">{error}</div>;
   if (!restaurant) return <div className="text-gray-600 p-4">Restaurant not found</div>;
@@ -78,6 +105,16 @@ export default function RestaurantDetailPage() {
 
   return (
     <div className="max-w-3xl mx-auto p-4 sm:p-6">
+      {/* Breadcrumbs */}
+      <div className="mb-4">
+        <SimpleBreadcrumbs 
+          customCrumbs={[
+            { name: 'Restaurants', path: '/restaurants', current: false },
+            { name: restaurant.name, path: `/restaurants/${restaurant._id}`, current: true }
+          ]}
+        />
+      </div>
+      
       {/* Header with restaurant name and action buttons */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b pb-4 mb-6">
         <div className="flex items-center gap-3 mb-4 sm:mb-0">
@@ -242,19 +279,17 @@ export default function RestaurantDetailPage() {
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4">
           <h2 className="text-xl font-semibold mb-2 sm:mb-0">Recent Meals</h2>
           <div className="flex gap-3">
-            <Link 
-              to={`/meals/new?restaurantId=${restaurant._id}`}
-              className="inline-flex items-center bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md text-sm"
-            >
-              <PlusIcon className="w-5 h-5 mr-1" />
-              <span>Add Meal</span>
+            <Link to={`/meals/new?restaurantId=${restaurant._id}`}>
+              <Button positive className="flex items-center">
+                <PlusIcon className="w-5 h-5 mr-1" />
+                <span>Add Meal</span>
+              </Button>
             </Link>
             {meals.length > 0 && (
-              <Link 
-                to={`/meals?restaurant=${restaurant._id}`}
-                className="inline-flex items-center bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md text-sm"
-              >
-                <span>View All</span>
+              <Link to={`/meals?restaurant=${restaurant._id}`}>
+                <Button positive>
+                  View All
+                </Button>
               </Link>
             )}
           </div>
@@ -266,8 +301,12 @@ export default function RestaurantDetailPage() {
           <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {/* Show only up to 3 most recent meals */}
             {meals.slice(0, 3).map(meal => (
-              <li key={meal._id} className="border rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
-                <MealCard meal={meal} />
+              <li key={meal._id} className="border rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow relative">
+                <MealCard 
+                  meal={meal}
+                  onThumbsRating={handleMealThumbsRating}
+                  onDelete={handleDeleteMeal}
+                />
               </li>
             ))}
           </ul>
@@ -277,7 +316,14 @@ export default function RestaurantDetailPage() {
       {/* Restaurant images gallery section */}
       {restaurant.restaurantImages && restaurant.restaurantImages.length > 0 && (
         <div className="border-t pt-6 mt-6">
-          <h3 className="text-xl font-semibold mb-4">Restaurant Photos</h3>
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4">
+            <h2 className="text-xl font-semibold mb-2 sm:mb-0">Restaurant Photos</h2>
+            <Link to={`/restaurants/${id}/edit`}>
+              <Button positive>
+                Manage Photos
+              </Button>
+            </Link>
+          </div>
           
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
             {restaurant.restaurantImages.map((image, index) => (
@@ -289,15 +335,6 @@ export default function RestaurantDetailPage() {
                 />
               </div>
             ))}
-          </div>
-          
-          <div className="mt-4 text-center">
-            <button
-              onClick={() => navigate(`/restaurants/${id}/edit`)}
-              className="inline-flex items-center text-blue-600 hover:text-blue-800"
-            >
-              <span>Manage Photos</span>
-            </button>
           </div>
         </div>
       )}
