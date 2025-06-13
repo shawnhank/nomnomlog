@@ -108,33 +108,62 @@ export default function RestaurantCard({ restaurant, onThumbsRating, onDelete })
                     </div>
                   )}
                   
-                  {/* Contact info row */}
-                  <div className="flex flex-wrap gap-x-4 gap-y-1">
-                    {/* Phone */}
-                    {restaurant.phone && (
-                      <a
-                        href={`tel:${restaurant.phone}`}
-                        className="text-blue-300 hover:text-blue-200 text-sm flex items-center"
-                        onClick={e => e.stopPropagation()}
-                      >
-                        <PhoneIcon className="h-4 w-4 mr-1.5" />
-                        {restaurant.phone}
-                      </a>
-                    )}
+                  {/* Contact info row with thumbs rating */}
+                  <div className="flex items-center justify-between">
+                    <div className="flex flex-wrap gap-x-4 gap-y-1">
+                      {/* Phone */}
+                      {restaurant.phone && (
+                        <a
+                          href={`tel:${restaurant.phone}`}
+                          className="text-blue-300 hover:text-blue-200 text-sm flex items-center"
+                          onClick={e => e.stopPropagation()}
+                        >
+                          <PhoneIcon className="h-4 w-4 mr-1.5" />
+                          {restaurant.phone}
+                        </a>
+                      )}
+                      
+                      {/* Website */}
+                      {restaurant.website && (
+                        <a
+                          href={restaurant.website.startsWith('http') ? restaurant.website : `https://${restaurant.website}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-blue-300 hover:text-blue-200 text-sm flex items-center"
+                          onClick={e => e.stopPropagation()}
+                        >
+                          <GlobeAltIcon className="h-4 w-4 mr-1.5" />
+                          Website
+                        </a>
+                      )}
+                    </div>
                     
-                    {/* Website */}
-                    {restaurant.website && (
-                      <a
-                        href={restaurant.website.startsWith('http') ? restaurant.website : `https://${restaurant.website}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-blue-300 hover:text-blue-200 text-sm flex items-center"
-                        onClick={e => e.stopPropagation()}
+                    {/* Rating buttons - in same row as contact info */}
+                    <div className="flex space-x-2 ml-auto">
+                      <button 
+                        onClick={(e) => handleThumbsRating(true, e)}
+                        className="text-white hover:text-green-500"
+                        title="Would visit again"
                       >
-                        <GlobeAltIcon className="h-4 w-4 mr-1.5" />
-                        Website
-                      </a>
-                    )}
+                        {restaurant.isThumbsUp === true ? (
+                          <HandThumbUpSolid className="w-5 h-5 text-green-500" />
+                        ) : (
+                          <HandThumbUpIcon className="w-5 h-5" />
+                        )}
+                      </button>
+                      
+                      <button 
+                        onClick={(e) => handleThumbsRating(false, e)}
+                        className="text-white hover:text-red-500"
+                        title="Would not visit again"
+                      >
+                        {restaurant.isThumbsUp === false ? (
+                          <HandThumbDownSolid className="w-5 h-5 text-red-500" />
+                        ) : (
+                          <HandThumbDownIcon className="w-5 h-5" />
+                        )}
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -154,36 +183,36 @@ export default function RestaurantCard({ restaurant, onThumbsRating, onDelete })
                     </p>
                   )}
                 </div>
+                
+                {/* Rating buttons for no-image case */}
+                <div className="flex space-x-2">
+                  <button 
+                    onClick={(e) => handleThumbsRating(true, e)}
+                    className="text-gray-400 hover:text-green-500"
+                    title="Would visit again"
+                  >
+                    {restaurant.isThumbsUp === true ? (
+                      <HandThumbUpSolid className="w-5 h-5 text-green-500" />
+                    ) : (
+                      <HandThumbUpIcon className="w-5 h-5" />
+                    )}
+                  </button>
+                  
+                  <button 
+                    onClick={(e) => handleThumbsRating(false, e)}
+                    className="text-gray-400 hover:text-red-500"
+                    title="Would not visit again"
+                  >
+                    {restaurant.isThumbsUp === false ? (
+                      <HandThumbDownSolid className="w-5 h-5 text-red-500" />
+                    ) : (
+                      <HandThumbDownIcon className="w-5 h-5" />
+                    )}
+                  </button>
+                </div>
               </div>
             </div>
           )}
-          
-          {/* Rating buttons */}
-          <div className="px-4 py-3 flex justify-end space-x-2">
-            <button 
-              onClick={(e) => handleThumbsRating(true, e)}
-              className="text-gray-400 hover:text-green-500"
-              title="Would visit again"
-            >
-              {restaurant.isThumbsUp === true ? (
-                <HandThumbUpSolid className="w-5 h-5 text-green-500" />
-              ) : (
-                <HandThumbUpIcon className="w-5 h-5" />
-              )}
-            </button>
-            
-            <button 
-              onClick={(e) => handleThumbsRating(false, e)}
-              className="text-gray-400 hover:text-red-500"
-              title="Would not visit again"
-            >
-              {restaurant.isThumbsUp === false ? (
-                <HandThumbDownSolid className="w-5 h-5 text-red-500" />
-              ) : (
-                <HandThumbDownIcon className="w-5 h-5" />
-              )}
-            </button>
-          </div>
         </Link>
       </div>
       

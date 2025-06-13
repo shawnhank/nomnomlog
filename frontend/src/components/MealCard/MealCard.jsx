@@ -1,63 +1,36 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router';
-import { XMarkIcon } from '@heroicons/react/24/outline';
+import { XMarkIcon, HandThumbUpIcon, HandThumbDownIcon } from '@heroicons/react/24/outline';
+import { HandThumbUpIcon as HandThumbUpSolid, HandThumbDownIcon as HandThumbDownSolid } from '@heroicons/react/24/solid';
 import ThumbsRating from '../ThumbsRating/ThumbsRating';
 import DeleteConfirmationModal from '../DeleteConfirmationModal/DeleteConfirmationModal';
 
-export default function MealCard({ meal, onThumbsRating, onDelete }) {
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
-  
+export default function MealCard({ meal, onThumbsRating }) {
   // Find primary image if available
+  // If there's only one image, treat it as primary regardless of isPrimary flag
   const primaryImage = meal.mealImages && meal.mealImages.length > 0 
-    ? (meal.mealImages.find(img => img.isPrimary) || meal.mealImages[0])
+    ? (meal.mealImages.length === 1
+      ? meal.mealImages[0]
+      : meal.mealImages.find(img => img.isPrimary) || meal.mealImages[0])
     : null;
 
-  // Format date
-  const formattedDate = new Date(meal.date).toLocaleDateString();
+  // If no mealImages but there's a legacy imageUrl, use that
+  const imageToShow = primaryImage ? primaryImage.url : meal.imageUrl;
   
-  // Handle thumbs rating if provided
-  const handleThumbsRating = onThumbsRating 
-    ? (newValue, e) => {
-        // Prevent event from bubbling up to parent link
-        e.preventDefault();
-        e.stopPropagation();
-        onThumbsRating(meal._id, newValue, e);
-      }
-    : null;
-    
-  // Handle delete click
-  const handleDeleteClick = (e) => {
+  // Format the date
+  const formattedDate = meal.date ? new Date(meal.date).toLocaleDateString() : '';
+  
+  const handleThumbsRating = (isThumbsUp, e) => {
     e.preventDefault(); // Prevent navigation
-    e.stopPropagation(); // Prevent event bubbling
-    setShowDeleteModal(true);
-  };
-  
-  // Handle confirm delete
-  const handleConfirmDelete = () => {
-    if (onDelete) {
-      try {
-        onDelete(meal._id);
-      } catch (err) {
-        console.error('Error in delete handler:', err);
-      }
-    }
-    setShowDeleteModal(false);
+    
+    // If the current state matches the requested state, clear it (set to null)
+    const newValue = meal.isThumbsUp === isThumbsUp ? null : isThumbsUp;
+    onThumbsRating(meal._id, newValue, e);
   };
 
   return (
-    <>
-      <div className="flex flex-col h-full overflow-hidden rounded-lg border border-gray-200">
-        {/* Delete button - only shown if onDelete is provided */}
-        {onDelete && (
-          <button
-            onClick={handleDeleteClick}
-            className="absolute top-2 right-2 z-10 p-1.5 bg-white rounded-full shadow-sm hover:bg-red-500 transition-colors duration-150"
-            title="Delete meal"
-          >
-            <XMarkIcon className="w-4 h-4 text-red-500 hover:text-white" />
-          </button>
-        )}
-        
+    <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg border border-gray-200 hover:shadow-md transition-all duration-200 hover:-translate-y-1">
+      <Link to={`/meals/${meal._id}`} className="block">
         {/* Image */}
         {primaryImage ? (
           <div className="relative h-56 bg-gray-200">
@@ -71,17 +44,54 @@ export default function MealCard({ meal, onThumbsRating, onDelete }) {
             
             {/* Semi-transparent background bar for text */}
             <div className="absolute bottom-0 left-0 right-0 bg-black/80 p-3">
-              <Link to={`/meals/${meal._id}`} className="block">
-                <h3 className="text-white font-bold text-lg leading-tight">{meal.name}</h3>
-              </Link>
-              {meal.restaurantId && (
-                <Link 
-                  to={`/restaurants/${meal.restaurantId._id}`}
-                  className="text-white hover:text-blue-300 font-medium text-sm inline-block"
-                >
-                  {meal.restaurantId.name}
+              <div className="flex flex-col">
+                <Link to={`/meals/${meal._id}`} className="block">
+                  <h3 className="text-white font-bold text-lg leading-tight">{meal.name}</h3>
                 </Link>
-              )}
+                {meal.restaurantId && (
+                  <Link 
+                    to={`/restaurants/${meal.restaurantId._id}`}
+                    className="text-white hover:text-blue-300 font-medium text-sm inline-block"
+                  >
+                    {meal.restaurantId.name}
+                  </Link>
+                )}
+                
+                {/* Date and thumbs in same row */}
+                <div className="flex justify-between items-center mt-2">
+                  <Link to={`/meals/${meal._id}`} className="text-white text-sm">
+                    {formattedDate}
+                  </Link>
+                  
+                  {handleThumbsRating && (
+                    <div className="flex space-x-2 ml-auto">
+                      <button 
+                        onClick={(e) => handleThumbsRating(true, e)}
+                        className="text-white hover:text-green-500"
+                        title="Would order again"
+                      >
+                        {meal.isThumbsUp === true ? (
+                          <HandThumbUpSolid className="w-5 h-5 text-green-500" />
+                        ) : (
+                          <HandThumbUpIcon className="w-5 h-5" />
+                        )}
+                      </button>
+                      
+                      <button 
+                        onClick={(e) => handleThumbsRating(false, e)}
+                        className="text-white hover:text-red-500"
+                        title="Would not order again"
+                      >
+                        {meal.isThumbsUp === false ? (
+                          <HandThumbDownSolid className="w-5 h-5 text-red-500" />
+                        ) : (
+                          <HandThumbDownIcon className="w-5 h-5" />
+                        )}
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </div>
             </div>
           </div>
         ) : (
@@ -97,34 +107,46 @@ export default function MealCard({ meal, onThumbsRating, onDelete }) {
                 {meal.restaurantId.name}
               </Link>
             )}
+            
+            {/* Date and thumbs for no-image case */}
+            <div className="flex justify-between items-center mt-2">
+              <Link to={`/meals/${meal._id}`} className="text-gray-600 text-sm">
+                {formattedDate}
+              </Link>
+              
+              {handleThumbsRating && (
+                <div className="flex space-x-2">
+                  <button 
+                    onClick={(e) => handleThumbsRating(true, e)}
+                    className="text-gray-400 hover:text-green-500"
+                    title="Would order again"
+                  >
+                    {meal.isThumbsUp === true ? (
+                      <HandThumbUpSolid className="w-5 h-5 text-green-500" />
+                    ) : (
+                      <HandThumbUpIcon className="w-5 h-5" />
+                    )}
+                  </button>
+                  
+                  <button 
+                    onClick={(e) => handleThumbsRating(false, e)}
+                    className="text-gray-400 hover:text-red-500"
+                    title="Would not order again"
+                  >
+                    {meal.isThumbsUp === false ? (
+                      <HandThumbDownSolid className="w-5 h-5 text-red-500" />
+                    ) : (
+                      <HandThumbDownIcon className="w-5 h-5" />
+                    )}
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
         )}
-        
-        {/* Card footer with date and thumbs */}
-        <div className="p-3 flex justify-between items-center mt-auto">
-          <Link to={`/meals/${meal._id}`} className="text-gray-600 text-sm">
-            {formattedDate}
-          </Link>
-          
-          {handleThumbsRating && (
-            <ThumbsRating 
-              value={meal.isThumbsUp}
-              onChange={handleThumbsRating}
-              size="md" // Changed from "sm" to "md" for larger icons
-            />
-          )}
-        </div>
-      </div>
-      
-      {/* Delete confirmation modal */}
-      <DeleteConfirmationModal
-        isOpen={showDeleteModal}
-        onClose={() => setShowDeleteModal(false)}
-        onConfirm={handleConfirmDelete}
-        title="Delete Meal"
-        message="Are you sure you want to delete this meal? This action cannot be undone."
-        itemName={meal?.name}
-      />
-    </>
+
+        {/* Remove the original card footer since we moved everything into the overlay */}
+      </Link>
+    </div>
   );
 }
