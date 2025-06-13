@@ -187,14 +187,25 @@ export default function TagsPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
         <h1 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-0">Tags</h1>
-        <Button
-          onClick={() => setShowAddForm(true)}
-          positive
-          className="flex items-center"
-        >
-          <PlusIcon className="w-5 h-5 mr-1" />
-          <span>Add Tag</span>
-        </Button>
+        <div className="flex items-center gap-3">
+          {selectedCount > 0 && (
+            <button
+              onClick={handleBulkDelete}
+              className="group relative flex items-center justify-center w-10 h-10 text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors"
+              title={`Delete ${selectedCount} tag${selectedCount > 1 ? 's' : ''}`}
+            >
+              <TrashIcon className="w-5 h-5" />
+            </button>
+          )}
+          <Button
+            onClick={() => setShowAddForm(true)}
+            positive
+            className="flex items-center"
+          >
+            <PlusIcon className="w-5 h-5 mr-1" />
+            <span>Add Tag</span>
+          </Button>
+        </div>
       </div>
 
       {/* Search Bar */}
@@ -258,21 +269,7 @@ export default function TagsPage() {
         </div>
       )}
 
-      {/* Bulk actions - only show when tags are selected */}
-      {selectedCount > 0 && (
-        <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-50">
-          <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg px-4 py-3">
-            <Button
-              onClick={handleBulkDelete}
-              negative
-              className="flex items-center"
-            >
-              <TrashIcon className="w-4 h-4 mr-2" />
-              <span>Delete {selectedCount} tag{selectedCount > 1 ? 's' : ''}</span>
-            </Button>
-          </div>
-        </div>
-      )}
+
 
       {/* Tags pills */}
       {filteredTags.length === 0 ? (
@@ -310,12 +307,12 @@ export default function TagsPage() {
           {filteredTags.map((tag) => (
             <div key={tag._id} className="relative">
               {editingTagId === tag._id ? (
-                <div className="inline-flex items-center gap-2 bg-white dark:bg-gray-800 border border-gray-300 rounded-full px-4 py-2">
+                <div className="inline-flex items-center justify-center bg-white dark:bg-gray-800 border-2 border-blue-300 rounded-full px-4 py-2 min-w-[80px]">
                   <input
                     type="text"
                     value={editingName}
                     onChange={(e) => setEditingName(e.target.value)}
-                    className="bg-transparent border-none outline-none text-sm min-w-0 w-20"
+                    className="bg-transparent border-none outline-none text-sm text-center min-w-0 w-full"
                     onKeyDown={(e) => {
                       if (e.key === 'Enter') saveEdit();
                       if (e.key === 'Escape') cancelEditing();
@@ -326,41 +323,39 @@ export default function TagsPage() {
                   />
                 </div>
               ) : (
-                <div
-                  className={`group inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium cursor-pointer transition-all duration-200 hover:shadow-sm ${
-                    selectedTags.has(tag._id)
-                      ? 'bg-blue-100 text-blue-800 border-2 border-blue-300 dark:bg-blue-900/30 dark:text-blue-200 dark:border-blue-600'
-                      : 'bg-gray-100 text-gray-700 border-2 border-gray-200 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-600'
-                  }`}
-                  onClick={() => handleTagSelect(tag._id, !selectedTags.has(tag._id))}
-                >
-                  {/* Tag name */}
-                  <span className="select-none">{tag.name}</span>
+                <div className="relative group">
+                  <div
+                    className={`inline-flex items-center justify-center px-4 py-2 rounded-full text-sm font-medium cursor-pointer transition-all duration-200 hover:shadow-sm min-w-[80px] ${
+                      selectedTags.has(tag._id)
+                        ? 'bg-blue-100 text-blue-800 border-2 border-blue-300 dark:bg-blue-900/30 dark:text-blue-200 dark:border-blue-600'
+                        : 'bg-gray-100 text-gray-700 border-2 border-gray-200 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-600'
+                    }`}
+                    onClick={() => handleTagSelect(tag._id, !selectedTags.has(tag._id))}
+                  >
+                    {/* Tag name - centered and clickable for editing */}
+                    <span
+                      className="select-none text-center"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        startEditing(tag);
+                      }}
+                    >
+                      {tag.name}
+                    </span>
+                  </div>
 
-                  {/* Action buttons - show on hover for single selection */}
+                  {/* Delete X - floating on upper right corner */}
                   {!selectedTags.has(tag._id) && (
-                    <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity ml-1">
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          startEditing(tag);
-                        }}
-                        className="p-1 hover:bg-blue-100 text-blue-600 rounded-full transition-colors"
-                        title="Edit tag"
-                      >
-                        <PencilIcon className="w-3 h-3" />
-                      </button>
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleSingleDelete(tag);
-                        }}
-                        className="p-1 hover:bg-red-100 text-red-600 rounded-full transition-colors"
-                        title="Delete tag"
-                      >
-                        <TrashIcon className="w-3 h-3" />
-                      </button>
-                    </div>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleSingleDelete(tag);
+                      }}
+                      className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 hover:bg-red-600 text-white rounded-full flex items-center justify-center text-xs font-bold opacity-0 group-hover:opacity-100 transition-opacity shadow-sm"
+                      title="Delete tag"
+                    >
+                      ×
+                    </button>
                   )}
                 </div>
               )}
