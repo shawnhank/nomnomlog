@@ -1,6 +1,10 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router';
 import * as authService from '../../services/authService';
+import { Button } from '../../components/catalyst/button';
+import { Input } from '../../components/catalyst/input';
+import { Checkbox } from '../../components/catalyst/checkbox';
+import { Fieldset } from '../../components/catalyst/fieldset';
 
 export default function LogInPage({ setUser }) {
   const [formData, setFormData] = useState({
@@ -30,42 +34,39 @@ export default function LogInPage({ setUser }) {
   }
 
   return (
-    <div className="flex min-h-screen flex-col justify-center items-center bg-gray-50 dark:bg-gray-900 py-8 pt-4 pl-4 pr-4 pb-1 sm:px-6 lg:px-8">
-      <form 
-        onSubmit={handleSubmit} 
-        className="grid w-full grid-cols-1 gap-6 px-4"
-      >
-        <img 
-          src="/images/nnl_logo_v2_trans_bg.png" 
-          alt="NomNomLog Logo" 
-          className="w-[250px] h-[250px] mx-auto" 
-        />
-        
-        <h1 className="text-center text-3xl font-bold text-gray-900 dark:text-white pb-7">
-          Sign in to your account
-        </h1>
-        
-        {errorMsg && (
-          <div className="rounded-md bg-red-50 dark:bg-red-900 p-4">
-            <p className="text-sm text-red-700 dark:text-red-200">{errorMsg}</p>
-          </div>
-        )}
-        
-        <div>
-          <label htmlFor="email" className="block text-base font-medium text-gray-700 dark:text-gray-300">
-            Email
-          </label>
-          <input
-            id="email"
-            name="email"
-            type="email"
-            autoComplete="email"
-            required
-            value={formData.email}
-            onChange={handleChange}
-            className="mt-1 h-10 px-4 block w-full rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+    <div className="flex min-h-screen flex-col justify-center items-center bg-gray-50 dark:bg-gray-900 py-4 px-4 sm:px-6 lg:px-8">
+      <div className="w-full max-w-md space-y-8">
+        <div className="text-center">
+          <img
+            src="/images/nnl_logo_v2_trans_bg.png"
+            alt="NomNomLog Logo"
+            className="w-32 h-32 sm:w-40 sm:h-40 mx-auto"
           />
+          <h1 className="mt-6 text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
+            Sign in to your account
+          </h1>
         </div>
+
+        <form onSubmit={handleSubmit} className="space-y-6">
+          {errorMsg && (
+            <div className="rounded-md bg-red-50 dark:bg-red-900 p-4">
+              <p className="text-sm text-red-700 dark:text-red-200">{errorMsg}</p>
+            </div>
+          )}
+
+          <Fieldset>
+            <div className="space-y-4">
+              <Input
+                name="email"
+                type="email"
+                autoComplete="email"
+                required
+                value={formData.email}
+                onChange={handleChange}
+                placeholder="Enter your email"
+              />
+            </div>
+          </Fieldset>
         
         <div>
           <div className="flex items-center justify-between">

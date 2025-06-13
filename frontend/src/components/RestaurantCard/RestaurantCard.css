@@ -1,17 +1,1 @@
-.restaurant-card {
-  width: 100%;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  overflow: hidden;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  background-color: white;
-}
-
-.restaurant-card:hover {
-  transform: translateY(-2px);
-}
-
-.restaurant-card a {
-  text-decoration: none;
-  color: inherit;
-}
+/* This file can be deleted as we've converted to Tailwind CSS */

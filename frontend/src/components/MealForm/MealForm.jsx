@@ -1,7 +1,11 @@
 import { useState, useEffect } from 'react';
-import './MealForm.css'; // Keep this for any custom styles
-import MultiImageUploader from '../MultiImageUploader/MultiImageUploader'; // Updated import
-import { Button } from '../Button/button';
+import MultiImageUploader from '../MultiImageUploader/MultiImageUploader';
+import { Button } from '../catalyst/button';
+import { Input } from '../catalyst/input';
+import { Select } from '../catalyst/select';
+import { Textarea } from '../catalyst/textarea';
+import { Fieldset, Legend } from '../catalyst/fieldset';
+import { Checkbox } from '../catalyst/checkbox';
 
 export default function MealForm({ initialData, onSubmit, buttonLabel = 'Save', loading = false }) {
   // Default form values
@@ -73,114 +77,117 @@ export default function MealForm({ initialData, onSubmit, buttonLabel = 'Save', 
   }, [initialData]);
   
   return (
-    <form onSubmit={handleSubmit} className="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-md">
-      <div className="mb-4">
-        <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">Meal Name</label>
-        <input
-          type="text"
-          id="name"
-          name="name"
-          value={formData.name}
-          onChange={handleChange}
-          required
-          className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
-        />
-      </div>
-      
-      <div className="mb-4">
-        <label htmlFor="restaurantId" className="block text-sm font-medium text-gray-700 mb-1">Restaurant</label>
-        <select
-          id="restaurantId"
-          name="restaurantId"
-          value={formData.restaurantId}
-          onChange={handleChange}
-          required
-          className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
-        >
-          <option value="">Select a restaurant</option>
-          {restaurants.map(restaurant => (
-            <option key={restaurant._id} value={restaurant._id}>
-              {restaurant.name}
-            </option>
-          ))}
-        </select>
-      </div>
-      
-      <div className="mb-4">
-        <label htmlFor="date" className="block text-sm font-medium text-gray-700 mb-1">Date</label>
-        <input
-          type="date"
-          id="date"
-          name="date"
-          value={formData.date}
-          onChange={handleChange}
-          required
-          className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
-        />
-      </div>
-      
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700 mb-1">Would order again?</label>
-        <div className="flex items-center space-x-4">
-          <button
-            type="button"
-            className={`px-4 py-2 rounded-md ${formData.isThumbsUp === true ? 'bg-primary text-white' : 'bg-gray-200 text-gray-700'} hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-primary`}
-            onClick={() => setFormData({...formData, isThumbsUp: true})}
+    <div className="max-w-2xl mx-auto p-4 sm:p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md">
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <Fieldset>
+          <Legend>Meal Details</Legend>
+
+          <div className="space-y-4">
+            <Input
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              required
+              placeholder="Enter meal name"
+            />
+
+            <Select
+              name="restaurantId"
+              value={formData.restaurantId}
+              onChange={handleChange}
+              required
+            >
+              <option value="">Select a restaurant</option>
+              {restaurants.map(restaurant => (
+                <option key={restaurant._id} value={restaurant._id}>
+                  {restaurant.name}
+                </option>
+              ))}
+            </Select>
+
+            <Input
+              type="date"
+              name="date"
+              value={formData.date}
+              onChange={handleChange}
+              required
+            />
+          </div>
+        </Fieldset>
+
+        <Fieldset>
+          <Legend>Preferences</Legend>
+
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-900 dark:text-gray-100 mb-3">
+                Would order again?
+              </label>
+              <div className="flex items-center space-x-3">
+                <Button
+                  type="button"
+                  color={formData.isThumbsUp === true ? 'green' : 'zinc'}
+                  outline={formData.isThumbsUp !== true}
+                  onClick={() => setFormData({...formData, isThumbsUp: true})}
+                >
+                  👍 Yes
+                </Button>
+                <Button
+                  type="button"
+                  color={formData.isThumbsUp === false ? 'red' : 'zinc'}
+                  outline={formData.isThumbsUp !== false}
+                  onClick={() => setFormData({...formData, isThumbsUp: false})}
+                >
+                  👎 No
+                </Button>
+              </div>
+            </div>
+
+            <Checkbox
+              name="isFavorite"
+              checked={formData.isFavorite}
+              onChange={handleChange}
+            >
+              Mark as favorite
+            </Checkbox>
+          </div>
+        </Fieldset>
+
+        <Fieldset>
+          <Legend>Photos & Notes</Legend>
+
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-900 dark:text-gray-100 mb-2">
+                Meal Photos
+              </label>
+              <MultiImageUploader
+                images={formData.mealImages}
+                onImagesUpdated={handleImagesUpdated}
+                entityType="meal"
+              />
+            </div>
+
+            <Textarea
+              name="notes"
+              value={formData.notes}
+              onChange={handleChange}
+              rows={4}
+              placeholder="Add any notes about this meal..."
+            />
+          </div>
+        </Fieldset>
+
+        <div className="flex justify-end pt-4">
+          <Button
+            type="submit"
+            color="blue"
+            disabled={loading}
           >
-            👍 Yes
-          </button>
-          <button
-            type="button"
-            className={`px-4 py-2 rounded-md ${formData.isThumbsUp === false ? 'bg-primary text-white' : 'bg-gray-200 text-gray-700'} hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-primary`}
-            onClick={() => setFormData({...formData, isThumbsUp: false})}
-          >
-            👎 No
-          </button>
+            {loading ? 'Saving...' : buttonLabel}
+          </Button>
         </div>
-      </div>
-      
-      <div className="mb-4">
-        <input
-          type="checkbox"
-          id="isFavorite"
-          name="isFavorite"
-          checked={formData.isFavorite}
-          onChange={handleChange}
-          className="mr-2"
-        />
-        <label htmlFor="isFavorite" className="text-sm font-medium text-gray-700">Mark as favorite</label>
-      </div>
-      
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700 mb-1">Meal Photos</label>
-        <MultiImageUploader 
-          images={formData.mealImages} 
-          onImagesUpdated={handleImagesUpdated}
-          entityType="meal"
-        />
-      </div>
-      
-      <div className="mb-4">
-        <label htmlFor="notes" className="block text-sm font-medium text-gray-700 mb-1">Notes</label>
-        <textarea
-          id="notes"
-          name="notes"
-          value={formData.notes}
-          onChange={handleChange}
-          rows="4"
-          className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
-        />
-      </div>
-      
-      <div className="flex justify-end mt-6">
-        <Button
-          type="submit"
-          color="blue"
-          disabled={loading}
-        >
-          {loading ? 'Saving...' : buttonLabel}
-        </Button>
-      </div>
-    </form>
+      </form>
+    </div>
   );
 }
