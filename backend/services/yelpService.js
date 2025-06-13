@@ -75,8 +75,24 @@ async function autocomplete(text, latitude, longitude) {
   }
 }
 
+/**
+ * Get reviews for a business
+ * @param {string} id - Yelp business ID
+ * @returns {Promise} - Promise with reviews
+ */
+async function getBusinessReviews(id) {
+  try {
+    const response = await yelpAxios.get(`/businesses/${id}/reviews`);
+    return response.data;
+  } catch (error) {
+    console.error('Yelp API business reviews error:', error.response?.data || error.message);
+    throw error;
+  }
+}
+
 module.exports = {
   searchBusinesses,
   getBusinessById,
-  autocomplete
+  autocomplete,
+  getBusinessReviews
 };

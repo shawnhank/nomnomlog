@@ -35,6 +35,12 @@ const restaurantSchema = new Schema({
   lat: Number,
   long: Number,
   
+  // Add Yelp ID field
+  yelpId: {
+    type: String,
+    index: true
+  },
+  
   // Updated with more specific field name
   restaurantImages: [imageSchema],
   

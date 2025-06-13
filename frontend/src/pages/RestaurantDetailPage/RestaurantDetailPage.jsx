@@ -9,6 +9,7 @@ import MealCard from '../../components/MealCard/MealCard';
 import DeleteConfirmationModal from '../../components/DeleteConfirmationModal/DeleteConfirmationModal';
 import ThumbsRating from '../../components/ThumbsRating/ThumbsRating';
 import SimpleBreadcrumbs from '../../components/SimpleBreadcrumbs/SimpleBreadcrumbs';
+import YelpIntegration from '../../components/YelpIntegration/YelpIntegration';
 
 export default function RestaurantDetailPage() {
   const [restaurant, setRestaurant] = useState(null);
@@ -342,6 +343,14 @@ export default function RestaurantDetailPage() {
               </div>
             ))}
           </div>
+        </div>
+      )}
+
+      {/* Yelp integration */}
+      {restaurant.yelpId && (
+        <div className="border-t pt-6 mt-6">
+          <h2 className="text-xl font-semibold mb-2">Yelp Information</h2>
+          <YelpIntegration yelpId={restaurant.yelpId} />
         </div>
       )}
 

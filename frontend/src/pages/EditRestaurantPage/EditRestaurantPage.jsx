@@ -6,6 +6,7 @@ import { Heading } from '../../components/catalyst/heading';
 import { Button } from '../../components/catalyst/button';
 import RestaurantForm from '../../components/RestaurantForm/RestaurantForm';
 import SimpleBreadcrumbs from '../../components/SimpleBreadcrumbs/SimpleBreadcrumbs';
+import YelpSearchAutocomplete from '../../components/YelpSearchAutocomplete/YelpSearchAutocomplete';
 
 export default function EditRestaurantPage() {
   const [initialData, setInitialData] = useState(null);
@@ -53,6 +54,29 @@ export default function EditRestaurantPage() {
     navigate(`/restaurants/${id}`);
   }
   
+  // Add this function to handle selecting a restaurant from Yelp
+  const handleSelectYelpRestaurant = (restaurantData) => {
+    // Update form state with Yelp data
+    setFormData({
+      ...formData,
+      yelpId: restaurantData.yelpId
+    });
+    
+    // Optionally update other fields if they're empty
+    if (!formData.website && restaurantData.website) {
+      setFormData(prev => ({ ...prev, website: restaurantData.website }));
+    }
+    
+    if (!formData.phone && restaurantData.phone) {
+      setFormData(prev => ({ ...prev, phone: restaurantData.phone }));
+    }
+    
+    // If there are images and we don't have any, update the images
+    if (restaurantData.restaurantImages?.length > 0 && (!images || images.length === 0)) {
+      setImages(restaurantData.restaurantImages);
+    }
+  };
+
   if (loading && !initialData) return (
     <div className="flex justify-center items-center h-64 text-gray-600 dark:text-gray-400">
       Loading restaurant data...
@@ -111,6 +135,34 @@ export default function EditRestaurantPage() {
         buttonLabel="Save Changes"
         loading={loading}
       />
+
+      <div className="mb-6 p-4 border border-gray-200 rounded-lg">
+        <h3 className="text-lg font-medium mb-2">Link to Yelp</h3>
+        <p className="text-sm text-gray-600 mb-4">
+          Search for this restaurant on Yelp to link it and import additional data.
+        </p>
+        
+        <YelpSearchAutocomplete onSelectRestaurant={handleSelectYelpRestaurant} />
+        
+        {formData.yelpId && (
+          <div className="mt-4 p-3 bg-green-50 border border-green-200 rounded-md">
+            <div className="flex items-center">
+              <svg className="h-5 w-5 text-green-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
+              <span>Restaurant linked to Yelp</span>
+            </div>
+            <a 
+              href={`https://www.yelp.com/biz/${formData.yelpId}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm text-blue-600 hover:underline mt-1 inline-block"
+            >
+              View on Yelp
+            </a>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
