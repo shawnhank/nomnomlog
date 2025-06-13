@@ -4,7 +4,11 @@ import * as restaurantService from '../../services/restaurant';
 import * as tagService from '../../services/tag';
 import * as restaurantTagService from '../../services/restaurantTag';
 import MultiImageUploader from '../../components/MultiImageUploader/MultiImageUploader';
-import './NewRestaurantPage.css';
+import { Button } from '../../components/catalyst/button';
+import { Input } from '../../components/catalyst/input';
+import { Checkbox } from '../../components/catalyst/checkbox';
+import { Fieldset, Legend } from '../../components/catalyst/fieldset';
+import { Heading } from '../../components/catalyst/heading';
 
 export default function NewRestaurantPage() {
   // State for the restaurant form data
@@ -109,119 +113,120 @@ export default function NewRestaurantPage() {
   }
 
   return (
-    <div className="NewRestaurantPage">
-      <h1>Add New Restaurant</h1>
-      
-      {errorMsg && <p className="text-red-500">{errorMsg}</p>}
-      
-      <form onSubmit={handleSubmit}>
-        {/* Restaurant Name field (required) */}
-        <div className="form-group">
-          <label htmlFor="name">Restaurant Name</label>
-          <input
-            type="text"
-            id="name"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            required
-          />
+    <div className="max-w-2xl mx-auto p-4 sm:p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md">
+      <Heading>Add New Restaurant</Heading>
+
+      {errorMsg && (
+        <div className="mb-6 rounded-md bg-red-50 dark:bg-red-900 p-4">
+          <p className="text-sm text-red-700 dark:text-red-200">{errorMsg}</p>
         </div>
-        
-        {/* Address field (optional) */}
-        <div className="form-group">
-          <label htmlFor="address">Address</label>
-          <input
-            type="text"
-            id="address"
-            name="address"
-            value={formData.address}
-            onChange={handleChange}
-          />
-        </div>
-        
-        {/* Phone field (optional) */}
-        <div className="form-group">
-          <label htmlFor="phone">Phone</label>
-          <input
-            type="tel"
-            id="phone"
-            name="phone"
-            value={formData.phone}
-            onChange={handleChange}
-          />
-        </div>
-        
-        {/* Website field (optional) */}
-        <div className="form-group">
-          <label htmlFor="website">Website</label>
-          <input
-            type="url"
-            id="website"
-            name="website"
-            value={formData.website}
-            onChange={handleChange}
-            placeholder="https://example.com"
-          />
-        </div>
-        
-        {/* Add MultiImageUploader */}
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700 mb-1">Restaurant Photos</label>
-          <MultiImageUploader 
-            images={formData.restaurantImages} 
-            onImagesUpdated={handleImagesUpdated}
-            entityType="restaurant"
-          />
-        </div>
-        
-        {/* Tags section */}
-        <div className="form-group">
-          <label>Tags</label>
-          <div className="tags-container">
-            {tags.map(tag => (
-              <div key={tag._id} className="tag-item">
-                <input
-                  type="checkbox"
-                  id={`tag-${tag._id}`}
-                  checked={selectedTags.includes(tag._id)}
-                  onChange={() => handleTagSelect(tag._id)}
-                />
-                <label htmlFor={`tag-${tag._id}`}>{tag.name}</label>
-              </div>
-            ))}
-          </div>
-          
-          {/* Add new tag */}
-          <div className="add-tag-container">
-            <input
-              type="text"
-              value={newTag}
-              onChange={handleNewTagChange}
-              placeholder="Add a new tag"
+      )}
+
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <Fieldset>
+          <Legend>Restaurant Information</Legend>
+          <div className="space-y-4">
+            <Input
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              required
+              placeholder="Enter restaurant name"
             />
-            <button 
-              type="button" 
-              onClick={handleCreateTag}
-              className="btn-add-tag"
-            >
-              Add
-            </button>
+
+            <Input
+              name="address"
+              value={formData.address}
+              onChange={handleChange}
+              placeholder="Enter restaurant address"
+            />
+
+            <Input
+              name="phone"
+              type="tel"
+              value={formData.phone}
+              onChange={handleChange}
+              placeholder="Enter phone number"
+            />
+
+            <Input
+              name="website"
+              type="url"
+              value={formData.website}
+              onChange={handleChange}
+              placeholder="https://example.com"
+            />
           </div>
-        </div>
-        
-        {/* Form actions */}
-        <div className="form-actions">
-          <button 
-            type="button" 
-            className="btn-cancel" 
+        </Fieldset>
+
+        <Fieldset>
+          <Legend>Photos</Legend>
+          <div>
+            <label className="block text-sm font-medium text-gray-900 dark:text-gray-100 mb-2">
+              Restaurant Photos
+            </label>
+            <MultiImageUploader
+              images={formData.restaurantImages}
+              onImagesUpdated={handleImagesUpdated}
+              entityType="restaurant"
+            />
+          </div>
+        </Fieldset>
+
+        <Fieldset>
+          <Legend>Tags</Legend>
+          <div className="space-y-4">
+            {tags.length > 0 && (
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                {tags.map(tag => (
+                  <Checkbox
+                    key={tag._id}
+                    name={`tag-${tag._id}`}
+                    checked={selectedTags.includes(tag._id)}
+                    onChange={() => handleTagSelect(tag._id)}
+                  >
+                    {tag.name}
+                  </Checkbox>
+                ))}
+              </div>
+            )}
+
+            <div className="flex gap-2">
+              <Input
+                value={newTag}
+                onChange={handleNewTagChange}
+                placeholder="Add a new tag"
+                className="flex-1"
+              />
+              <Button
+                type="button"
+                onClick={handleCreateTag}
+                color="zinc"
+                outline
+              >
+                Add
+              </Button>
+            </div>
+          </div>
+        </Fieldset>
+
+        <div className="flex flex-col sm:flex-row gap-3 pt-4">
+          <Button
+            type="button"
+            color="zinc"
+            outline
             onClick={() => navigate('/restaurants')}
+            className="sm:w-auto"
           >
             Cancel
-          </button>
-          <button type="submit" className="btn-submit">
+          </Button>
+          <Button
+            type="submit"
+            color="blue"
+            className="flex-1 sm:flex-none"
+          >
             Add Restaurant
-          </button>
+          </Button>
         </div>
       </form>
     </div>
