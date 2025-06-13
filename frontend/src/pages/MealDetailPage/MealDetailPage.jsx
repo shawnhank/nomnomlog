@@ -2,11 +2,9 @@ import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router';
 import { HeartIcon as HeartSolid } from '@heroicons/react/24/solid';
 import { HeartIcon as HeartOutline } from '@heroicons/react/24/outline';
-import { HandThumbUpIcon, HandThumbDownIcon } from '@heroicons/react/24/outline';
+import { HandThumbUpIcon, HandThumbDownIcon, PlusIcon } from '@heroicons/react/24/outline';
 import { HandThumbUpIcon as HandThumbUpSolid, HandThumbDownIcon as HandThumbDownSolid } from '@heroicons/react/24/solid';
 import * as mealService from '../../services/meal';
-import MultiImageUploader from '../../components/MultiImageUploader/MultiImageUploader';
-import './MealDetailPage.css';
 
 export default function MealDetailPage() {
   const [meal, setMeal] = useState(null);
@@ -75,19 +73,6 @@ export default function MealDetailPage() {
     }
   }
 
-  // Handle image updates
-  async function handleImagesUpdated(updatedData) {
-    try {
-      const updatedMeal = await mealService.update(id, {
-        ...meal,
-        ...updatedData
-      });
-      setMeal(updatedMeal);
-    } catch (err) {
-      setError('Failed to update meal images');
-    }
-  }
-
   // Add this function to handle edit navigation
   function handleEdit() {
     navigate(`/meals/${id}/edit`);
@@ -97,6 +82,11 @@ export default function MealDetailPage() {
   if (error) return <div className="text-red-600 p-4">{error}</div>;
   if (!meal) return <div className="text-gray-600 p-4">Meal not found</div>;
 
+  // Find primary image if available
+  const primaryImage = meal.mealImages && meal.mealImages.length > 0 
+    ? (meal.mealImages.find(img => img.isPrimary) || meal.mealImages[0])
+    : null;
+
   return (
     <div className="max-w-3xl mx-auto p-4 sm:p-6">
       {/* Header with meal name and action buttons */}
@@ -105,9 +95,10 @@ export default function MealDetailPage() {
         <div className="flex gap-3">
           <Link 
             to="/meals/new"
-            className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md text-sm"
+            className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded-md text-sm flex items-center"
           >
-            Add New Meal
+            <PlusIcon className="w-5 h-5 mr-1" />
+            <span>Add Meal</span>
           </Link>
           <button 
             onClick={handleEdit}
@@ -145,87 +136,91 @@ export default function MealDetailPage() {
           </div>
         </div>
 
-        {/* Meal actions (favorite and thumbs) */}
-        <div className="action-buttons-container">
-          {/* Favorite button */}
-          <button 
-            onClick={handleToggleFavorite}
-            className="action-button"
-            title={meal.isFavorite ? "Remove from favorites" : "Add to favorites"}
-          >
-            <span className={`heart-icon ${meal.isFavorite ? 'filled' : ''}`}>
-              {meal.isFavorite ? (
-                <HeartSolid style={{ width: '24px', height: '24px', color: '#e11d48' }} />
-              ) : (
-                <HeartOutline style={{ width: '24px', height: '24px', color: 'white' }} />
-              )}
-            </span>
-          </button>
-          
+        {/* Meal actions (thumbs only) */}
+        <div className="flex gap-3 my-4">
           {/* Thumbs up button */}
           <button 
             onClick={() => handleThumbsRating(true)}
-            className={`action-button ${meal.isThumbsUp === true ? 'thumbs-up-active' : ''}`}
+            className={`flex items-center justify-center w-10 h-10 rounded-md ${
+              meal.isThumbsUp === true 
+                ? 'bg-green-600 hover:bg-green-700' 
+                : 'bg-gray-800 hover:bg-gray-700'
+            }`}
             title="Would Order Again"
           >
-            <span className={`thumbs-up-icon ${meal.isThumbsUp === true ? 'filled' : ''}`}>
-              {meal.isThumbsUp === true ? (
-                <HandThumbUpSolid style={{ width: '24px', height: '24px', color: 'white' }} />
-              ) : (
-                <HandThumbUpIcon style={{ width: '24px', height: '24px', color: 'white' }} />
-              )}
-            </span>
+            {meal.isThumbsUp === true ? (
+              <HandThumbUpSolid className="w-6 h-6 text-white" />
+            ) : (
+              <HandThumbUpIcon className="w-6 h-6 text-white" />
+            )}
           </button>
           
           {/* Thumbs down button */}
           <button 
             onClick={() => handleThumbsRating(false)}
-            className={`action-button ${meal.isThumbsUp === false ? 'thumbs-down-active' : ''}`}
+            className={`flex items-center justify-center w-10 h-10 rounded-md ${
+              meal.isThumbsUp === false 
+                ? 'bg-red-600 hover:bg-red-700' 
+                : 'bg-gray-800 hover:bg-gray-700'
+            }`}
             title="Would Not Order Again"
           >
-            <span className={`thumbs-down-icon ${meal.isThumbsUp === false ? 'filled' : ''}`}>
-              {meal.isThumbsUp === false ? (
-                <HandThumbDownSolid style={{ width: '24px', height: '24px', color: 'white' }} />
-              ) : (
-                <HandThumbDownIcon style={{ width: '24px', height: '24px', color: 'white' }} />
-              )}
-            </span>
+            {meal.isThumbsUp === false ? (
+              <HandThumbDownSolid className="w-6 h-6 text-white" />
+            ) : (
+              <HandThumbDownIcon className="w-6 h-6 text-white" />
+            )}
           </button>
         </div>
 
-        {/* Meal images section with MultiImageUploader */}
-        <div className="my-6">
-          <h3 className="text-lg font-medium mb-2">Photos</h3>
-          
-          {/* Display primary image prominently if available */}
-          {meal.mealImages && meal.mealImages.length > 0 && meal.mealImages.find(img => img.isPrimary) && (
-            <div className="mb-4">
-              <img 
-                src={meal.mealImages.find(img => img.isPrimary).url} 
-                alt={meal.name} 
-                className="w-full max-h-96 object-cover rounded-lg shadow-md"
-              />
-              {meal.mealImages.find(img => img.isPrimary).caption && (
-                <p className="text-sm text-gray-600 mt-1">
-                  {meal.mealImages.find(img => img.isPrimary).caption}
-                </p>
-              )}
-            </div>
-          )}
-          
-          {/* MultiImageUploader for managing images */}
-          <MultiImageUploader 
-            images={meal.mealImages || []} 
-            onImagesUpdated={handleImagesUpdated}
-            entityType="meal"
-          />
-        </div>
+        {/* Primary image display */}
+        {primaryImage && (
+          <div className="my-6">
+            <img 
+              src={primaryImage.url} 
+              alt={meal.name} 
+              className="w-full max-h-96 object-cover rounded-lg shadow-md"
+            />
+            {primaryImage.caption && (
+              <p className="text-sm text-gray-600 mt-1">
+                {primaryImage.caption}
+              </p>
+            )}
+          </div>
+        )}
 
         {/* Notes */}
         {meal.notes && (
           <div className="bg-gray-50 p-4 rounded-lg">
             <h3 className="text-lg font-medium mb-2">Notes</h3>
             <p className="text-gray-700 whitespace-pre-line">{meal.notes}</p>
+          </div>
+        )}
+
+        {/* Image gallery (if there are multiple images) */}
+        {meal.mealImages && meal.mealImages.length > 1 && (
+          <div className="my-6">
+            <h3 className="text-lg font-medium mb-2">Photos</h3>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
+              {meal.mealImages.map((image, index) => (
+                <div key={index} className="aspect-square">
+                  <img 
+                    src={image.url} 
+                    alt={image.caption || `${meal.name} photo ${index + 1}`} 
+                    className="w-full h-full object-cover rounded-md"
+                  />
+                </div>
+              ))}
+            </div>
+            
+            <div className="mt-4 text-center">
+              <button
+                onClick={handleEdit}
+                className="inline-flex items-center text-blue-600 hover:text-blue-800"
+              >
+                <span>Manage Photos</span>
+              </button>
+            </div>
           </div>
         )}
       </div>

@@ -42,21 +42,28 @@ export default function EditMealPage() {
           }];
         }
         
+        // Get restaurants for dropdown
+        const restaurantsData = await restaurantService.getAll();
+        setRestaurants(restaurantsData);
+        
+        // Ensure we're using the restaurant ID correctly
+        // If restaurantId is an object with _id, use that, otherwise use the value directly
+        const restaurantId = typeof meal.restaurantId === 'object' && meal.restaurantId?._id 
+          ? meal.restaurantId._id 
+          : meal.restaurantId;
+        
         setFormData({
           name: meal.name,
-          restaurantId: meal.restaurantId,
+          restaurantId: restaurantId,
           date: new Date(meal.date).toISOString().split('T')[0],
           isThumbsUp: meal.isThumbsUp,
-          isFavorite: meal.isFavorite,
           notes: meal.notes || '',
           mealImages
         });
         
-        // Get restaurants for dropdown
-        const restaurantsData = await restaurantService.getAll();
-        setRestaurants(restaurantsData);
         setLoading(false);
       } catch (err) {
+        console.error('Error loading meal data:', err);
         setError('Failed to load meal data');
         setLoading(false);
       }
@@ -209,22 +216,6 @@ export default function EditMealPage() {
             >
               <span>Clear</span>
             </button>
-          </div>
-        </div>
-        
-        <div>
-          <div className="flex items-center mb-2">
-            <input
-              type="checkbox"
-              id="isFavorite"
-              name="isFavorite"
-              checked={formData.isFavorite}
-              onChange={handleChange}
-              className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-            />
-            <label htmlFor="isFavorite" className="ml-2 block text-sm text-gray-700">
-              Mark as Favorite
-            </label>
           </div>
         </div>
         

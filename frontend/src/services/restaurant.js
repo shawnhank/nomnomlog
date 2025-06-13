@@ -80,3 +80,18 @@ export async function setThumbsRating(id, isThumbsUp) {
     throw new Error('Failed to set thumbs rating');
   }
 }
+
+// Get all thumbs up restaurants
+export function getThumbsUp() {
+  return sendRequest(`${BASE_URL}/thumbs-up`);
+}
+
+// Get all thumbs down restaurants
+export function getThumbsDown() {
+  return sendRequest(`${BASE_URL}/thumbs-down`);
+}
+
+// Get all unrated restaurants
+export function getUnrated() {
+  return sendRequest(`${BASE_URL}/unrated`);
+}
