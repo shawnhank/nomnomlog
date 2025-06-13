@@ -71,8 +71,8 @@ export default function NavBar({ user, setUser }) {
                         to={item.href}
                         className={({ isActive }) => classNames(
                           isActive 
-                            ? 'bg-gray-900 text-white dark:bg-gray-700' 
-                            : 'text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700',
+                            ? 'bg-blue-600 text-white' 
+                            : 'text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white',
                           'rounded-md px-3 py-2 text-sm font-medium'
                         )}
                       >
@@ -154,15 +154,14 @@ export default function NavBar({ user, setUser }) {
                   to={item.href}
                   className={({ isActive }) => classNames(
                     isActive 
-                      ? 'bg-gray-900 text-white dark:bg-gray-700' 
-                      : 'text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700',
+                      ? 'bg-blue-600 text-white' 
+                      : 'text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white',
                     'block rounded-md px-3 py-2 text-base font-medium'
                   )}
                 >
                   {item.name}
                 </DisclosureButton>
               ))}
-              {/* Remove all user-related content from mobile menu */}
             </div>
           </DisclosurePanel>
         </>

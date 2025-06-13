@@ -7,14 +7,13 @@ import { Textarea } from '../catalyst/textarea';
 import { Fieldset, Legend } from '../catalyst/fieldset';
 import { Checkbox } from '../catalyst/checkbox';
 
-export default function MealForm({ initialData, onSubmit, buttonLabel = 'Save', loading = false }) {
+export default function MealForm({ initialData, onSubmit, buttonLabel = 'Save', loading = false, onCancel }) {
   // Default form values
   const defaultFormData = {
     name: '',
     restaurantId: '',
     date: new Date().toISOString().split('T')[0],
     isThumbsUp: null,
-    isFavorite: false,
     notes: '',
     mealImages: [] // Changed from imageUrl to mealImages array
   };
@@ -77,7 +76,7 @@ export default function MealForm({ initialData, onSubmit, buttonLabel = 'Save', 
   }, [initialData]);
   
   return (
-    <div className="max-w-2xl mx-auto p-4 sm:p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md">
+    <div className="w-full bg-white dark:bg-gray-800 rounded-lg shadow-md">
       <form onSubmit={handleSubmit} className="space-y-6">
         <Fieldset>
           <Legend>Meal Details</Legend>
@@ -142,14 +141,6 @@ export default function MealForm({ initialData, onSubmit, buttonLabel = 'Save', 
                 </Button>
               </div>
             </div>
-
-            <Checkbox
-              name="isFavorite"
-              checked={formData.isFavorite}
-              onChange={handleChange}
-            >
-              Mark as favorite
-            </Checkbox>
           </div>
         </Fieldset>
 
@@ -178,7 +169,17 @@ export default function MealForm({ initialData, onSubmit, buttonLabel = 'Save', 
           </div>
         </Fieldset>
 
-        <div className="flex justify-end pt-4">
+        <div className="flex justify-end gap-3 pt-4">
+          {onCancel && (
+            <Button
+              type="button"
+              color="zinc"
+              outline
+              onClick={onCancel}
+            >
+              Cancel
+            </Button>
+          )}
           <Button
             type="submit"
             color="blue"

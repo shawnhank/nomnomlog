@@ -84,20 +84,21 @@ export default function MealDetailPage() {
       {/* Header with meal name and action buttons */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b pb-4 mb-6">
         <h1 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-0">{meal.name}</h1>
-        <div className="flex gap-3">
+        <div className="flex flex-nowrap gap-3 shrink-0">
           <Link 
             to="/meals/new"
-            className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded-md text-sm flex items-center"
+            className="inline-flex items-center justify-center gap-x-2 rounded-lg bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 whitespace-nowrap"
           >
-            <PlusIcon className="w-5 h-5 mr-1" />
+            <PlusIcon className="w-5 h-5" aria-hidden="true" />
             <span>Add Meal</span>
           </Link>
-          <Button 
-            href={`/meals/${meal._id}/edit`}
-            color="blue"
-          >
-            Edit
-          </Button>
+          <Link to={`/meals/${meal._id}/edit`}>
+            <Button 
+              color="blue"
+            >
+              Edit
+            </Button>
+          </Link>
           <Button
             onClick={() => setShowDeleteModal(true)}
             color="red"

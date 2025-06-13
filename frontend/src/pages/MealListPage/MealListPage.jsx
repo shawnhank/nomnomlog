@@ -109,14 +109,17 @@ export default function MealListPage() {
         >
           Unrated
         </Button>
-        <Button 
-          href="/meals/new" 
+        <Link 
+          to="/meals/new" 
           className="ml-auto"
-          color="blue"
-          icon={PlusIcon}
         >
-          <span className="hidden sm:inline">Add</span>
-        </Button>
+          <Button 
+            color="blue"
+            icon={PlusIcon}
+          >
+            <span className="hidden sm:inline">Add</span>
+          </Button>
+        </Link>
       </div>
       
       {/* Search bar */}
