@@ -1,9 +1,7 @@
 import { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router';
+import { Link } from 'react-router';
 import { HandThumbUpIcon, HandThumbDownIcon, PlusIcon } from '@heroicons/react/24/outline';
-import { HandThumbUpIcon as HandThumbUpSolid, HandThumbDownIcon as HandThumbDownSolid } from '@heroicons/react/24/solid';
 import * as mealService from '../../services/meal';
-import * as restaurantService from '../../services/restaurant';
 import MealCard from '../../components/MealCard/MealCard';
 import { Button } from '../../components/catalyst/button';
 import SimpleBreadcrumbs from '../../components/SimpleBreadcrumbs/SimpleBreadcrumbs';
@@ -105,49 +103,50 @@ export default function MealListPage() {
       </div>
       
       <div className="flex flex-wrap items-center gap-2 mb-4 border-b border-gray-200 pb-2 overflow-x-auto">
-        <Button 
+        <Button
           plain={activeFilter !== 'all'}
           color={activeFilter === 'all' ? 'blue' : undefined}
           onClick={() => setActiveFilter('all')}
-          className="text-sm"
+          className={`text-sm ${activeFilter === 'all' ? 'text-white' : '!text-gray-500 dark:!text-gray-300'}`}
         >
           <span className="whitespace-nowrap">All Meals</span>
         </Button>
-        <Button 
+        <Button
           plain={activeFilter !== 'thumbsUp'}
           color={activeFilter === 'thumbsUp' ? 'blue' : undefined}
           onClick={() => setActiveFilter('thumbsUp')}
-          className="text-sm"
+          className={`text-sm ${activeFilter === 'thumbsUp' ? 'text-white' : '!text-gray-500 dark:!text-gray-300'}`}
         >
           <HandThumbUpIcon className="h-5 w-5 inline mr-1" />
           <span className="hidden sm:inline whitespace-nowrap">Thumbs Up</span>
         </Button>
-        <Button 
+        <Button
           plain={activeFilter !== 'thumbsDown'}
           color={activeFilter === 'thumbsDown' ? 'blue' : undefined}
           onClick={() => setActiveFilter('thumbsDown')}
-          className="text-sm"
+          className={`text-sm ${activeFilter === 'thumbsDown' ? 'text-white' : '!text-gray-500 dark:!text-gray-300'}`}
         >
           <HandThumbDownIcon className="h-5 w-5 inline mr-1" />
           <span className="hidden sm:inline whitespace-nowrap">Thumbs Down</span>
         </Button>
-        <Button 
+        <Button
           plain={activeFilter !== 'unrated'}
           color={activeFilter === 'unrated' ? 'blue' : undefined}
           onClick={() => setActiveFilter('unrated')}
-          className="text-sm"
+          className={`text-sm ${activeFilter === 'unrated' ? 'text-white' : '!text-gray-500 dark:!text-gray-300'}`}
         >
           <span className="whitespace-nowrap">No Rating</span>
         </Button>
-        <Link 
-          to="/meals/new" 
+        <Link
+          to="/meals/new"
           className="ml-auto"
         >
-          <Button 
+          <Button
+            outline
             color="blue"
-            className="whitespace-nowrap text-white"
+            className="whitespace-nowrap"
           >
-            <PlusIcon className="h-5 w-5 inline mr-1 text-white" />
+            <PlusIcon className="h-5 w-5 inline mr-1" />
             <span className="hidden sm:inline">Add Meal</span>
           </Button>
         </Link>

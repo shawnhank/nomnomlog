@@ -44,11 +44,11 @@ h3 {
 
 /* Image overlay text styles */
 .image-overlay-title {
-  @apply text-white font-semibold !important;
+  @apply text-white font-semibold;
 }
 
 .image-overlay-subtitle {
-  @apply text-white text-opacity-90 !important;
+  @apply text-white/90;
 }
 
 /* Add this to your global CSS */
