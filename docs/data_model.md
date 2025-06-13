@@ -93,7 +93,7 @@ Restaurant (MVP)
   - website : string (optional)
   - lat : number (optional)
   - long : number (optional)
-  - isFavorite: boolean
+  - isThumbsUp : tri-state (true-thumbs up; false-thumbs down; null-neither up or down)
   - restaurantImages : array of {
       url : string,
       isPrimary : boolean,
@@ -110,9 +110,7 @@ Meal  (MVP)
   - restaurantId : ObjectId (FK → Restaurant)
   - mealName : string
   - mealMethodId : ObjectId (FK → MealMethod)
-  - isThumbsUp : boolean
-  - starRating : number (optional)
-  - isFavorite : boolean
+  - isThumbsUp : tri-state (true-thumbs up; false-thumbs down; null-neither up or down)
   - mealImages : array of {
       url : string,
       isPrimary : boolean,
