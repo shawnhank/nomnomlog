@@ -67,58 +67,53 @@ export default function LogInPage({ setUser }) {
               />
             </div>
           </Fieldset>
-        
-        <div>
-          <div className="flex items-center justify-between">
-            <label htmlFor="password" className="block text-base font-medium text-gray-700 dark:text-gray-300">
-              Password
-            </label>
-            <div className="text-sm">
-              <Link to="/forgot-password" className="font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400">
-                Forgot password?
-              </Link>
+
+          <Fieldset>
+            <div className="space-y-4">
+              <div>
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-sm font-medium text-gray-900 dark:text-gray-100">Password</span>
+                  <Link to="/forgot-password" className="text-sm font-medium text-blue-600 hover:text-blue-500 dark:text-blue-400">
+                    Forgot password?
+                  </Link>
+                </div>
+                <Input
+                  name="password"
+                  type="password"
+                  autoComplete="current-password"
+                  required
+                  value={formData.password}
+                  onChange={handleChange}
+                  placeholder="Enter your password"
+                />
+              </div>
+
+              <Checkbox
+                name="rememberMe"
+                checked={formData.rememberMe}
+                onChange={handleChange}
+              >
+                Remember me
+              </Checkbox>
             </div>
-          </div>
-          <input
-            id="password"
-            name="password"
-            type="password"
-            autoComplete="current-password"
-            required
-            value={formData.password}
-            onChange={handleChange}
-            className="mt-1 h-10 px-4 block w-full rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-          />
-        </div>
-        
-        <div className="flex justify-center items-center mt-3">
-          <input
-            id="rememberMe"
-            name="rememberMe"
-            type="checkbox"
-            checked={formData.rememberMe}
-            onChange={handleChange}
-            className="h-4 w-4 mb-3 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 dark:border-gray-700 dark:bg-gray-700"
-          />
-          <label htmlFor="rememberMe" className="mb-3 px-2 block text-sm text-gray-700 dark:text-gray-300">
-            Remember me
-          </label>
-        </div>
-        
-        <button
-          type="submit"
-          className="w-full flex justify-center py-2 px-4 mb-3 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-        >
-          Sign in
-        </button>
-        
-        <p className="text-center text-sm text-gray-600 dark:text-gray-400 pt-5">
-          Don't have an account?{' '}
-          <Link to="/signup" className="font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400">
-            Sign up
-          </Link>
-        </p>
-      </form>
+          </Fieldset>
+
+          <Button
+            type="submit"
+            color="blue"
+            className="w-full"
+          >
+            Sign in
+          </Button>
+
+          <p className="text-center text-sm text-gray-600 dark:text-gray-400">
+            Don't have an account?{' '}
+            <Link to="/signup" className="font-medium text-blue-600 hover:text-blue-500 dark:text-blue-400">
+              Sign up
+            </Link>
+          </p>
+        </form>
+      </div>
     </div>
   );
 }
