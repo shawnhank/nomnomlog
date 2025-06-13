@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import { Button } from '../../components/catalyst/button';
 import { Input } from '../../components/catalyst/input';
-import { Checkbox } from '../../components/catalyst/checkbox';
 import { PencilIcon, TrashIcon, PlusIcon } from '@heroicons/react/24/outline';
 import * as tagService from '../../services/tag';
 import DeleteConfirmationModal from '../../components/DeleteConfirmationModal/DeleteConfirmationModal';
@@ -54,14 +53,7 @@ export default function TagsPage() {
     setSelectedTags(newSelected);
   }
 
-  // Handle select all/none
-  function handleSelectAll(checked) {
-    if (checked) {
-      setSelectedTags(new Set(tags.map(tag => tag._id)));
-    } else {
-      setSelectedTags(new Set());
-    }
-  }
+
 
   // Start editing a tag
   function startEditing(tag) {
@@ -179,12 +171,10 @@ export default function TagsPage() {
   }
 
   const selectedCount = selectedTags.size;
-  const allSelected = filteredTags.length > 0 && selectedTags.size === filteredTags.length;
-  const someSelected = selectedTags.size > 0 && selectedTags.size < filteredTags.length;
   const hasSearchResults = searchTerm && filteredTags.length === 0;
 
   return (
-    <div className="max-w-4xl mx-auto p-4 sm:p-6">
+    <div className="max-w-3xl mx-auto px-4 py-6">
       {/* Breadcrumbs */}
       <div className="mb-4">
         <SimpleBreadcrumbs 
@@ -268,37 +258,23 @@ export default function TagsPage() {
         </div>
       )}
 
-      {/* Bulk actions */}
-      {filteredTags.length > 0 && (
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
-          <div className="flex items-center gap-3 mb-3 sm:mb-0">
-            <Checkbox
-              checked={allSelected}
-              indeterminate={someSelected}
-              onChange={(checked) => handleSelectAll(checked)}
-            />
-            <span className="text-sm text-gray-600 dark:text-gray-400">
-              {selectedCount === 0
-                ? `Select tags (${filteredTags.length} ${searchTerm ? 'found' : 'total'})`
-                : `${selectedCount} selected`
-              }
-            </span>
-          </div>
-
-          {selectedCount > 0 && (
+      {/* Bulk actions - only show when tags are selected */}
+      {selectedCount > 0 && (
+        <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-50">
+          <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg px-4 py-3">
             <Button
               onClick={handleBulkDelete}
               negative
               className="flex items-center"
             >
-              <TrashIcon className="w-4 h-4 mr-1" />
-              <span>Delete Selected ({selectedCount})</span>
+              <TrashIcon className="w-4 h-4 mr-2" />
+              <span>Delete {selectedCount} tag{selectedCount > 1 ? 's' : ''}</span>
             </Button>
-          )}
+          </div>
         </div>
       )}
 
-      {/* Tags grid */}
+      {/* Tags pills */}
       {filteredTags.length === 0 ? (
         <div className="text-center py-12">
           {searchTerm ? (
@@ -330,84 +306,62 @@ export default function TagsPage() {
           )}
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+        <div className="flex flex-wrap gap-3">
           {filteredTags.map((tag) => (
-            <div
-              key={tag._id}
-              className={`group relative bg-white dark:bg-gray-800 rounded-lg border-2 transition-all duration-200 hover:shadow-md cursor-pointer ${
-                selectedTags.has(tag._id)
-                  ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
-                  : 'border-gray-200 dark:border-gray-700 hover:border-gray-300'
-              }`}
-              onClick={() => handleTagSelect(tag._id, !selectedTags.has(tag._id))}
-            >
+            <div key={tag._id} className="relative">
               {editingTagId === tag._id ? (
-                <div className="p-4">
-                  <div className="flex items-center gap-2">
-                    <Input
-                      value={editingName}
-                      onChange={(e) => setEditingName(e.target.value)}
-                      className="flex-1"
-                      onKeyPress={(e) => {
-                        if (e.key === 'Enter') saveEdit();
-                        if (e.key === 'Escape') cancelEditing();
-                      }}
-                      autoFocus
-                      onClick={(e) => e.stopPropagation()}
-                    />
-                  </div>
-                  <div className="flex gap-2 mt-3">
-                    <Button onClick={saveEdit} positive size="sm">
-                      Save
-                    </Button>
-                    <Button onClick={cancelEditing} size="sm">
-                      Cancel
-                    </Button>
-                  </div>
+                <div className="inline-flex items-center gap-2 bg-white dark:bg-gray-800 border border-gray-300 rounded-full px-4 py-2">
+                  <input
+                    type="text"
+                    value={editingName}
+                    onChange={(e) => setEditingName(e.target.value)}
+                    className="bg-transparent border-none outline-none text-sm min-w-0 w-20"
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') saveEdit();
+                      if (e.key === 'Escape') cancelEditing();
+                    }}
+                    onBlur={saveEdit}
+                    autoFocus
+                    onClick={(e) => e.stopPropagation()}
+                  />
                 </div>
               ) : (
-                <div className="p-4">
-                  {/* Selection indicator */}
-                  <div className="flex items-start justify-between mb-2">
-                    <Checkbox
-                      checked={selectedTags.has(tag._id)}
-                      onChange={(checked) => handleTagSelect(tag._id, checked)}
-                      onClick={(e) => e.stopPropagation()}
-                    />
+                <div
+                  className={`group inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium cursor-pointer transition-all duration-200 hover:shadow-sm ${
+                    selectedTags.has(tag._id)
+                      ? 'bg-blue-100 text-blue-800 border-2 border-blue-300 dark:bg-blue-900/30 dark:text-blue-200 dark:border-blue-600'
+                      : 'bg-gray-100 text-gray-700 border-2 border-gray-200 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-600'
+                  }`}
+                  onClick={() => handleTagSelect(tag._id, !selectedTags.has(tag._id))}
+                >
+                  {/* Tag name */}
+                  <span className="select-none">{tag.name}</span>
 
-                    {/* Action buttons - show on hover or when selected */}
-                    <div className={`flex gap-1 transition-opacity ${
-                      selectedTags.has(tag._id) ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
-                    }`}>
-                      <Button
+                  {/* Action buttons - show on hover for single selection */}
+                  {!selectedTags.has(tag._id) && (
+                    <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity ml-1">
+                      <button
                         onClick={(e) => {
                           e.stopPropagation();
                           startEditing(tag);
                         }}
-                        size="sm"
-                        className="p-1 hover:bg-blue-100 text-blue-600 border-blue-300"
-                        outline
+                        className="p-1 hover:bg-blue-100 text-blue-600 rounded-full transition-colors"
+                        title="Edit tag"
                       >
-                        <PencilIcon className="w-4 h-4" />
-                      </Button>
-                      <Button
+                        <PencilIcon className="w-3 h-3" />
+                      </button>
+                      <button
                         onClick={(e) => {
                           e.stopPropagation();
                           handleSingleDelete(tag);
                         }}
-                        negative
-                        size="sm"
-                        className="p-1"
+                        className="p-1 hover:bg-red-100 text-red-600 rounded-full transition-colors"
+                        title="Delete tag"
                       >
-                        <TrashIcon className="w-4 h-4" />
-                      </Button>
+                        <TrashIcon className="w-3 h-3" />
+                      </button>
                     </div>
-                  </div>
-
-                  {/* Tag name */}
-                  <div className="text-gray-900 dark:text-white font-medium">
-                    {tag.name}
-                  </div>
+                  )}
                 </div>
               )}
             </div>

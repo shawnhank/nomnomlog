@@ -1,6 +1,3 @@
-import { useState } from 'react';
-import { Input } from '../catalyst/input';
-import { Button } from '../catalyst/button';
 import { MagnifyingGlassIcon, XMarkIcon } from '@heroicons/react/24/outline';
 
 export default function SearchBar({
@@ -14,8 +11,6 @@ export default function SearchBar({
   disabled = false,
   ...props
 }) {
-  const [isFocused, setIsFocused] = useState(false);
-
   const handleClear = () => {
     onChange('');
     if (onClear) {
@@ -34,32 +29,28 @@ export default function SearchBar({
         <MagnifyingGlassIcon className="h-5 w-5 text-gray-400" />
       </div>
 
-      {/* Input Field */}
-      <Input
+      {/* Input Field - matching meal/restaurant list pages */}
+      <input
         type="text"
         value={value}
         onChange={handleChange}
-        onFocus={() => setIsFocused(true)}
-        onBlur={() => setIsFocused(false)}
         placeholder={placeholder}
         autoFocus={autoFocus}
         disabled={disabled}
-        className="pl-10 pr-10"
+        className="w-full p-2 pl-10 pr-10 border border-gray-300 rounded"
         {...props}
       />
 
       {/* Clear Button */}
       {showClearButton && value && (
-        <div className="absolute right-2 top-1/2 transform -translate-y-1/2">
-          <Button
-            type="button"
-            onClick={handleClear}
-            className="p-1 hover:bg-gray-100 rounded-full transition-colors"
-            aria-label="Clear search"
-          >
-            <XMarkIcon className="h-4 w-4 text-gray-400 hover:text-gray-600" />
-          </Button>
-        </div>
+        <button
+          type="button"
+          onClick={handleClear}
+          className="absolute right-2 top-1/2 transform -translate-y-1/2 p-1 hover:bg-gray-100 rounded-full transition-colors"
+          aria-label="Clear search"
+        >
+          <XMarkIcon className="h-4 w-4 text-gray-400 hover:text-gray-600" />
+        </button>
       )}
     </div>
   );
