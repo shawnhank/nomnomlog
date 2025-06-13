@@ -1,0 +1,19 @@
+/* Reservation service buttons styling */
+.reservation-services {
+  margin-bottom: 1.5rem;
+}
+
+.reservation-button {
+  transition: all 0.2s ease-in-out;
+}
+
+.reservation-button:hover {
+  transform: translateY(-2px);
+}
+
+/* Mobile-first responsive adjustments */
+@media (min-width: 640px) {
+  .reservation-services .flex {
+    justify-content: flex-start;
+  }
+}

@@ -31,6 +31,7 @@ app.use('/api/restaurant-tags', require('./routes/restaurantTags'));
 app.use('/api/meals', require('./routes/meals'));
 app.use('/api/meal-tags', require('./routes/mealTags'));
 app.use('/api/uploads', require('./routes/uploads'));
+app.use('/api/yelp', require('./routes/yelp'));
 
 
 // Use a "catch-all" route to deliver the frontend's production index.html

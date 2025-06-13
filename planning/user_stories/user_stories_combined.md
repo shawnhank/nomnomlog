@@ -24,9 +24,9 @@
 
 - [x] As a user, I want to filter my meals by restaurant, thumbs up or down status, or tag, to make finding what i'm looking for easier.
 
-- [ ] As a user, I want to upload a single or multiple photos of my meal, directly using the camera, from the camera roll, from an album, or from a file manager so that I have a visual referenc of the meal
+- [x] As a user, I want to upload a single or multiple photos of my meal, directly using the camera, from the camera roll, from an album, or from a file manager so that I have a visual referenc of the meal
 
-- [ ] As a user, I want to upload a single or multiple photos of a restaurant, directly using the camera, from the camera roll, from an album, or from a file manager so that I have a visual reference of the restaurant 
+- [x] As a user, I want to upload a single or multiple photos of a restaurant, directly using the camera, from the camera roll, from an album, or from a file manager so that I have a visual reference of the restaurant 
 
 - [x] As a user, I want to add tags and attach them to meals and restaurants, so that I can organize views/lists by these tags.
 
