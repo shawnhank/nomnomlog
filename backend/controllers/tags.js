@@ -4,7 +4,8 @@ module.exports = {
   getAll,
   create,
   update,
-  delete: deleteTag
+  delete: deleteTag,
+  bulkDelete
 };
 
 // Get all tags for the logged-in user
@@ -56,13 +57,37 @@ async function deleteTag(req, res) {
       _id: req.params.id,
       userId: req.user._id
     });
-    
+
     if (!tag) {
       return res.status(404).json({ error: 'Tag not found' });
     }
-    
+
     res.json({ message: 'Tag deleted successfully' });
   } catch (err) {
     res.status(400).json({ error: err.message });
+  }
+}
+
+// Bulk delete tags
+async function bulkDelete(req, res) {
+  try {
+    const { tagIds } = req.body;
+
+    if (!tagIds || !Array.isArray(tagIds) || tagIds.length === 0) {
+      return res.status(400).json({ error: 'Tag IDs array is required' });
+    }
+
+    // Delete tags that belong to the user
+    const result = await Tag.deleteMany({
+      _id: { $in: tagIds },
+      userId: req.user._id
+    });
+
+    res.json({
+      message: `${result.deletedCount} tag(s) deleted successfully`,
+      deletedCount: result.deletedCount
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
 }

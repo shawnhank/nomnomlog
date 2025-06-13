@@ -61,10 +61,28 @@ export async function deleteTag(id) {
       'Authorization': `Bearer ${getToken()}`
     }
   });
-  
+
   if (res.ok) {
     return res.json();
   } else {
     throw new Error('Failed to delete tag');
+  }
+}
+
+// Bulk delete tags
+export async function bulkDeleteTags(tagIds) {
+  const res = await fetch(`${BASE_URL}/bulk-delete`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${getToken()}`
+    },
+    body: JSON.stringify({ tagIds })
+  });
+
+  if (res.ok) {
+    return res.json();
+  } else {
+    throw new Error('Failed to bulk delete tags');
   }
 }

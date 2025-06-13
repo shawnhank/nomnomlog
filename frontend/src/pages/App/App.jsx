@@ -15,6 +15,7 @@ import MealListPage from '../MealListPage/MealListPage';
 import MealDetailPage from '../MealDetailPage/MealDetailPage';
 import NewMealPage from '../NewMealPage/NewMealPage';
 import EditMealPage from '../EditMealPage/EditMealPage';
+import TagsPage from '../TagsPage/TagsPage';
 import NavBar from '../../components/NavBar/NavBar';
 import { useEffect } from 'react';
 import { initializeTheme } from "../../utils/themeUtils";
@@ -70,7 +71,9 @@ export default function App() {
           <Route path="/meals/new" element={<NewMealPage />} />
           <Route path="/meals/:id" element={<MealDetailPage />} />
           <Route path="/meals/:id/edit" element={<EditMealPage />} />
-          {/* Add other meal routes as needed */}
+
+          {/* Tags routes */}
+          <Route path="/tags" element={<TagsPage />} />
           
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>

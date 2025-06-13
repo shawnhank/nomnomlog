@@ -30,11 +30,12 @@ export default function NavBar({ user, setUser }) {
   }
 
   // Define navigation based on user authentication status
-  const navigation = user 
+  const navigation = user
     ? [
         { name: 'Home', href: '/', current: false },
         { name: 'Restaurants', href: '/restaurants', current: false },
         { name: 'Meals', href: '/meals', current: false },
+        { name: 'Tags', href: '/tags', current: false },
       ]
     : [
         { name: 'Home', href: '/', current: false },

@@ -11,6 +11,9 @@ router.get('/', ensureLoggedIn, tagsCtrl.getAll);
 // Create a new tag
 router.post('/', ensureLoggedIn, tagsCtrl.create);
 
+// Bulk delete tags (must come before /:id route)
+router.delete('/bulk-delete', ensureLoggedIn, tagsCtrl.bulkDelete);
+
 // Update a tag
 router.put('/:id', ensureLoggedIn, tagsCtrl.update);
 
