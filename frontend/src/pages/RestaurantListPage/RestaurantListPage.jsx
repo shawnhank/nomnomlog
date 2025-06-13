@@ -108,14 +108,17 @@ export default function RestaurantListPage() {
         >
           Unrated
         </Button>
-        <Button 
-          href="/restaurants/new" 
+        <Link 
+          to="/restaurants/new" 
           className="ml-auto"
-          color="blue"
-          icon={PlusIcon}
         >
-          <span className="hidden sm:inline">Add</span>
-        </Button>
+          <Button 
+            color="blue"
+            icon={PlusIcon}
+          >
+            <span className="hidden sm:inline">Add</span>
+          </Button>
+        </Link>
       </div>
       
       {/* Search bar */}

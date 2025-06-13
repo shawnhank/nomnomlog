@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router';
-import { HeartIcon as HeartSolid } from '@heroicons/react/24/solid';
-import { HeartIcon as HeartOutline } from '@heroicons/react/24/outline';
 import { HandThumbUpIcon, HandThumbDownIcon, PlusIcon } from '@heroicons/react/24/outline';
 import { HandThumbUpIcon as HandThumbUpSolid, HandThumbDownIcon as HandThumbDownSolid } from '@heroicons/react/24/solid';
 import * as mealService from '../../services/meal';
@@ -55,15 +53,7 @@ export default function MealDetailPage() {
     setShowDeleteModal(false);
   }
 
-  // Handle toggle favorite
-  async function handleToggleFavorite() {
-    try {
-      const updatedMeal = await mealService.toggleFavorite(id);
-      setMeal(updatedMeal);
-    } catch (err) {
-      setError('Failed to update favorite status');
-    }
-  }
+
 
   // Handle thumbs rating with toggle functionality
   async function handleThumbsRating(isThumbsUp) {
