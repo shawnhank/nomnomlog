@@ -5,6 +5,7 @@ import { HandThumbDownIcon } from '@heroicons/react/24/outline';
 import { PlusIcon } from '@heroicons/react/24/outline';
 import * as restaurantService from '../../services/restaurant';
 import RestaurantCard from '../../components/RestaurantCard/RestaurantCard';
+// import './RestaurantListPage.css';
 
 export default function RestaurantListPage() {
   const [restaurants, setRestaurants] = useState([]);
@@ -72,34 +73,50 @@ export default function RestaurantListPage() {
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-6">
-      <div className="page-header">
-        <h1 className="text-2xl font-bold text-center mb-6">Restaurants</h1>
+      <div className="mb-6 text-center">
+        <h1 className="text-2xl font-bold mb-4">Restaurants</h1>
       </div>
       
-      {/* Filter tabs */}
-      <div className="tabs">
+      {/* Filter tabs - replaced custom class */}
+      <div className="flex flex-wrap items-center gap-2 mb-4 border-b border-gray-200 pb-2 overflow-x-auto">
         <button 
-          className={activeFilter === 'all' ? 'active' : ''} 
+          className={`px-3 py-2 text-sm font-medium rounded-md transition-colors ${
+            activeFilter === 'all' 
+              ? 'bg-blue-500 text-white' 
+              : 'text-gray-600 hover:text-gray-900'
+          }`}
           onClick={() => setActiveFilter('all')}
         >
           All Restaurants
         </button>
         <button 
-          className={activeFilter === 'thumbsUp' ? 'active' : ''} 
+          className={`px-3 py-2 text-sm font-medium rounded-md transition-colors flex items-center ${
+            activeFilter === 'thumbsUp' 
+              ? 'bg-blue-500 text-white' 
+              : 'text-gray-600 hover:text-gray-900'
+          }`}
           onClick={() => setActiveFilter('thumbsUp')}
         >
-          <HandThumbUpIcon className="w-4 h-4 inline mr-1" />
+          <HandThumbUpIcon className="w-4 h-4 mr-1" />
           <span>Would Visit Again</span>
         </button>
         <button 
-          className={activeFilter === 'thumbsDown' ? 'active' : ''} 
+          className={`px-3 py-2 text-sm font-medium rounded-md transition-colors flex items-center ${
+            activeFilter === 'thumbsDown' 
+              ? 'bg-blue-500 text-white' 
+              : 'text-gray-600 hover:text-gray-900'
+          }`}
           onClick={() => setActiveFilter('thumbsDown')}
         >
-          <HandThumbDownIcon className="w-4 h-4 inline mr-1" />
+          <HandThumbDownIcon className="w-4 h-4 mr-1" />
           <span>Would Not Visit Again</span>
         </button>
         <button 
-          className={activeFilter === 'unrated' ? 'active' : ''} 
+          className={`px-3 py-2 text-sm font-medium rounded-md transition-colors ${
+            activeFilter === 'unrated' 
+              ? 'bg-blue-500 text-white' 
+              : 'text-gray-600 hover:text-gray-900'
+          }`}
           onClick={() => setActiveFilter('unrated')}
         >
           <span>Unrated</span>
@@ -113,7 +130,7 @@ export default function RestaurantListPage() {
         </Link>
       </div>
       
-      {/* Search bar - moved below tabs */}
+      {/* Search bar */}
       <div className="mb-4 mt-4">
         <input
           type="text"
@@ -147,9 +164,9 @@ export default function RestaurantListPage() {
                   : 'No restaurants added yet. Add your first restaurant!'}
         </div>
       ) : (
-        <ul className="restaurant-list grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4">
+        <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4">
           {filteredRestaurants.map(restaurant => (
-            <li key={restaurant._id} className="restaurant-item">
+            <li key={restaurant._id} className="border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-all duration-200 hover:-translate-y-1">
               <RestaurantCard 
                 restaurant={restaurant} 
                 onThumbsRating={handleThumbsRating} 

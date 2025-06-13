@@ -145,13 +145,13 @@ export default function MealDetailPage() {
               meal.isThumbsUp === true 
                 ? 'bg-green-600 hover:bg-green-700' 
                 : 'bg-gray-800 hover:bg-gray-700'
-            }`}
+            } text-white transition-colors`}
             title="Would Order Again"
           >
             {meal.isThumbsUp === true ? (
-              <HandThumbUpSolid className="w-6 h-6 text-white" />
+              <HandThumbUpSolid className="w-6 h-6" />
             ) : (
-              <HandThumbUpIcon className="w-6 h-6 text-white" />
+              <HandThumbUpIcon className="w-6 h-6" />
             )}
           </button>
           
@@ -162,13 +162,13 @@ export default function MealDetailPage() {
               meal.isThumbsUp === false 
                 ? 'bg-red-600 hover:bg-red-700' 
                 : 'bg-gray-800 hover:bg-gray-700'
-            }`}
+            } text-white transition-colors`}
             title="Would Not Order Again"
           >
             {meal.isThumbsUp === false ? (
-              <HandThumbDownSolid className="w-6 h-6 text-white" />
+              <HandThumbDownSolid className="w-6 h-6" />
             ) : (
-              <HandThumbDownIcon className="w-6 h-6 text-white" />
+              <HandThumbDownIcon className="w-6 h-6" />
             )}
           </button>
         </div>

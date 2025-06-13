@@ -5,7 +5,7 @@ import { HandThumbUpIcon as HandThumbUpSolid, HandThumbDownIcon as HandThumbDown
 import * as mealService from '../../services/meal';
 import * as restaurantService from '../../services/restaurant';
 import MealCard from '../../components/MealCard/MealCard';
-import './MealListPage.css';
+// import './MealListPage.css';
 
 export default function MealListPage() {
   const [meals, setMeals] = useState([]);
@@ -73,34 +73,49 @@ export default function MealListPage() {
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-6">
-      <div className="page-header">
-        <h1 className="text-2xl font-bold text-center mb-6">Meals</h1>
+      <div className="mb-6 text-center">
+        <h1 className="text-2xl font-bold mb-4">Meals</h1>
       </div>
       
-      {/* Filter tabs */}
-      <div className="tabs">
+      <div className="flex flex-wrap items-center gap-2 mb-4 border-b border-gray-200 pb-2 overflow-x-auto">
         <button 
-          className={activeFilter === 'all' ? 'active' : ''} 
+          className={`px-3 py-2 text-sm font-medium rounded-md transition-colors ${
+            activeFilter === 'all' 
+              ? 'bg-blue-500 text-white' 
+              : 'text-gray-600 hover:text-gray-900'
+          }`}
           onClick={() => setActiveFilter('all')}
         >
           All Meals
         </button>
         <button 
-          className={activeFilter === 'thumbsUp' ? 'active' : ''} 
+          className={`px-3 py-2 text-sm font-medium rounded-md transition-colors flex items-center ${
+            activeFilter === 'thumbsUp' 
+              ? 'bg-blue-500 text-white' 
+              : 'text-gray-600 hover:text-gray-900'
+          }`}
           onClick={() => setActiveFilter('thumbsUp')}
         >
-          <HandThumbUpIcon className="w-4 h-4 inline mr-1" />
+          <HandThumbUpIcon className="w-4 h-4 mr-1" />
           <span>Would Order Again</span>
         </button>
         <button 
-          className={activeFilter === 'thumbsDown' ? 'active' : ''} 
+          className={`px-3 py-2 text-sm font-medium rounded-md transition-colors flex items-center ${
+            activeFilter === 'thumbsDown' 
+              ? 'bg-blue-500 text-white' 
+              : 'text-gray-600 hover:text-gray-900'
+          }`}
           onClick={() => setActiveFilter('thumbsDown')}
         >
-          <HandThumbDownIcon className="w-4 h-4 inline mr-1" />
+          <HandThumbDownIcon className="w-4 h-4 mr-1" />
           <span>Would Not Order Again</span>
         </button>
         <button 
-          className={activeFilter === 'unrated' ? 'active' : ''} 
+          className={`px-3 py-2 text-sm font-medium rounded-md transition-colors ${
+            activeFilter === 'unrated' 
+              ? 'bg-blue-500 text-white' 
+              : 'text-gray-600 hover:text-gray-900'
+          }`}
           onClick={() => setActiveFilter('unrated')}
         >
           <span>Unrated</span>
@@ -114,7 +129,7 @@ export default function MealListPage() {
         </Link>
       </div>
       
-      {/* Search bar - moved below tabs */}
+      {/* Search bar */}
       <div className="mb-4 mt-4">
         <input
           type="text"
@@ -148,9 +163,9 @@ export default function MealListPage() {
                   : 'No meals added yet. Add your first meal!'}
         </div>
       ) : (
-        <ul className="meal-list grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4">
+        <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4">
           {filteredMeals.map(meal => (
-            <li key={meal._id} className="meal-item">
+            <li key={meal._id} className="border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-all duration-200 hover:-translate-y-1">
               <MealCard 
                 meal={meal} 
                 onThumbsRating={handleThumbsRating} 
