@@ -34,21 +34,21 @@
 
 - [ ] As a user, i want to be able to delete tags individually or in bulk using a multiselect feature that allows me to select multiple tags and delete them from the tags view/page
 
-- [ ] As a user, I want to view all my restaurants and quickly delete restaurants as needed.
+- [x] As a user, I want to view all my restaurants and quickly delete restaurants as needed.
 
-- [ ] As a user, I want to view all my meals and have the ability to quickly delete restaurants as needed.
+- [x] As a user, I want to view all my meals and have the ability to quickly delete restaurants as needed.
 
-- [ ] As a user, I want to be able to tap or click a restauarnts phone number to call them to place an order or make a reservation
+- [x] As a user, I want to be able to tap or click a restauarnts phone number to call them to place an order or make a reservation
 
-- [ ] As a user, I want to be able to tap or click on the website of a restaurant and view their website
+- [x] As a user, I want to be able to tap or click on the website of a restaurant and view their website
 
-- [ ] As a user, I want to be able to tap or click on the address of the restaurant and have it open the default maps app of my device (phone, tablet or desktop computer) aka use deep-linking
+- [x] As a user, I want to be able to tap or click on the address of the restaurant and have it open the default maps app of my device (phone, tablet or desktop computer) aka use deep-linking
 
 - [ ] As a user, i want to be able to tap a delivery service icon (Yelp, Uber Eats, Door Dash, Grub Hub, etc.) to place an order from the specific restaurant (aka use deep linking) it would be great if the meal I want could be opened in the delivery service app or website. if not, at least open the meal delivery app / website to the active restaurant in the app.
 
   - [ ] Deep linking apps for meal delivery will include DoorDash, Uber Eats, Grubhub, Postmates, Seamless and Caviar
 
-- [ ] As a user, I want to be able to tap on a button to make a reservatin with any of the following services:
+- [ ] As a user, I want to be able to tap on a button to make a reservation with any of the following services:
 
   - [ ] OpenTable, Resy, Tock,Yelp, Toast Tables, Eat App, 
 
