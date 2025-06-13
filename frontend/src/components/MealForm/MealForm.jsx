@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import './MealForm.css'; // Keep this for any custom styles
-import ImageUploader from '../ImageUploader/ImageUploader'; // Update the import path
+import MultiImageUploader from '../MultiImageUploader/MultiImageUploader'; // Updated import
 
 export default function MealForm({ initialData, onSubmit, buttonLabel = 'Save', loading = false }) {
   // Default form values
@@ -11,7 +11,7 @@ export default function MealForm({ initialData, onSubmit, buttonLabel = 'Save', 
     isThumbsUp: null,
     isFavorite: false,
     notes: '',
-    imageUrl: ''
+    mealImages: [] // Changed from imageUrl to mealImages array
   };
   
   // Initialize with provided data or defaults
@@ -43,11 +43,11 @@ export default function MealForm({ initialData, onSubmit, buttonLabel = 'Save', 
     });
   }
   
-  // Handle image upload completion
-  function handleImageUploaded(imageUrl) {
+  // Handle image updates from MultiImageUploader
+  function handleImagesUpdated(updatedData) {
     setFormData({
       ...formData,
-      imageUrl
+      ...updatedData
     });
   }
   
@@ -56,6 +56,20 @@ export default function MealForm({ initialData, onSubmit, buttonLabel = 'Save', 
     evt.preventDefault();
     onSubmit(formData);
   }
+  
+  // Convert legacy imageUrl to mealImages if needed (for backward compatibility)
+  useEffect(() => {
+    if (initialData && initialData.imageUrl && (!initialData.mealImages || initialData.mealImages.length === 0)) {
+      setFormData(prev => ({
+        ...prev,
+        mealImages: [{
+          url: initialData.imageUrl,
+          isPrimary: true,
+          caption: ''
+        }]
+      }));
+    }
+  }, [initialData]);
   
   return (
     <form onSubmit={handleSubmit} className="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-md">
@@ -137,19 +151,12 @@ export default function MealForm({ initialData, onSubmit, buttonLabel = 'Save', 
       </div>
       
       <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700 mb-1">Meal Photo</label>
-        <ImageUploader onImageUploaded={handleImageUploaded} />
-        
-        {formData.imageUrl && (
-          <div className="mt-2 flex items-center">
-            <img 
-              src={formData.imageUrl} 
-              alt="Meal" 
-              className="w-16 h-16 object-cover rounded-md mr-2" 
-            />
-            <span className="text-sm text-gray-600">Image will be saved with this meal</span>
-          </div>
-        )}
+        <label className="block text-sm font-medium text-gray-700 mb-1">Meal Photos</label>
+        <MultiImageUploader 
+          images={formData.mealImages} 
+          onImagesUpdated={handleImagesUpdated}
+          entityType="meal"
+        />
       </div>
       
       <div className="mb-4">
