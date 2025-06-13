@@ -7,11 +7,13 @@ import { PencilIcon, TrashIcon, PlusIcon } from '@heroicons/react/24/outline';
 import * as tagService from '../../services/tag';
 import DeleteConfirmationModal from '../../components/DeleteConfirmationModal/DeleteConfirmationModal';
 import SimpleBreadcrumbs from '../../components/SimpleBreadcrumbs/SimpleBreadcrumbs';
+import SearchBar from '../../components/SearchBar/SearchBar';
 
 export default function TagsPage() {
   const [tags, setTags] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
   const [editingTagId, setEditingTagId] = useState(null);
   const [editingName, setEditingName] = useState('');
   const [selectedTags, setSelectedTags] = useState(new Set());
@@ -137,7 +139,7 @@ export default function TagsPage() {
   // Add new tag
   async function addNewTag() {
     if (!newTagName.trim()) return;
-    
+
     try {
       const newTag = await tagService.create({ name: newTagName.trim() });
       setTags([...tags, newTag]);
@@ -149,6 +151,25 @@ export default function TagsPage() {
     }
   }
 
+  // Add new tag from search
+  async function addTagFromSearch() {
+    if (!searchTerm.trim()) return;
+
+    try {
+      const newTag = await tagService.create({ name: searchTerm.trim() });
+      setTags([...tags, newTag]);
+      setSearchTerm('');
+    } catch (err) {
+      setError('Failed to create tag');
+      console.error(err);
+    }
+  }
+
+  // Filter tags based on search term
+  const filteredTags = tags.filter(tag =>
+    tag.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   if (loading) {
     return (
       <div className="flex justify-center items-center h-64">
@@ -158,8 +179,9 @@ export default function TagsPage() {
   }
 
   const selectedCount = selectedTags.size;
-  const allSelected = tags.length > 0 && selectedTags.size === tags.length;
-  const someSelected = selectedTags.size > 0 && selectedTags.size < tags.length;
+  const allSelected = filteredTags.length > 0 && selectedTags.size === filteredTags.length;
+  const someSelected = selectedTags.size > 0 && selectedTags.size < filteredTags.length;
+  const hasSearchResults = searchTerm && filteredTags.length === 0;
 
   return (
     <div className="max-w-4xl mx-auto p-4 sm:p-6">
@@ -174,7 +196,7 @@ export default function TagsPage() {
 
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
-        <h1 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-0">Manage Tags</h1>
+        <h1 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-0">Tags</h1>
         <Button
           onClick={() => setShowAddForm(true)}
           positive
@@ -183,6 +205,35 @@ export default function TagsPage() {
           <PlusIcon className="w-5 h-5 mr-1" />
           <span>Add Tag</span>
         </Button>
+      </div>
+
+      {/* Search Bar */}
+      <div className="mb-6">
+        <SearchBar
+          value={searchTerm}
+          onChange={setSearchTerm}
+          placeholder="Search tags..."
+          className="w-full"
+          autoFocus={false}
+        />
+
+        {/* Create tag from search */}
+        {hasSearchResults && (
+          <div className="mt-3 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+            <p className="text-sm text-blue-700 mb-2">
+              No tags found for "{searchTerm}"
+            </p>
+            <Button
+              onClick={addTagFromSearch}
+              positive
+              size="sm"
+              className="flex items-center"
+            >
+              <PlusIcon className="w-4 h-4 mr-1" />
+              <span>Create "{searchTerm}" tag</span>
+            </Button>
+          </div>
+        )}
       </div>
 
       {/* Error message */}
@@ -218,8 +269,8 @@ export default function TagsPage() {
       )}
 
       {/* Bulk actions */}
-      {tags.length > 0 && (
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+      {filteredTags.length > 0 && (
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
           <div className="flex items-center gap-3 mb-3 sm:mb-0">
             <Checkbox
               checked={allSelected}
@@ -227,13 +278,13 @@ export default function TagsPage() {
               onChange={(checked) => handleSelectAll(checked)}
             />
             <span className="text-sm text-gray-600 dark:text-gray-400">
-              {selectedCount === 0 
-                ? `Select tags (${tags.length} total)`
+              {selectedCount === 0
+                ? `Select tags (${filteredTags.length} ${searchTerm ? 'found' : 'total'})`
                 : `${selectedCount} selected`
               }
             </span>
           </div>
-          
+
           {selectedCount > 0 && (
             <Button
               onClick={handleBulkDelete}
@@ -247,34 +298,52 @@ export default function TagsPage() {
         </div>
       )}
 
-      {/* Tags list */}
-      {tags.length === 0 ? (
+      {/* Tags grid */}
+      {filteredTags.length === 0 ? (
         <div className="text-center py-12">
-          <p className="text-gray-500 dark:text-gray-400 mb-4">No tags found</p>
-          <Button
-            onClick={() => setShowAddForm(true)}
-            positive
-            className="flex items-center mx-auto"
-          >
-            <PlusIcon className="w-5 h-5 mr-1" />
-            <span>Create Your First Tag</span>
-          </Button>
+          {searchTerm ? (
+            <div>
+              <p className="text-gray-500 dark:text-gray-400 mb-4">
+                No tags found for "{searchTerm}"
+              </p>
+              <Button
+                onClick={addTagFromSearch}
+                positive
+                className="flex items-center mx-auto"
+              >
+                <PlusIcon className="w-5 h-5 mr-1" />
+                <span>Create "{searchTerm}" tag</span>
+              </Button>
+            </div>
+          ) : (
+            <div>
+              <p className="text-gray-500 dark:text-gray-400 mb-4">No tags found</p>
+              <Button
+                onClick={() => setShowAddForm(true)}
+                positive
+                className="flex items-center mx-auto"
+              >
+                <PlusIcon className="w-5 h-5 mr-1" />
+                <span>Create Your First Tag</span>
+              </Button>
+            </div>
+          )}
         </div>
       ) : (
-        <div className="space-y-2">
-          {tags.map((tag) => (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+          {filteredTags.map((tag) => (
             <div
               key={tag._id}
-              className="flex items-center justify-between p-4 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 hover:shadow-sm transition-shadow"
+              className={`group relative bg-white dark:bg-gray-800 rounded-lg border-2 transition-all duration-200 hover:shadow-md cursor-pointer ${
+                selectedTags.has(tag._id)
+                  ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
+                  : 'border-gray-200 dark:border-gray-700 hover:border-gray-300'
+              }`}
+              onClick={() => handleTagSelect(tag._id, !selectedTags.has(tag._id))}
             >
-              <div className="flex items-center gap-3 flex-1">
-                <Checkbox
-                  checked={selectedTags.has(tag._id)}
-                  onChange={(checked) => handleTagSelect(tag._id, checked)}
-                />
-                
-                {editingTagId === tag._id ? (
-                  <div className="flex items-center gap-2 flex-1">
+              {editingTagId === tag._id ? (
+                <div className="p-4">
+                  <div className="flex items-center gap-2">
                     <Input
                       value={editingName}
                       onChange={(e) => setEditingName(e.target.value)}
@@ -284,7 +353,10 @@ export default function TagsPage() {
                         if (e.key === 'Escape') cancelEditing();
                       }}
                       autoFocus
+                      onClick={(e) => e.stopPropagation()}
                     />
+                  </div>
+                  <div className="flex gap-2 mt-3">
                     <Button onClick={saveEdit} positive size="sm">
                       Save
                     </Button>
@@ -292,30 +364,50 @@ export default function TagsPage() {
                       Cancel
                     </Button>
                   </div>
-                ) : (
-                  <span className="text-gray-900 dark:text-white font-medium flex-1">
+                </div>
+              ) : (
+                <div className="p-4">
+                  {/* Selection indicator */}
+                  <div className="flex items-start justify-between mb-2">
+                    <Checkbox
+                      checked={selectedTags.has(tag._id)}
+                      onChange={(checked) => handleTagSelect(tag._id, checked)}
+                      onClick={(e) => e.stopPropagation()}
+                    />
+
+                    {/* Action buttons - show on hover or when selected */}
+                    <div className={`flex gap-1 transition-opacity ${
+                      selectedTags.has(tag._id) ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
+                    }`}>
+                      <Button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          startEditing(tag);
+                        }}
+                        size="sm"
+                        className="p-1 hover:bg-blue-100 text-blue-600 border-blue-300"
+                        outline
+                      >
+                        <PencilIcon className="w-4 h-4" />
+                      </Button>
+                      <Button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleSingleDelete(tag);
+                        }}
+                        negative
+                        size="sm"
+                        className="p-1"
+                      >
+                        <TrashIcon className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  </div>
+
+                  {/* Tag name */}
+                  <div className="text-gray-900 dark:text-white font-medium">
                     {tag.name}
-                  </span>
-                )}
-              </div>
-              
-              {editingTagId !== tag._id && (
-                <div className="flex items-center gap-2">
-                  <Button
-                    onClick={() => startEditing(tag)}
-                    size="sm"
-                    className="flex items-center"
-                  >
-                    <PencilIcon className="w-4 h-4" />
-                  </Button>
-                  <Button
-                    onClick={() => handleSingleDelete(tag)}
-                    negative
-                    size="sm"
-                    className="flex items-center"
-                  >
-                    <TrashIcon className="w-4 h-4" />
-                  </Button>
+                  </div>
                 </div>
               )}
             </div>
