@@ -38,16 +38,16 @@ const restaurantSchema = new Schema({
   // Updated with more specific field name
   restaurantImages: [imageSchema],
   
-  // Add isFavorite field
-  isFavorite: {
+  // Replace isFavorite with isThumbsUp as tri-state
+  isThumbsUp: {
     type: Boolean,
-    default: false
+    default: null
   }
 }, {
   timestamps: true
 });
 
-// Add index for efficient queries on isFavorite
-restaurantSchema.index({ isFavorite: 1 });
+// Update index for efficient queries on isThumbsUp
+restaurantSchema.index({ isThumbsUp: 1 });
 
 module.exports = mongoose.model('Restaurant', restaurantSchema);

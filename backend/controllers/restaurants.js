@@ -6,8 +6,10 @@ module.exports = {
   show,
   update,
   delete: deleteRestaurant,
-  toggleFavorite,
-  getFavorites
+  setThumbsRating,
+  getThumbsUp,
+  getThumbsDown,
+  getUnrated
 };
 
 async function create(req, res) {
@@ -109,8 +111,8 @@ async function deleteRestaurant(req, res) {
   }
 }
 
-// Toggle favorite status
-async function toggleFavorite(req, res) {
+// Set thumbs rating
+async function setThumbsRating(req, res) {
   try {
     const restaurant = await Restaurant.findOne({
       _id: req.params.id,
@@ -121,8 +123,8 @@ async function toggleFavorite(req, res) {
       return res.status(404).json({ message: 'Restaurant not found' });
     }
     
-    // Toggle the favorite status
-    restaurant.isFavorite = !restaurant.isFavorite;
+    // Set the thumbs rating based on request body
+    restaurant.isThumbsUp = req.body.isThumbsUp;
     await restaurant.save();
     
     res.json(restaurant);
@@ -131,12 +133,40 @@ async function toggleFavorite(req, res) {
   }
 }
 
-// Get all favorite restaurants
-async function getFavorites(req, res) {
+// Get all thumbs up restaurants
+async function getThumbsUp(req, res) {
   try {
     const restaurants = await Restaurant.find({ 
       userId: req.user._id,
-      isFavorite: true 
+      isThumbsUp: true 
+    }).sort({ updatedAt: -1 });
+    
+    res.json(restaurants);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+}
+
+// Get all thumbs down restaurants
+async function getThumbsDown(req, res) {
+  try {
+    const restaurants = await Restaurant.find({ 
+      userId: req.user._id,
+      isThumbsUp: false 
+    }).sort({ updatedAt: -1 });
+    
+    res.json(restaurants);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+}
+
+// Get all unrated restaurants
+async function getUnrated(req, res) {
+  try {
+    const restaurants = await Restaurant.find({ 
+      userId: req.user._id,
+      isThumbsUp: null 
     }).sort({ updatedAt: -1 });
     
     res.json(restaurants);

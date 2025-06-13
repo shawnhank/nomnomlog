@@ -1,22 +1,25 @@
 import { Link } from 'react-router';
-import { HeartIcon as HeartSolid } from '@heroicons/react/24/solid';
 import { HandThumbUpIcon as HandThumbUpSolid, HandThumbDownIcon as HandThumbDownSolid } from '@heroicons/react/24/solid';
+import { HandThumbUpIcon, HandThumbDownIcon } from '@heroicons/react/24/outline';
 
-export default function MealCard({ meal, onToggleFavorite }) {
+export default function MealCard({ meal, onThumbsRating }) {
   // Find primary image if available
   // If there's only one image, treat it as primary regardless of isPrimary flag
   const primaryImage = meal.mealImages && meal.mealImages.length > 0 
-    ? (meal.mealImages.length === 1 
-        ? meal.mealImages[0] 
-        : meal.mealImages.find(img => img.isPrimary) || meal.mealImages[0])
+    ? (meal.mealImages.length === 1
+      ? meal.mealImages[0]
+      : meal.mealImages.find(img => img.isPrimary) || meal.mealImages[0])
     : null;
-  
+
   // If no mealImages but there's a legacy imageUrl, use that
   const imageToShow = primaryImage ? primaryImage.url : meal.imageUrl;
-
-  const handleToggleFavorite = (e) => {
-    e.preventDefault(); // Prevent navigation when clicking the heart
-    onToggleFavorite(meal._id);
+  
+  const handleThumbsRating = (isThumbsUp, e) => {
+    e.preventDefault(); // Prevent navigation
+    
+    // If the current state matches the requested state, clear it (set to null)
+    const newValue = meal.isThumbsUp === isThumbsUp ? null : isThumbsUp;
+    onThumbsRating(meal._id, newValue, e);
   };
 
   return (
@@ -51,15 +54,29 @@ export default function MealCard({ meal, onToggleFavorite }) {
             </div>
             
             <div className="flex space-x-2">
-              {meal.isFavorite && (
-                <HeartSolid className="w-5 h-5 text-red-500" />
-              )}
-              {meal.isThumbsUp === true && (
-                <HandThumbUpSolid className="w-5 h-5 text-green-500" />
-              )}
-              {meal.isThumbsUp === false && (
-                <HandThumbDownSolid className="w-5 h-5 text-red-500" />
-              )}
+              <button 
+                onClick={(e) => handleThumbsRating(true, e)}
+                className="text-gray-400 hover:text-green-500"
+                title="Would order again"
+              >
+                {meal.isThumbsUp === true ? (
+                  <HandThumbUpSolid className="w-5 h-5 text-green-500" />
+                ) : (
+                  <HandThumbUpIcon className="w-5 h-5" />
+                )}
+              </button>
+              
+              <button 
+                onClick={(e) => handleThumbsRating(false, e)}
+                className="text-gray-400 hover:text-red-500"
+                title="Would not order again"
+              >
+                {meal.isThumbsUp === false ? (
+                  <HandThumbDownSolid className="w-5 h-5 text-red-500" />
+                ) : (
+                  <HandThumbDownIcon className="w-5 h-5" />
+                )}
+              </button>
             </div>
           </div>
         </div>

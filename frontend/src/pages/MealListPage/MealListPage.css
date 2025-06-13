@@ -196,52 +196,30 @@
 
 .tabs {
   display: flex;
-  margin-bottom: 20px;
-  border-bottom: 1px solid #ddd;
-  flex-wrap: nowrap;
-  width: 100%;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-
-.tabs::-webkit-scrollbar {
-  display: none; /* Hide scrollbar in Chrome/Safari */
-}
-
-.tabs button, .tabs a {
-  padding: 8px 12px;
-  background-color: transparent;
-  border: none;
-  border-bottom: 3px solid transparent;
-  color: #555;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  text-decoration: none;
-  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
   align-items: center;
-  justify-content: center;
+}
+
+.tabs button {
+  padding: 8px 12px;
+  border-radius: 4px;
+  background-color: #f3f4f6;
+  border: 1px solid #e5e7eb;
+  cursor: pointer;
+  font-size: 0.875rem;
   white-space: nowrap;
-  flex-shrink: 0;
-}
-
-@media (min-width: 640px) {
-  .tabs button, .tabs a {
-    padding: 10px 15px;
-    font-size: 1rem;
-  }
-}
-
-.tabs button:hover, .tabs a:hover {
-  color: #1a1a1a;
-  border-bottom-color: #1a1a1a;
 }
 
 .tabs button.active {
-  color: #1a1a1a;
-  border-bottom-color: #1a1a1a;
+  background-color: #3b82f6;
+  color: white;
+  border-color: #3b82f6;
+}
+
+.tabs button:hover {
+  background-color: #e5e7eb;
 }
 
 /* Style the action button */

@@ -1,12 +1,10 @@
-## **🧠 What Is a Data Model?**
+# **🧠 What Is a Data Model?**
 
 A **data model** is a structured blueprint of all the entities (like users, restaurants, meals) in your app, what data each one stores (fields), and how they relate to each other (relationships).  It defines:
 
 - **What** information your app tracks
 - **How** it’s organized
 - **How** different types of data are linked
-
-
 
 ## **🔧 Why Is a Data Model Important in Web Apps?**
 
@@ -57,15 +55,11 @@ The data model is your app’s brain.  It’s what tells your app *what it knows
 
 Every form you build, every API you design, and every page you render depends on it.
 
-
-
 ---
 
-# 💁🏼  Data Model for NomNomLog
+## 💁🏼  Data Model for NomNomLog
 
-
-
-  ```
+```text
 User (MVP)
   - _id : ObjectId (PK)
   - fname : string (optional)
@@ -222,13 +216,9 @@ CaptureStatus (Lookup Table)
 
   ```
 
-
-
 ---
 
-
-
-##  🔗 Relationships
+## 🔗 Relationships
 
 - **User → Restaurants**: One-to-Many
 - **User → Meals**: One-to-Many
@@ -245,11 +235,7 @@ CaptureStatus (Lookup Table)
 - **DeliveryTier → DeliveryService**: Many-to-One
 - **VoiceCapture → CaptureStatus**: Many-to-One
 
-
-
 ---
-
-
 
 ## **🎯 The Role of Lookup Tables in a Data-Driven Web App**
 
@@ -263,8 +249,6 @@ Lookup tables are the backbone of all dropdowns, filters, analytics, and joins w
 - How you filter data
 - How relationships are stored
 
-
-
 ## 📦 Lookup Tables in NomNomLog
 
 | **Table**          | **Purpose**                                                  |
@@ -275,8 +259,6 @@ Lookup tables are the backbone of all dropdowns, filters, analytics, and joins w
 | DeliveryService    | Prevents typo-filled serviceName strings. Represents services like Uber Eats, GrubHub, DoorDash. |
 | DeliveryTier       | Represents tiers like “Standard”, “Priority”, “Express” tied to a specific delivery service. |
 | CaptureStatus      | Tracks processing stages of voice captures, such as “Pending”, “Complete”, “Error”. |
-
-
 
 ---
 
@@ -297,8 +279,6 @@ Join tables act as the glue between entities — ensuring relationships are **ef
 
 You cannot achieve this cleanly using arrays inside one model. Join tables normalize your structure for long-term growth.
 
-
-
 ## **🔗 Join Tables** in NomNomLog
 
 | **Table**     | **Purpose**                                                  |
@@ -306,11 +286,9 @@ You cannot achieve this cleanly using arrays inside one model. Join tables norma
 | MealTag       | Links meals and tags. Enables one meal to have many tags and reuse tags across meals. |
 | RestaurantTag | Links restaurants and tags. Supports filtering/searching across restaurant metadata like cuisine, atmosphere, or dietary options. |
 
-
-
 ## **💡 Why Join Tables Matter**
 
-**Without Join Tables**
+### Without Join Tables
 
 You might store an array like tags = ['spicy', 'late night'] inside a meal. This:
 
@@ -322,12 +300,9 @@ You might store an array like tags = ['spicy', 'late night'] inside a meal. This
 
 - Doesn’t support searching *“all spicy ramen meals”*
 
-  
-
-**With Join Tables + Tag Model**
+### With Join Tables + Tag Model
 
 - Tags become real entities you can validate, browse, or edit
 - Relationships become efficient and scalable
 - Queries like *“meals tagged as gluten-free”* are fast and clean
 - Tag reuse across meals and restaurants becomes seamless
-

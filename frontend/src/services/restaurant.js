@@ -62,3 +62,21 @@ export async function getFavorites() {
     throw new Error('Failed to fetch favorite restaurants');
   }
 }
+
+// Set thumbs rating
+export async function setThumbsRating(id, isThumbsUp) {
+  const res = await fetch(`${BASE_URL}/${id}/thumbs`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${getToken()}`
+    },
+    body: JSON.stringify({ isThumbsUp })
+  });
+  
+  if (res.ok) {
+    return res.json();
+  } else {
+    throw new Error('Failed to set thumbs rating');
+  }
+}

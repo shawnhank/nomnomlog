@@ -1,8 +1,8 @@
 import { Link } from 'react-router';
-import { HeartIcon as HeartSolid } from '@heroicons/react/24/solid';
-import { HeartIcon as HeartOutline } from '@heroicons/react/24/outline';
+import { HandThumbUpIcon as HandThumbUpSolid, HandThumbDownIcon as HandThumbDownSolid } from '@heroicons/react/24/solid';
+import { HandThumbUpIcon, HandThumbDownIcon } from '@heroicons/react/24/outline';
 
-export default function RestaurantCard({ restaurant, onToggleFavorite }) {
+export default function RestaurantCard({ restaurant, onThumbsRating }) {
   // Find primary image if available
   // If there's only one image, treat it as primary regardless of isPrimary flag
   const primaryImage = restaurant.restaurantImages && restaurant.restaurantImages.length > 0 
@@ -13,10 +13,13 @@ export default function RestaurantCard({ restaurant, onToggleFavorite }) {
 
   // If no restaurantImages but there's a legacy imageUrl, use that
   const imageToShow = primaryImage ? primaryImage.url : restaurant.imageUrl;
-
-  const handleToggleFavorite = (e) => {
-    e.preventDefault(); // Prevent navigation when clicking the heart
-    onToggleFavorite(restaurant._id, e);
+  
+  const handleThumbsRating = (isThumbsUp, e) => {
+    e.preventDefault(); // Prevent navigation
+    
+    // If the current state matches the requested state, clear it (set to null)
+    const newValue = restaurant.isThumbsUp === isThumbsUp ? null : isThumbsUp;
+    onThumbsRating(restaurant._id, newValue, e);
   };
 
   return (
@@ -48,17 +51,31 @@ export default function RestaurantCard({ restaurant, onToggleFavorite }) {
               )}
             </div>
             
-            <button 
-              onClick={handleToggleFavorite}
-              className="text-gray-400 hover:text-red-500 ml-2"
-              title={restaurant.isFavorite ? "Remove from favorites" : "Add to favorites"}
-            >
-              {restaurant.isFavorite ? (
-                <HeartSolid className="w-5 h-5 text-red-500" />
-              ) : (
-                <HeartOutline className="w-5 h-5" />
-              )}
-            </button>
+            <div className="flex space-x-2">
+              <button 
+                onClick={(e) => handleThumbsRating(true, e)}
+                className="text-gray-400 hover:text-green-500"
+                title="Would visit again"
+              >
+                {restaurant.isThumbsUp === true ? (
+                  <HandThumbUpSolid className="w-5 h-5 text-green-500" />
+                ) : (
+                  <HandThumbUpIcon className="w-5 h-5" />
+                )}
+              </button>
+              
+              <button 
+                onClick={(e) => handleThumbsRating(false, e)}
+                className="text-gray-400 hover:text-red-500"
+                title="Would not visit again"
+              >
+                {restaurant.isThumbsUp === false ? (
+                  <HandThumbDownSolid className="w-5 h-5 text-red-500" />
+                ) : (
+                  <HandThumbDownIcon className="w-5 h-5" />
+                )}
+              </button>
+            </div>
           </div>
         </div>
       </Link>

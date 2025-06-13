@@ -28,9 +28,12 @@
   display: grid;
   grid-template-columns: 1fr;
   gap: 1rem;
+  width: 100%;
+  max-width: 100%;
 }
 
 .restaurant-item {
+  width: 100%;
   border-radius: 0.5rem;
   overflow: hidden;
   transition: transform 0.2s ease;
@@ -41,6 +44,7 @@
 
 .restaurant-item:hover {
   transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
 
 .restaurant-item a {
@@ -64,61 +68,64 @@
   }
 }
 
-.page-header {
-  margin-bottom: 24px;
-}
-
-.page-header h2 {
-  text-align: center;
-  margin-bottom: 16px;
-  font-size: 1.8rem;
-}
-
+/* Tabs styling to match MealListPage */
 .tabs {
   display: flex;
-  margin-bottom: 20px;
-  border-bottom: 1px solid #ddd;
-  flex-wrap: nowrap;
-  width: 100%;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+  align-items: center;
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 8px;
   overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
 }
 
-.tabs button, .tabs .action-button {
+.tabs button {
   padding: 8px 12px;
   background: none;
   border: none;
   border-bottom: 3px solid transparent;
-  font-weight: 500;
-  color: #666;
   cursor: pointer;
-  white-space: nowrap;
-  transition: all 0.2s ease;
   font-size: 0.875rem;
-}
-
-@media (min-width: 640px) {
-  .tabs button, .tabs .action-button {
-    padding: 10px 20px;
-    font-size: 1rem;
-  }
-  
-  .tabs {
-    justify-content: center;
-  }
-}
-
-.tabs button:hover {
-  color: #333;
+  white-space: nowrap;
+  color: #6b7280;
 }
 
 .tabs button.active {
   color: #3b82f6;
   border-bottom-color: #3b82f6;
+  font-weight: 500;
 }
 
+.tabs button:hover {
+  color: #1f2937;
+}
+
+/* Add this to ensure text is hidden on mobile */
+@media (max-width: 639px) {
+  .tabs .action-button span {
+    display: none;
+  }
+  
+  .tabs button span:not(:first-child) {
+    display: none;
+  }
+}
+
+/* Add this to ensure the plus icon is properly sized */
+.tabs .action-button .w-5 {
+  width: 1.25rem !important;
+  height: 1.25rem !important;
+}
+
+@media (min-width: 640px) {
+  .tabs .action-button .sm\:w-6 {
+    width: 1.5rem !important;
+    height: 1.5rem !important;
+  }
+}
+
+/* Style the action button */
 .tabs .action-button {
   margin-left: auto;
   background-color: #3b82f6;
@@ -127,10 +134,25 @@
   padding: 0.5rem 1rem;
   font-weight: 500;
   text-decoration: none;
+  border-bottom: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .tabs .action-button:hover {
   background-color: #2563eb;
+  color: white;
+}
+
+.page-header {
+  margin-bottom: 24px;
+}
+
+.page-header h1 {
+  text-align: center;
+  margin-bottom: 16px;
+  font-size: 1.8rem;
 }
 
 .action-buttons-container {

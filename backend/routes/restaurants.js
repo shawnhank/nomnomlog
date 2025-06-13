@@ -11,8 +11,14 @@ router.use(ensureLoggedIn);
 // Get all restaurants
 router.get('/', restaurantsCtrl.index);
 
-// Get all favorite restaurants
-router.get('/favorites', restaurantsCtrl.getFavorites);
+// Get all thumbs up restaurants
+router.get('/thumbs-up', restaurantsCtrl.getThumbsUp);
+
+// Get all thumbs down restaurants
+router.get('/thumbs-down', restaurantsCtrl.getThumbsDown);
+
+// Get all unrated restaurants
+router.get('/unrated', restaurantsCtrl.getUnrated);
 
 // Get one restaurant
 router.get('/:id', restaurantsCtrl.show);
@@ -26,7 +32,7 @@ router.put('/:id', restaurantsCtrl.update);
 // Delete a restaurant
 router.delete('/:id', restaurantsCtrl.delete);
 
-// Toggle favorite status
-router.put('/:id/favorite', restaurantsCtrl.toggleFavorite);
+// Set thumbs rating
+router.put('/:id/thumbs', restaurantsCtrl.setThumbsRating);
 
 module.exports = router;
