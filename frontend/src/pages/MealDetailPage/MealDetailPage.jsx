@@ -5,6 +5,7 @@ import { HeartIcon as HeartOutline } from '@heroicons/react/24/outline';
 import { HandThumbUpIcon, HandThumbDownIcon, PlusIcon } from '@heroicons/react/24/outline';
 import { HandThumbUpIcon as HandThumbUpSolid, HandThumbDownIcon as HandThumbDownSolid } from '@heroicons/react/24/solid';
 import * as mealService from '../../services/meal';
+import { Button } from '../../components/Button/button';
 
 export default function MealDetailPage() {
   const [meal, setMeal] = useState(null);
@@ -100,18 +101,18 @@ export default function MealDetailPage() {
             <PlusIcon className="w-5 h-5 mr-1" />
             <span>Add Meal</span>
           </Link>
-          <button 
-            onClick={handleEdit}
-            className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md text-sm"
+          <Button 
+            href={`/meals/${meal._id}/edit`}
+            color="blue"
           >
             Edit
-          </button>
-          <button 
-            onClick={handleDelete} 
-            className="bg-white hover:bg-red-50 text-red-600 border border-red-600 px-4 py-2 rounded-md text-sm"
+          </Button>
+          <Button 
+            onClick={handleDelete}
+            color="red"
           >
             Delete
-          </button>
+          </Button>
         </div>
       </div>
 
@@ -139,38 +140,20 @@ export default function MealDetailPage() {
         {/* Meal actions (thumbs only) */}
         <div className="flex gap-3 my-4">
           {/* Thumbs up button */}
-          <button 
+          <Button 
             onClick={() => handleThumbsRating(true)}
-            className={`flex items-center justify-center w-10 h-10 rounded-md ${
-              meal.isThumbsUp === true 
-                ? 'bg-green-600 hover:bg-green-700' 
-                : 'bg-gray-800 hover:bg-gray-700'
-            } text-white transition-colors`}
-            title="Would Order Again"
-          >
-            {meal.isThumbsUp === true ? (
-              <HandThumbUpSolid className="w-6 h-6" />
-            ) : (
-              <HandThumbUpIcon className="w-6 h-6" />
-            )}
-          </button>
+            color={meal.isThumbsUp === true ? 'green' : 'zinc'}
+            aria-label="Would Order Again"
+            icon={meal.isThumbsUp === true ? HandThumbUpSolid : HandThumbUpIcon}
+          />
           
           {/* Thumbs down button */}
-          <button 
+          <Button 
             onClick={() => handleThumbsRating(false)}
-            className={`flex items-center justify-center w-10 h-10 rounded-md ${
-              meal.isThumbsUp === false 
-                ? 'bg-red-600 hover:bg-red-700' 
-                : 'bg-gray-800 hover:bg-gray-700'
-            } text-white transition-colors`}
-            title="Would Not Order Again"
-          >
-            {meal.isThumbsUp === false ? (
-              <HandThumbDownSolid className="w-6 h-6" />
-            ) : (
-              <HandThumbDownIcon className="w-6 h-6" />
-            )}
-          </button>
+            color={meal.isThumbsUp === false ? 'red' : 'zinc'}
+            aria-label="Would Not Order Again"
+            icon={meal.isThumbsUp === false ? HandThumbDownSolid : HandThumbDownIcon}
+          />
         </div>
 
         {/* Primary image display */}
@@ -214,12 +197,12 @@ export default function MealDetailPage() {
             </div>
             
             <div className="mt-4 text-center">
-              <button
+              <Button
                 onClick={handleEdit}
-                className="inline-flex items-center text-blue-600 hover:text-blue-800"
+                color="blue"
               >
-                <span>Manage Photos</span>
-              </button>
+                Manage Photos
+              </Button>
             </div>
           </div>
         )}

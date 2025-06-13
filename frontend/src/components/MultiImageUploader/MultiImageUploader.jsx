@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import { Button } from '../Button/button';
+import { XMarkIcon } from '@heroicons/react/24/outline';
 
 export default function MultiImageUploader({ 
   images = [], 
@@ -129,13 +131,16 @@ export default function MultiImageUploader({
                     >
                       {image.isPrimary ? 'Primary' : 'Set Primary'}
                     </button>
-                    <button
+                    <Button
                       type="button"
                       onClick={() => handleRemoveImage(index)}
-                      className="text-xs px-1 py-0.5 bg-red-500 text-white rounded"
+                      color="red"
+                      plain
+                      className="absolute top-2 right-2"
+                      aria-label="Remove image"
                     >
-                      Remove
-                    </button>
+                      <XMarkIcon className="w-5 h-5" />
+                    </Button>
                   </div>
                 </div>
               </div>
@@ -145,16 +150,14 @@ export default function MultiImageUploader({
         
         {/* Upload button */}
         <div className="flex items-center space-x-2">
-          <label className="px-4 py-2 bg-blue-500 text-white rounded-lg cursor-pointer hover:bg-blue-600 disabled:bg-gray-400">
-            {uploading ? 'Uploading...' : 'Add Image'}
-            <input
-              type="file"
-              accept="image/*"
-              className="hidden"
-              onChange={handleFileSelect}
-              disabled={uploading}
-            />
-          </label>
+          <Button
+            type="button"
+            onClick={handleAddImageClick}
+            color="blue"
+            outline
+          >
+            Add Image
+          </Button>
         </div>
         
         {error && (

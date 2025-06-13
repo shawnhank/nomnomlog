@@ -5,6 +5,7 @@ import { HandThumbUpIcon as HandThumbUpSolid, HandThumbDownIcon as HandThumbDown
 import * as mealService from '../../services/meal';
 import * as restaurantService from '../../services/restaurant';
 import MealCard from '../../components/MealCard/MealCard';
+import { Button } from '../../components/Button/button';
 // import './MealListPage.css';
 
 export default function MealListPage() {
@@ -78,55 +79,44 @@ export default function MealListPage() {
       </div>
       
       <div className="flex flex-wrap items-center gap-2 mb-4 border-b border-gray-200 pb-2 overflow-x-auto">
-        <button 
-          className={`px-3 py-2 text-sm font-medium rounded-md transition-colors ${
-            activeFilter === 'all' 
-              ? 'bg-blue-500 text-white' 
-              : 'text-gray-600 hover:text-gray-900'
-          }`}
+        <Button 
+          plain={activeFilter !== 'all'}
+          color={activeFilter === 'all' ? 'blue' : undefined}
           onClick={() => setActiveFilter('all')}
         >
           All Meals
-        </button>
-        <button 
-          className={`px-3 py-2 text-sm font-medium rounded-md transition-colors flex items-center ${
-            activeFilter === 'thumbsUp' 
-              ? 'bg-blue-500 text-white' 
-              : 'text-gray-600 hover:text-gray-900'
-          }`}
+        </Button>
+        <Button 
+          plain={activeFilter !== 'thumbsUp'}
+          color={activeFilter === 'thumbsUp' ? 'blue' : undefined}
+          icon={HandThumbUpIcon}
           onClick={() => setActiveFilter('thumbsUp')}
         >
-          <HandThumbUpIcon className="w-4 h-4 mr-1" />
-          <span>Would Order Again</span>
-        </button>
-        <button 
-          className={`px-3 py-2 text-sm font-medium rounded-md transition-colors flex items-center ${
-            activeFilter === 'thumbsDown' 
-              ? 'bg-blue-500 text-white' 
-              : 'text-gray-600 hover:text-gray-900'
-          }`}
+          Would Order Again
+        </Button>
+        <Button 
+          plain={activeFilter !== 'thumbsDown'}
+          color={activeFilter === 'thumbsDown' ? 'blue' : undefined}
+          icon={HandThumbDownIcon}
           onClick={() => setActiveFilter('thumbsDown')}
         >
-          <HandThumbDownIcon className="w-4 h-4 mr-1" />
-          <span>Would Not Order Again</span>
-        </button>
-        <button 
-          className={`px-3 py-2 text-sm font-medium rounded-md transition-colors ${
-            activeFilter === 'unrated' 
-              ? 'bg-blue-500 text-white' 
-              : 'text-gray-600 hover:text-gray-900'
-          }`}
+          Would Not Order Again
+        </Button>
+        <Button 
+          plain={activeFilter !== 'unrated'}
+          color={activeFilter === 'unrated' ? 'blue' : undefined}
           onClick={() => setActiveFilter('unrated')}
         >
-          <span>Unrated</span>
-        </button>
-        <Link 
-          to="/meals/new" 
-          className="ml-auto flex items-center justify-center bg-blue-500 hover:bg-blue-600 text-white font-medium rounded-md px-3 py-2"
+          Unrated
+        </Button>
+        <Button 
+          href="/meals/new" 
+          className="ml-auto"
+          color="blue"
+          icon={PlusIcon}
         >
-          <PlusIcon className="w-6 h-6" aria-hidden="true" />
-          <span className="ml-1 hidden sm:inline">Add</span>
-        </Link>
+          <span className="hidden sm:inline">Add</span>
+        </Button>
       </div>
       
       {/* Search bar */}

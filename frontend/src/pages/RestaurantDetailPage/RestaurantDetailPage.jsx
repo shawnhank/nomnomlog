@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router';
-import { PlusIcon } from '@heroicons/react/24/outline';
-import { HandThumbUpIcon, HandThumbDownIcon } from '@heroicons/react/24/outline';
+import { Button } from '../../components/Button/button';
+import { HandThumbUpIcon, HandThumbDownIcon, PlusIcon } from '@heroicons/react/24/outline';
 import { HandThumbUpIcon as HandThumbUpSolid, HandThumbDownIcon as HandThumbDownSolid } from '@heroicons/react/24/solid';
 import * as restaurantService from '../../services/restaurant';
 import * as mealService from '../../services/meal';
@@ -160,38 +160,20 @@ export default function RestaurantDetailPage() {
           {/* Thumbs rating buttons */}
           <div className="flex gap-3 my-4">
             {/* Thumbs up button */}
-            <button 
+            <Button 
               onClick={() => handleThumbsRating(true)}
-              className={`flex items-center justify-center w-10 h-10 rounded-md ${
-                restaurant.isThumbsUp === true 
-                  ? 'bg-green-600 hover:bg-green-700' 
-                  : 'bg-gray-800 hover:bg-gray-700'
-              }`}
-              title="Would Visit Again"
-            >
-              {restaurant.isThumbsUp === true ? (
-                <HandThumbUpSolid className="w-6 h-6 text-white" />
-              ) : (
-                <HandThumbUpIcon className="w-6 h-6 text-white" />
-              )}
-            </button>
+              color={restaurant.isThumbsUp === true ? 'green' : 'zinc'}
+              aria-label="Would Visit Again"
+              icon={restaurant.isThumbsUp === true ? HandThumbUpSolid : HandThumbUpIcon}
+            />
             
             {/* Thumbs down button */}
-            <button 
+            <Button 
               onClick={() => handleThumbsRating(false)}
-              className={`flex items-center justify-center w-10 h-10 rounded-md ${
-                restaurant.isThumbsUp === false 
-                  ? 'bg-red-600 hover:bg-red-700' 
-                  : 'bg-gray-800 hover:bg-gray-700'
-              }`}
-              title="Would Not Visit Again"
-            >
-              {restaurant.isThumbsUp === false ? (
-                <HandThumbDownSolid className="w-6 h-6 text-white" />
-              ) : (
-                <HandThumbDownIcon className="w-6 h-6 text-white" />
-              )}
-            </button>
+              color={restaurant.isThumbsUp === false ? 'red' : 'zinc'}
+              aria-label="Would Not Visit Again"
+              icon={restaurant.isThumbsUp === false ? HandThumbDownSolid : HandThumbDownIcon}
+            />
           </div>
         </div>
         

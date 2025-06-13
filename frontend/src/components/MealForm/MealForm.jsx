@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import './MealForm.css'; // Keep this for any custom styles
 import MultiImageUploader from '../MultiImageUploader/MultiImageUploader'; // Updated import
+import { Button } from '../Button/button';
 
 export default function MealForm({ initialData, onSubmit, buttonLabel = 'Save', loading = false }) {
   // Default form values
@@ -171,14 +172,14 @@ export default function MealForm({ initialData, onSubmit, buttonLabel = 'Save', 
         />
       </div>
       
-      <div className="mt-6 flex justify-end gap-4">
-        <button 
-          type="submit" 
-          className="px-4 py-2 bg-primary text-white rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
+      <div className="flex justify-end mt-6">
+        <Button
+          type="submit"
+          color="blue"
           disabled={loading}
         >
           {loading ? 'Saving...' : buttonLabel}
-        </button>
+        </Button>
       </div>
     </form>
   );
