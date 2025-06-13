@@ -141,7 +141,7 @@ export default function RestaurantCard({ restaurant, onThumbsRating, onDelete })
         <div className="cursor-pointer" onClick={navigateToDetail}>
           {/* Image - edge to edge on mobile */}
           {imageToShow && (
-            <div className="w-full aspect-[4/3] relative">
+            <div className="w-full aspect-[16/9] lg:aspect-[4/3] relative">
               {/* Use Link only for the main card area, not wrapping everything */}
               <Link to={`/restaurants/${restaurant._id}`} className="block absolute inset-0">
                 <img 
@@ -155,10 +155,10 @@ export default function RestaurantCard({ restaurant, onThumbsRating, onDelete })
               <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent via-70% to-black/80"></div>
               
               {/* Text overlay with all restaurant info */}
-              <div className="absolute bottom-0 left-0 right-0 bg-black/80 p-3">
+              <div className="absolute bottom-0 left-0 right-0 bg-black/80 p-3 lg:p-4">
                 {/* Restaurant name */}
                 <Link to={`/restaurants/${restaurant._id}`} className="block">
-                  <h3 className="text-base font-semibold line-clamp-2 text-white">
+                  <h3 className="text-base lg:text-lg font-semibold line-clamp-2 text-white">
                     {restaurant.name}
                   </h3>
                 </Link>

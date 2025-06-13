@@ -9,6 +9,7 @@ import { Textarea } from '../../components/catalyst/textarea';
 import DeleteConfirmationModal from '../../components/DeleteConfirmationModal/DeleteConfirmationModal';
 import SimpleBreadcrumbs from '../../components/SimpleBreadcrumbs/SimpleBreadcrumbs';
 import ReactMarkdown from 'react-markdown';
+import DeliveryServiceButtons from '../../components/DeliveryServiceButtons/DeliveryServiceButtons';
 
 export default function MealDetailPage() {
   const [meal, setMeal] = useState(null);
@@ -383,6 +384,12 @@ export default function MealDetailPage() {
           </div>
         </div>
       )}
+
+      {/* Delivery options section */}
+      <div className="mt-6">
+        <h3 className="text-lg font-medium mb-2">Order This Meal</h3>
+        <DeliveryServiceButtons restaurant={meal.restaurant} meal={meal} />
+      </div>
 
       {/* Delete confirmation modal */}
       <DeleteConfirmationModal

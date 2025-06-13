@@ -88,7 +88,7 @@ export default function RestaurantListPage() {
   );
 
   return (
-    <div className="max-w-3xl mx-auto px-4 py-6">
+    <div className="max-w-4xl mx-auto px-4 py-6">
       <div className="mb-6 text-center">
         <h1 className="text-2xl font-bold mb-4">Restaurants</h1>
       </div>
@@ -178,7 +178,7 @@ export default function RestaurantListPage() {
                   : 'No restaurants added yet. Add your first restaurant!'}
         </div>
       ) : (
-        <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4">
+        <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-4">
           {filteredRestaurants.map(restaurant => (
             <li key={restaurant._id} className="border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-all duration-200 hover:-translate-y-1">
               <RestaurantCard 
