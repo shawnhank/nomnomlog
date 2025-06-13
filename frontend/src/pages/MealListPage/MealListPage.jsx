@@ -5,6 +5,7 @@ import * as mealService from '../../services/meal';
 import MealCard from '../../components/MealCard/MealCard';
 import { Button } from '../../components/catalyst/button';
 import SimpleBreadcrumbs from '../../components/SimpleBreadcrumbs/SimpleBreadcrumbs';
+import SearchBar from '../../components/SearchBar/SearchBar';
 // import './MealListPage.css';
 
 export default function MealListPage() {
@@ -154,12 +155,12 @@ export default function MealListPage() {
       
       {/* Search bar */}
       <div className="mb-4 mt-4">
-        <input
-          type="text"
-          placeholder="Search meals..."
+        <SearchBar
           value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="w-full p-2 border border-gray-300 rounded"
+          onChange={setSearchTerm}
+          placeholder="Search meals..."
+          className="w-full"
+          autoFocus={false}
         />
       </div>
       

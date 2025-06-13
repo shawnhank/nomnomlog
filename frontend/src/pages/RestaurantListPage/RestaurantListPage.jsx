@@ -4,6 +4,7 @@ import { HandThumbUpIcon, HandThumbDownIcon, PlusIcon } from '@heroicons/react/2
 import * as restaurantService from '../../services/restaurant';
 import RestaurantCard from '../../components/RestaurantCard/RestaurantCard';
 import { Button } from '../../components/catalyst/button';
+import SearchBar from '../../components/SearchBar/SearchBar';
 // import './RestaurantListPage.css';
 
 export default function RestaurantListPage() {
@@ -82,7 +83,7 @@ export default function RestaurantListPage() {
           plain={activeFilter !== 'all'}
           color={activeFilter === 'all' ? 'blue' : undefined}
           onClick={() => setActiveFilter('all')}
-          className={`text-sm ${activeFilter === 'all' ? 'text-white' : '!text-gray-500 dark:!text-gray-300'}`}
+          className="text-sm"
         >
           <span className="whitespace-nowrap">All Restaurants</span>
         </Button>
@@ -90,25 +91,25 @@ export default function RestaurantListPage() {
           plain={activeFilter !== 'thumbsUp'}
           color={activeFilter === 'thumbsUp' ? 'blue' : undefined}
           onClick={() => setActiveFilter('thumbsUp')}
-          className={`text-sm ${activeFilter === 'thumbsUp' ? 'text-white' : '!text-gray-500 dark:!text-gray-300'}`}
+          className="text-sm"
         >
           <HandThumbUpIcon className="h-5 w-5 inline mr-1" />
-          <span className="hidden sm:inline whitespace-nowrap">Thumbs Up</span>
+          <span className="hidden sm:inline whitespace-nowrap">Would Visit Again</span>
         </Button>
         <Button 
           plain={activeFilter !== 'thumbsDown'}
           color={activeFilter === 'thumbsDown' ? 'blue' : undefined}
           onClick={() => setActiveFilter('thumbsDown')}
-          className={`text-sm ${activeFilter === 'thumbsDown' ? 'text-white' : '!text-gray-500 dark:!text-gray-300'}`}
+          className="text-sm"
         >
           <HandThumbDownIcon className="h-5 w-5 inline mr-1" />
-          <span className="hidden sm:inline whitespace-nowrap">Thumbs Down</span>
+          <span className="hidden sm:inline whitespace-nowrap">Would Not Visit Again</span>
         </Button>
         <Button 
           plain={activeFilter !== 'unrated'}
           color={activeFilter === 'unrated' ? 'blue' : undefined}
           onClick={() => setActiveFilter('unrated')}
-          className={`text-sm ${activeFilter === 'unrated' ? 'text-white' : '!text-gray-500 dark:!text-gray-300'}`}
+          className="text-sm"
         >
           <span className="whitespace-nowrap">Unrated</span>
         </Button>
@@ -117,7 +118,6 @@ export default function RestaurantListPage() {
           className="ml-auto"
         >
           <Button 
-            outline
             color="blue"
             className="whitespace-nowrap"
           >
@@ -129,12 +129,12 @@ export default function RestaurantListPage() {
       
       {/* Search bar */}
       <div className="mb-4 mt-4">
-        <input
-          type="text"
-          placeholder="Search restaurants..."
+        <SearchBar
           value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="w-full p-2 border border-gray-300 rounded"
+          onChange={setSearchTerm}
+          placeholder="Search restaurants..."
+          className="w-full"
+          autoFocus={false}
         />
       </div>
       

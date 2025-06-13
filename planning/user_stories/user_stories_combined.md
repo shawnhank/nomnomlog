@@ -30,9 +30,9 @@
 
 - [x] As a user, I want to add tags and attach them to meals and restaurants, so that I can organize views/lists by these tags.
 
-- [ ] As a user, I want to be able to have a view of all my tags, and edit, update, or delete them
+- [x] As a user, I want to be able to have a view of all my tags, and edit, update, or delete them
 
-- [ ] As a user, i want to be able to delete tags individually or in bulk using a multiselect feature that allows me to select multiple tags and delete them from the tags view/page
+- [x] As a user, i want to be able to delete tags individually or in bulk using a multiselect feature that allows me to select multiple tags and delete them from the tags view/page
 
 - [x] As a user, I want to view all my restaurants and quickly delete restaurants as needed.
 
