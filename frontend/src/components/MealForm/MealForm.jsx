@@ -33,6 +33,7 @@ export default function MealForm({ initialData, onSubmit, buttonLabel = 'Save', 
   const [uploading, setUploading] = useState(false);
   const fileInputRef = useRef(null);
   const addImageButtonRef = useRef(null);
+  const [captureMode, setCaptureMode] = useState(null);
 
   // Load restaurants and tags when component mounts
   useEffect(() => {
@@ -118,6 +119,12 @@ export default function MealForm({ initialData, onSubmit, buttonLabel = 'Save', 
       ...formData,
       ...updatedData
     });
+  }
+
+  function handleCaptureMode(mode) {
+    setCaptureMode(mode);
+    // Trigger the file input click after setting the mode
+    setTimeout(() => addImageButtonRef.current?.handleAddImageClick(), 50);
   }
 
   return (
@@ -227,18 +234,32 @@ export default function MealForm({ initialData, onSubmit, buttonLabel = 'Save', 
         <Fieldset className="bg-white dark:bg-gray-800 rounded-md p-4 shadow-sm border border-gray-200 dark:border-gray-700">
           <Legend className="text-lg font-medium text-gray-900 dark:text-white flex justify-between items-center">
             Photos
-            <Button
-              type="button"
-              onClick={() => addImageButtonRef.current?.handleAddImageClick()}
-              color="blue"
-              outline
-              className="text-sm border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white transition-colors duration-200 -mr-2"
-            >
-              <span className="flex items-center">
-                <ArrowUpTrayIcon className="w-4 h-4 mr-2" />
-                Add Image
-              </span>
-            </Button>
+            <div className="flex space-x-2">
+              <Button
+                type="button"
+                onClick={() => handleCaptureMode('environment')}
+                color="blue"
+                outline
+                className="text-xs border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white transition-colors duration-200"
+              >
+                <span className="flex items-center">
+                  <ArrowUpTrayIcon className="w-3 h-3 mr-1" />
+                  Camera
+                </span>
+              </Button>
+              <Button
+                type="button"
+                onClick={() => handleCaptureMode(null)}
+                color="blue"
+                outline
+                className="text-xs border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white transition-colors duration-200"
+              >
+                <span className="flex items-center">
+                  <ArrowUpTrayIcon className="w-3 h-3 mr-1" />
+                  Gallery
+                </span>
+              </Button>
+            </div>
           </Legend>
           <div className="mt-4">
             <div className="bg-gray-50 dark:bg-gray-900 rounded-lg p-4 border-2 border-dashed border-gray-300 dark:border-gray-700">
@@ -248,6 +269,7 @@ export default function MealForm({ initialData, onSubmit, buttonLabel = 'Save', 
                 entityType="meal"
                 renderAddButton={false}
                 addButtonRef={addImageButtonRef}
+                captureMode={captureMode}
               />
             </div>
           </div>

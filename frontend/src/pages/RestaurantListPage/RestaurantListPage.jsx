@@ -83,7 +83,7 @@ export default function RestaurantListPage() {
           plain={activeFilter !== 'all'}
           color={activeFilter === 'all' ? 'blue' : undefined}
           onClick={() => setActiveFilter('all')}
-          className="text-sm"
+          className={`text-sm ${activeFilter === 'all' ? 'text-white' : '!text-gray-500 dark:!text-gray-300'}`}
         >
           <span className="whitespace-nowrap">All Restaurants</span>
         </Button>
@@ -91,25 +91,25 @@ export default function RestaurantListPage() {
           plain={activeFilter !== 'thumbsUp'}
           color={activeFilter === 'thumbsUp' ? 'blue' : undefined}
           onClick={() => setActiveFilter('thumbsUp')}
-          className="text-sm"
+          className={`text-sm ${activeFilter === 'thumbsUp' ? 'text-white' : '!text-gray-500 dark:!text-gray-300'}`}
         >
           <HandThumbUpIcon className="h-5 w-5 inline mr-1" />
-          <span className="hidden sm:inline whitespace-nowrap">Would Visit Again</span>
+          <span className="hidden sm:inline whitespace-nowrap">Thumbs Up</span>
         </Button>
         <Button 
           plain={activeFilter !== 'thumbsDown'}
           color={activeFilter === 'thumbsDown' ? 'blue' : undefined}
           onClick={() => setActiveFilter('thumbsDown')}
-          className="text-sm"
+          className={`text-sm ${activeFilter === 'thumbsDown' ? 'text-white' : '!text-gray-500 dark:!text-gray-300'}`}
         >
           <HandThumbDownIcon className="h-5 w-5 inline mr-1" />
-          <span className="hidden sm:inline whitespace-nowrap">Would Not Visit Again</span>
+          <span className="hidden sm:inline whitespace-nowrap">Thumbs Down</span>
         </Button>
         <Button 
           plain={activeFilter !== 'unrated'}
           color={activeFilter === 'unrated' ? 'blue' : undefined}
           onClick={() => setActiveFilter('unrated')}
-          className="text-sm"
+          className={`text-sm ${activeFilter === 'unrated' ? 'text-white' : '!text-gray-500 dark:!text-gray-300'}`}
         >
           <span className="whitespace-nowrap">Unrated</span>
         </Button>
@@ -118,6 +118,7 @@ export default function RestaurantListPage() {
           className="ml-auto"
         >
           <Button 
+            outline
             color="blue"
             className="whitespace-nowrap"
           >

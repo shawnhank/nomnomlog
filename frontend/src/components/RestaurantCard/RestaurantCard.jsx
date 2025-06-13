@@ -19,6 +19,7 @@ export default function RestaurantCard({ restaurant, onThumbsRating, onDelete })
   
   const handleThumbsRating = (isThumbsUp, e) => {
     e.preventDefault(); // Prevent navigation
+    e.stopPropagation(); // Stop propagation
     
     // If the current state matches the requested state, clear it (set to null)
     const newValue = restaurant.isThumbsUp === isThumbsUp ? null : isThumbsUp;
@@ -42,6 +43,41 @@ export default function RestaurantCard({ restaurant, onThumbsRating, onDelete })
     setShowDeleteModal(false);
   };
 
+  // Handle external links
+  const openGoogleMaps = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    window.open(`https://maps.google.com/?q=${encodeURIComponent(restaurant.address)}`, '_blank', 'noopener,noreferrer');
+  };
+
+  const openAppleMaps = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    window.open(`https://maps.apple.com/?q=${encodeURIComponent(restaurant.address)}`, '_blank', 'noopener,noreferrer');
+  };
+
+  const callPhone = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    window.location.href = `tel:${restaurant.phone}`;
+  };
+
+  const openWebsite = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    window.open(
+      restaurant.website.startsWith('http') ? restaurant.website : `https://${restaurant.website}`,
+      '_blank',
+      'noopener,noreferrer'
+    );
+  };
+
+  // Handle navigation to restaurant detail
+  const navigateToDetail = (e) => {
+    // Let the Link component handle this naturally
+    // This is just a placeholder for any additional logic
+  };
+
   return (
     <>
       <div className="relative overflow-hidden bg-white shadow-sm sm:rounded-lg border border-gray-200 hover:shadow-md transition-all duration-200 hover:-translate-y-1">
@@ -55,15 +91,19 @@ export default function RestaurantCard({ restaurant, onThumbsRating, onDelete })
           </button>
         )}
         
-        <Link to={`/restaurants/${restaurant._id}`} className="block">
+        {/* Main card content - wrapped in a div instead of Link */}
+        <div className="cursor-pointer" onClick={navigateToDetail}>
           {/* Image - edge to edge on mobile */}
           {imageToShow && (
             <div className="w-full aspect-[4/3] relative">
-              <img 
-                src={imageToShow} 
-                alt={restaurant.name} 
-                className="w-full h-full object-cover"
-              />
+              {/* Use Link only for the main card area, not wrapping everything */}
+              <Link to={`/restaurants/${restaurant._id}`} className="block absolute inset-0">
+                <img 
+                  src={imageToShow} 
+                  alt={restaurant.name} 
+                  className="w-full h-full object-cover"
+                />
+              </Link>
               
               {/* Gradient overlay for better text readability */}
               <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent via-70% to-black/80"></div>
@@ -71,12 +111,14 @@ export default function RestaurantCard({ restaurant, onThumbsRating, onDelete })
               {/* Text overlay with all restaurant info */}
               <div className="absolute bottom-0 left-0 right-0 bg-black/80 p-3">
                 {/* Restaurant name */}
-                <h3 className="text-base font-semibold line-clamp-2" style={{ color: 'white' }}>
-                  {restaurant.name}
-                </h3>
+                <Link to={`/restaurants/${restaurant._id}`} className="block">
+                  <h3 className="text-base font-semibold line-clamp-2 text-white">
+                    {restaurant.name}
+                  </h3>
+                </Link>
                 
                 {/* Restaurant details in overlay */}
-                <div className="mt-2 space-y-1.5">
+                <div className="mt-0 space-y-1.5">
                   {/* Address with map links */}
                   {restaurant.address && (
                     <div className="flex items-center">
@@ -84,25 +126,19 @@ export default function RestaurantCard({ restaurant, onThumbsRating, onDelete })
                       <div className="flex flex-wrap items-center">
                         <span className="text-white text-sm mr-2">{restaurant.address}</span>
                         <div className="flex gap-2 text-sm">
-                          <a 
-                            href={`https://maps.google.com/?q=${encodeURIComponent(restaurant.address)}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-blue-300 hover:text-blue-200"
-                            onClick={e => e.stopPropagation()}
+                          <button 
+                            onClick={openGoogleMaps}
+                            className="text-blue-300 hover:text-blue-200 bg-transparent border-0"
                           >
                             Google Maps
-                          </a>
+                          </button>
                           <span className="text-gray-400">|</span>
-                          <a 
-                            href={`https://maps.apple.com/?q=${encodeURIComponent(restaurant.address)}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-blue-300 hover:text-blue-200"
-                            onClick={e => e.stopPropagation()}
+                          <button 
+                            onClick={openAppleMaps}
+                            className="text-blue-300 hover:text-blue-200 bg-transparent border-0"
                           >
                             Apple Maps
-                          </a>
+                          </button>
                         </div>
                       </div>
                     </div>
@@ -110,31 +146,27 @@ export default function RestaurantCard({ restaurant, onThumbsRating, onDelete })
                   
                   {/* Contact info row with thumbs rating */}
                   <div className="flex items-center justify-between">
-                    <div className="flex flex-wrap gap-x-4 gap-y-1">
+                    <div className="flex flex-wrap gap-x-3 gap-y-1">
                       {/* Phone */}
                       {restaurant.phone && (
-                        <a
-                          href={`tel:${restaurant.phone}`}
-                          className="text-blue-300 hover:text-blue-200 text-sm flex items-center"
-                          onClick={e => e.stopPropagation()}
+                        <button
+                          onClick={callPhone}
+                          className="text-blue-300 hover:text-blue-200 text-sm flex items-center bg-transparent border-0"
                         >
                           <PhoneIcon className="h-4 w-4 mr-1.5" />
                           {restaurant.phone}
-                        </a>
+                        </button>
                       )}
                       
                       {/* Website */}
                       {restaurant.website && (
-                        <a
-                          href={restaurant.website.startsWith('http') ? restaurant.website : `https://${restaurant.website}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-blue-300 hover:text-blue-200 text-sm flex items-center"
-                          onClick={e => e.stopPropagation()}
+                        <button
+                          onClick={openWebsite}
+                          className="text-blue-300 hover:text-blue-200 text-sm flex items-center bg-transparent border-0"
                         >
                           <GlobeAltIcon className="h-4 w-4 mr-1.5" />
                           Website
-                        </a>
+                        </button>
                       )}
                     </div>
                     
@@ -173,14 +205,33 @@ export default function RestaurantCard({ restaurant, onThumbsRating, onDelete })
           {/* Content section - only shown if no image */}
           {!imageToShow && (
             <div className="px-4 py-3 sm:p-4">
+              <Link to={`/restaurants/${restaurant._id}`} className="block">
+                <h3 className="text-base font-semibold text-gray-900 line-clamp-2">{restaurant.name}</h3>
+              </Link>
+              
               <div className="flex justify-between items-start">
                 <div>
-                  <h3 className="text-base font-semibold text-gray-900 line-clamp-2">{restaurant.name}</h3>
-                  
                   {restaurant.address && (
-                    <p className="mt-1 text-sm text-gray-500">
-                      {restaurant.address}
-                    </p>
+                    <div className="mt-1">
+                      <p className="text-sm text-gray-500 mb-1">
+                        {restaurant.address}
+                      </p>
+                      <div className="flex gap-2 text-sm">
+                        <button 
+                          onClick={openGoogleMaps}
+                          className="text-blue-600 hover:text-blue-800 bg-transparent border-0"
+                        >
+                          Google Maps
+                        </button>
+                        <span className="text-gray-400">|</span>
+                        <button 
+                          onClick={openAppleMaps}
+                          className="text-blue-600 hover:text-blue-800 bg-transparent border-0"
+                        >
+                          Apple Maps
+                        </button>
+                      </div>
+                    </div>
                   )}
                 </div>
                 
@@ -213,7 +264,7 @@ export default function RestaurantCard({ restaurant, onThumbsRating, onDelete })
               </div>
             </div>
           )}
-        </Link>
+        </div>
       </div>
       
       {/* Delete confirmation modal */}

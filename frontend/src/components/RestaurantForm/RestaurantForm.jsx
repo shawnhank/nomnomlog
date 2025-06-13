@@ -27,6 +27,7 @@ export default function RestaurantForm({ initialData, onSubmit, buttonLabel = 'S
   const [formData, setFormData] = useState(initialData || defaultFormData);
   const [selectedTags, setSelectedTags] = useState([]);
   const [errorMsg, setErrorMsg] = useState('');
+  const [captureMode, setCaptureMode] = useState(null);
   
   // Load tags if we have initial data
   useEffect(() => {
@@ -99,6 +100,12 @@ export default function RestaurantForm({ initialData, onSubmit, buttonLabel = 'S
   // Handle tag selection changes
   function handleTagsChange(newSelectedTags) {
     setSelectedTags(newSelectedTags);
+  }
+
+  function handleCaptureMode(mode) {
+    setCaptureMode(mode);
+    // Trigger the file input click after setting the mode
+    setTimeout(() => addImageButtonRef.current?.handleAddImageClick(), 50);
   }
 
   const addImageButtonRef = useRef(null);
@@ -180,17 +187,29 @@ export default function RestaurantForm({ initialData, onSubmit, buttonLabel = 'S
         <Fieldset className="bg-white dark:bg-gray-800 rounded-md p-4 shadow-sm border border-gray-200 dark:border-gray-700">
           <Legend className="text-lg font-medium text-gray-900 dark:text-white flex justify-between items-center px-1">
             Photos
-            <div className="-mr-2">
+            <div className="flex space-x-2 -mr-2">
               <Button
                 type="button"
-                onClick={() => addImageButtonRef?.current?.handleAddImageClick()}
+                onClick={() => handleCaptureMode('environment')}
                 color="blue"
                 outline
-                className="text-sm border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white transition-colors duration-20 mr-2"
+                className="text-xs border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white transition-colors duration-200"
               >
                 <span className="flex items-center">
-                  <ArrowUpTrayIcon className="w-4 h-4 mr-2" />
-                  Add Image
+                  <ArrowUpTrayIcon className="w-3 h-3 mr-1" />
+                  Camera
+                </span>
+              </Button>
+              <Button
+                type="button"
+                onClick={() => handleCaptureMode(null)}
+                color="blue"
+                outline
+                className="text-xs border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white transition-colors duration-200"
+              >
+                <span className="flex items-center">
+                  <ArrowUpTrayIcon className="w-3 h-3 mr-1" />
+                  Gallery
                 </span>
               </Button>
             </div>
@@ -204,6 +223,7 @@ export default function RestaurantForm({ initialData, onSubmit, buttonLabel = 'S
                 entityType="restaurant"
                 renderAddButton={false}
                 addButtonRef={addImageButtonRef}
+                captureMode={captureMode}
               />
             </div>
           </div>
