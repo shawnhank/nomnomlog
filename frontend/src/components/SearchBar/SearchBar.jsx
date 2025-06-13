@@ -1,6 +1,7 @@
+import { forwardRef } from 'react';
 import { MagnifyingGlassIcon, XMarkIcon } from '@heroicons/react/24/outline';
 
-export default function SearchBar({
+const SearchBar = forwardRef(function SearchBar({
   value = '',
   onChange,
   placeholder = 'Search...',
@@ -10,7 +11,7 @@ export default function SearchBar({
   onClear,
   disabled = false,
   ...props
-}) {
+}, ref) {
   const handleClear = () => {
     onChange('');
     if (onClear) {
@@ -31,6 +32,7 @@ export default function SearchBar({
 
       {/* Input Field - matching meal/restaurant list pages */}
       <input
+        ref={ref}
         type="text"
         value={value}
         onChange={handleChange}
@@ -54,4 +56,6 @@ export default function SearchBar({
       )}
     </div>
   );
-}
+});
+
+export default SearchBar;

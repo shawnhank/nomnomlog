@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import { Button } from '../../components/catalyst/button';
 import { Input } from '../../components/catalyst/input';
-import { PencilIcon, TrashIcon, PlusIcon } from '@heroicons/react/24/outline';
+import { PencilIcon, TrashIcon, PlusIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import * as tagService from '../../services/tag';
 import DeleteConfirmationModal from '../../components/DeleteConfirmationModal/DeleteConfirmationModal';
 import SimpleBreadcrumbs from '../../components/SimpleBreadcrumbs/SimpleBreadcrumbs';
@@ -188,15 +188,6 @@ export default function TagsPage() {
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
         <h1 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-0">Tags</h1>
         <div className="flex items-center gap-3">
-          {selectedCount > 0 && (
-            <button
-              onClick={handleBulkDelete}
-              className="group relative flex items-center justify-center w-10 h-10 text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors"
-              title={`Delete ${selectedCount} tag${selectedCount > 1 ? 's' : ''}`}
-            >
-              <TrashIcon className="w-5 h-5" />
-            </button>
-          )}
           <Button
             onClick={() => setShowAddForm(true)}
             positive
@@ -205,11 +196,36 @@ export default function TagsPage() {
             <PlusIcon className="w-5 h-5 mr-1" />
             <span>Add Tag</span>
           </Button>
+
+          {selectedCount > 1 && (
+            <Button
+              onClick={() => {
+                setSelectedTags(new Set());
+              }}
+              negative
+              className="flex items-center gap-2 px-3 py-2"
+              title="Clear selection"
+            >
+              <XMarkIcon className="w-4 h-4" />
+              <span className="text-sm">Clear</span>
+            </Button>
+          )}
+
+          {selectedCount > 0 && (
+            <Button
+              onClick={handleBulkDelete}
+              negative
+              className="flex items-center justify-center w-10 h-10"
+              title={`Delete ${selectedCount} tag${selectedCount > 1 ? 's' : ''}`}
+            >
+              <TrashIcon className="w-5 h-5" />
+            </Button>
+          )}
         </div>
       </div>
 
       {/* Search Bar */}
-      <div className="mb-6">
+      <div className="mb-6 w-full">
         <SearchBar
           value={searchTerm}
           onChange={setSearchTerm}
@@ -218,23 +234,25 @@ export default function TagsPage() {
           autoFocus={false}
         />
 
-        {/* Create tag from search */}
-        {hasSearchResults && (
-          <div className="mt-3 p-3 bg-blue-50 border border-blue-200 rounded-lg">
-            <p className="text-sm text-blue-700 mb-2">
-              No tags found for "{searchTerm}"
-            </p>
-            <Button
-              onClick={addTagFromSearch}
-              positive
-              size="sm"
-              className="flex items-center"
-            >
-              <PlusIcon className="w-4 h-4 mr-1" />
-              <span>Create "{searchTerm}" tag</span>
-            </Button>
-          </div>
-        )}
+        {/* Create tag from search - Fixed height container to prevent layout shift */}
+        <div className="mt-3 min-h-0">
+          {hasSearchResults && (
+            <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg dark:bg-blue-900/20 dark:border-blue-800">
+              <p className="text-sm text-blue-700 dark:text-blue-300 mb-2">
+                No tags found for "{searchTerm}"
+              </p>
+              <Button
+                onClick={addTagFromSearch}
+                positive
+                size="sm"
+                className="flex items-center"
+              >
+                <PlusIcon className="w-4 h-4 mr-1" />
+                <span>Create "{searchTerm}" tag</span>
+              </Button>
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Error message */}
