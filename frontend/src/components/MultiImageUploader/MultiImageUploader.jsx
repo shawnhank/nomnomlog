@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Button } from '../catalyst/button';
 import { Input } from '../catalyst/input';
 import { XMarkIcon, ArrowUpTrayIcon } from '@heroicons/react/24/outline';
@@ -6,11 +6,22 @@ import { XMarkIcon, ArrowUpTrayIcon } from '@heroicons/react/24/outline';
 export default function MultiImageUploader({
   images = [],
   onImagesUpdated,
-  entityType = 'meal' // Can be 'user', 'restaurant', or 'meal'
+  entityType = 'meal', // Can be 'user', 'restaurant', or 'meal'
+  renderAddButton = true, // New prop to control button rendering
+  addButtonRef = null // New prop to expose the add button functionality
 }) {
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState(null);
   const fileInputRef = useRef(null);
+
+  // Expose the handleAddImageClick function via ref if provided
+  useEffect(() => {
+    if (addButtonRef) {
+      addButtonRef.current = {
+        handleAddImageClick: () => fileInputRef.current?.click()
+      };
+    }
+  }, [addButtonRef]);
 
   // Get the appropriate field name based on entity type
   const getFieldName = () => {
@@ -107,6 +118,25 @@ export default function MultiImageUploader({
     fileInputRef.current?.click();
   };
 
+  // New function to render the Add Image button
+  const renderAddImageButton = () => (
+    <Button
+      type="button"
+      onClick={handleAddImageClick}
+      color="blue"
+      outline
+      disabled={uploading}
+      className="w-full sm:w-auto border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white transition-colors duration-200"
+    >
+      {uploading ? 'Uploading...' : (
+        <span className="flex items-center">
+          <ArrowUpTrayIcon className="w-4 h-4 mr-2" />
+          Add Image
+        </span>
+      )}
+    </Button>
+  );
+
   return (
     <div className="space-y-4">
       {/* Image gallery */}
@@ -161,30 +191,18 @@ export default function MultiImageUploader({
         </div>
       )}
 
-      {/* Upload button */}
-      <div className="flex flex-col items-center gap-3">
-        <Button
-          type="button"
-          onClick={handleAddImageClick}
-          color="blue"
-          outline
-          disabled={uploading}
-          className="w-full sm:w-auto border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white transition-colors duration-200"
-        >
-          {uploading ? 'Uploading...' : (
-            <span className="flex items-center">
-              <ArrowUpTrayIcon className="w-4 h-4 mr-2" />
-              Add Image
-            </span>
-          )}
-        </Button>
+      {/* Upload button - only render if renderAddButton is true */}
+      {renderAddButton && (
+        <div className="flex flex-col items-center gap-3">
+          {renderAddImageButton()}
 
-        {error && (
-          <div className="w-full p-3 bg-red-50 border border-red-200 rounded-md dark:bg-red-950/20 dark:border-red-800">
-            <p className="text-red-700 dark:text-red-400 text-sm">{error}</p>
-          </div>
-        )}
-      </div>
+          {error && (
+            <div className="w-full p-3 bg-red-50 border border-red-200 rounded-md dark:bg-red-950/20 dark:border-red-800">
+              <p className="text-red-700 dark:text-red-400 text-sm">{error}</p>
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Hidden file input */}
       <input

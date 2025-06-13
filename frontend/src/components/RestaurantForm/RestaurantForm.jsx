@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router';
 import * as tagService from '../../services/tag';
 import * as restaurantTagService from '../../services/restaurantTag';
@@ -9,6 +9,7 @@ import { Textarea } from '../catalyst/textarea';
 import { Fieldset, Legend } from '../catalyst/fieldset';
 import { Button } from '../catalyst/button';
 import ThumbsRating from '../ThumbsRating/ThumbsRating';
+import { ArrowUpTrayIcon } from '@heroicons/react/24/outline';
 
 export default function RestaurantForm({ initialData, onSubmit, buttonLabel = 'Save', loading = false, onCancel }) {
   // Default form values
@@ -100,11 +101,13 @@ export default function RestaurantForm({ initialData, onSubmit, buttonLabel = 'S
     setSelectedTags(newSelectedTags);
   }
 
+  const addImageButtonRef = useRef(null);
+
   return (
     <div className="w-full bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
       <form onSubmit={handleSubmit} className="p-6 space-y-8">
         <Fieldset className="bg-white dark:bg-gray-800 rounded-md p-4 shadow-sm border border-gray-200 dark:border-gray-700">
-          <Legend className="text-lg font-medium text-gray-900 dark:text-white px-2">Restaurant Information</Legend>
+          <Legend className="text-lg font-medium text-gray-900 dark:text-white px-1">Restaurant Information</Legend>
           
           <div className="space-y-5 mt-4">
             <div>
@@ -175,40 +178,51 @@ export default function RestaurantForm({ initialData, onSubmit, buttonLabel = 'S
         </Fieldset>
 
         <Fieldset className="bg-white dark:bg-gray-800 rounded-md p-4 shadow-sm border border-gray-200 dark:border-gray-700">
-          <Legend className="text-lg font-medium text-gray-900 dark:text-white px-2">Photos</Legend>
+          <Legend className="text-lg font-medium text-gray-900 dark:text-white flex justify-between items-center px-1">
+            Photos
+            <div className="-mr-2">
+              <Button
+                type="button"
+                onClick={() => addImageButtonRef?.current?.handleAddImageClick()}
+                color="blue"
+                outline
+                className="text-sm border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white transition-colors duration-20 mr-2"
+              >
+                <span className="flex items-center">
+                  <ArrowUpTrayIcon className="w-4 h-4 mr-2" />
+                  Add Image
+                </span>
+              </Button>
+            </div>
+          </Legend>
 
           <div className="mt-4">
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Restaurant Photos
-            </label>
             <div className="bg-gray-50 dark:bg-gray-900 rounded-lg p-4 border-2 border-dashed border-gray-300 dark:border-gray-700">
               <MultiImageUploader
                 images={formData.restaurantImages}
                 onImagesUpdated={handleImagesUpdated}
                 entityType="restaurant"
+                renderAddButton={false}
+                addButtonRef={addImageButtonRef}
               />
             </div>
           </div>
         </Fieldset>
         
         <Fieldset className="bg-white dark:bg-gray-800 rounded-md p-4 shadow-sm border border-gray-200 dark:border-gray-700">
-          <Legend className="text-lg font-medium text-gray-900 dark:text-white px-2">Preferences</Legend>
-          <div className="flex items-center justify-between mt-4">
-            <div className="flex items-center space-x-2">
-              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                Would visit again?
-              </span>
-            </div>
+          <Legend className="text-lg font-medium text-gray-900 dark:text-white flex justify-between items-center px-1">
+            Preferences
             <ThumbsRating 
               value={formData.isThumbsUp}
               onChange={handleThumbsRating}
-              size="md"
+              size="lg"
+              className="mr-2"
             />
-          </div>
+          </Legend>
         </Fieldset>
         
         <Fieldset className="bg-white dark:bg-gray-800 rounded-md p-4 shadow-sm border border-gray-200 dark:border-gray-700">
-          <Legend className="text-lg font-medium text-gray-900 dark:text-white px-2">Comments</Legend>
+          <Legend className="text-lg font-medium text-gray-900 dark:text-white px-1">Comments</Legend>
           <div className="mt-4">
             <Textarea
               name="notes"
@@ -224,10 +238,7 @@ export default function RestaurantForm({ initialData, onSubmit, buttonLabel = 'S
 
         <Fieldset className="bg-white dark:bg-gray-800 rounded-md p-4 shadow-sm border border-gray-200 dark:border-gray-700">
           <Legend className="text-lg font-medium text-gray-900 dark:text-white px-2">Tags</Legend>
-          <div className="mt-4">
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Tags
-            </label>
+          <div className="mt-1">
             <TagSelector 
               selectedTags={selectedTags}
               onTagsChange={handleTagsChange}

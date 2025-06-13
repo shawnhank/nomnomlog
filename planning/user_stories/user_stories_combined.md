@@ -58,12 +58,12 @@
 
 ### EXTERNAL
 
-- [ ] As a user, I want restaurant fields to auto-fill using Google or Yelp or other API, so that I don’t have to type addresses or phone numbers.
+- [ ] As a user, I want restaurant fields to auto-fill using Yelp Fusion API, so that I don’t have to type addresses or phone numbers.
 - [ ] As a user, I want to convert Yelp categories into tags in the app.
-- [ ] as a user,  i want to be able to view ratings for a restaurant on yelp, or google maps/places so  I can get more context and determine if i want to add the restaurant to my app.
+- [ ] As a user, I want to be able to view ratings for a restaurant on yelp, or google maps/places so  I can get more context and determine if i want to add the restaurant to my app.
 - [ ] As a user, I want to tap an address for directions to a saved restaurant, so that I can navigate there quickly. (using Leafletjs.com)
-- [ ] As a user, I want the app to detect my location, so that I can log or find nearby restaurants and meals faster.
-- [ ] As a user, I want to open a delivery app link directly from a meal or restaurant, so that I can reorder faster.
+- [ ] As a user, I want the app to detect my location, so that I can find/view nearby restaurants and meals with leaflet js
+- [ ] As a user, I want to open a delivery app link directly from a meal or restaurant, so that I can order/reorder faster.
 - [ ] As a user, I want to ask natural language questions like “What’s my best rated sushi?” so that I can discover great meals I’ve logged.
 - [ ] As a user, I want to filter meals using plain language like “spicy noodles I liked”, so that I don’t need advanced filters.
 - [ ] As a user, I want to log a meal using my voice, so that I don’t have to type on mobile.

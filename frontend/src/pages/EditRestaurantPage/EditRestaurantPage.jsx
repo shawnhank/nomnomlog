@@ -3,7 +3,9 @@ import { useParams, useNavigate } from 'react-router';
 import * as restaurantService from '../../services/restaurant';
 import { Alert } from '../../components/catalyst/alert';
 import { Heading } from '../../components/catalyst/heading';
+import { Button } from '../../components/catalyst/button';
 import RestaurantForm from '../../components/RestaurantForm/RestaurantForm';
+import SimpleBreadcrumbs from '../../components/SimpleBreadcrumbs/SimpleBreadcrumbs';
 
 export default function EditRestaurantPage() {
   const [initialData, setInitialData] = useState(null);
@@ -59,7 +61,42 @@ export default function EditRestaurantPage() {
 
   return (
     <div className="w-full max-w-4xl mx-auto p-4 sm:p-6">
-      <Heading className="mb-6">Edit Restaurant</Heading>
+      {/* Add SimpleBreadcrumbs */}
+      <div className="mb-4">
+        <SimpleBreadcrumbs 
+          customCrumbs={[
+            { name: 'Restaurants', path: '/restaurants', current: false },
+            { name: 'Restaurant Details', path: `/restaurants/${id}`, current: false },
+            { name: 'Edit Restaurant', path: `/restaurants/${id}/edit`, current: true }
+          ]}
+        />
+      </div>
+
+      {/* Header with title and action buttons */}
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
+        <Heading className="mb-4 sm:mb-0">Edit Restaurant</Heading>
+        
+        {/* Top action buttons */}
+        <div className="flex space-x-3">
+          <Button
+            type="button"
+            onClick={handleCancel}
+            negative
+            className="px-4 py-2 text-sm font-medium rounded-md"
+          >
+            Cancel
+          </Button>
+          <Button
+            type="button"
+            onClick={() => document.querySelector('form')?.requestSubmit()}
+            disabled={loading}
+            positive
+            className="px-4 py-2 text-sm font-medium rounded-md"
+          >
+            {loading ? 'Saving...' : 'Save Changes'}
+          </Button>
+        </div>
+      </div>
 
       {error && (
         <Alert className="mb-6">
