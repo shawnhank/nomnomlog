@@ -20,14 +20,13 @@ export default function DeleteConfirmationModal({
       <DialogActions>
         <Button
           onClick={onClose}
-          color="zinc"
-          outline
+          negative
         >
           Cancel
         </Button>
         <Button
           onClick={onConfirm}
-          color="red"
+          negative
         >
           Delete
         </Button>

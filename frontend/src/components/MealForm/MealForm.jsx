@@ -8,8 +8,8 @@ import { Combobox, ComboboxOption, ComboboxLabel } from '../catalyst/combobox';
 import { Input } from '../catalyst/input';
 import { Textarea } from '../catalyst/textarea';
 import { Fieldset, Legend } from '../catalyst/fieldset';
-import { HandThumbUpIcon, HandThumbDownIcon } from '@heroicons/react/24/outline';
-import { HandThumbUpIcon as HandThumbUpSolid, HandThumbDownIcon as HandThumbDownSolid } from '@heroicons/react/24/solid';
+import { Button } from '../catalyst/button';
+import ThumbsRating from '../ThumbsRating/ThumbsRating';
 
 export default function MealForm({ initialData, onSubmit, buttonLabel = 'Save', loading = false, onCancel }) {
   // Default form values
@@ -19,13 +19,15 @@ export default function MealForm({ initialData, onSubmit, buttonLabel = 'Save', 
     date: new Date().toISOString().split('T')[0],
     isThumbsUp: null,
     notes: '',
-    mealImages: [] // Changed from imageUrl to mealImages array
+    mealImages: [], // Changed from imageUrl to mealImages array
+    tags: [] // Initialize tags as an empty array
   };
 
   const [formData, setFormData] = useState(initialData || defaultFormData);
   const [restaurants, setRestaurants] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);
   const [errorMsg, setErrorMsg] = useState('');
+  const [previewImage, setPreviewImage] = useState(null);
 
   // Load restaurants and tags when component mounts
   useEffect(() => {
@@ -48,6 +50,16 @@ export default function MealForm({ initialData, onSubmit, buttonLabel = 'Save', 
     loadData();
   }, [initialData]);
 
+  // Set preview image when form data changes
+  useEffect(() => {
+    if (formData.mealImages && formData.mealImages.length > 0) {
+      const primaryImage = formData.mealImages.find(img => img.isPrimary) || formData.mealImages[0];
+      setPreviewImage(primaryImage.url);
+    } else {
+      setPreviewImage(null);
+    }
+  }, [formData.mealImages]);
+
   // Handle form input changes
   function handleChange(evt) {
     const { name, value } = evt.target;
@@ -58,6 +70,11 @@ export default function MealForm({ initialData, onSubmit, buttonLabel = 'Save', 
   // Handle tag selection changes
   function handleTagsChange(tagIds) {
     setSelectedTags(tagIds);
+  }
+
+  // Handle thumbs rating changes
+  function handleThumbsRating(newValue) {
+    setFormData({ ...formData, isThumbsUp: newValue });
   }
 
   // Handle form submission
@@ -111,6 +128,7 @@ export default function MealForm({ initialData, onSubmit, buttonLabel = 'Save', 
               onChange={handleChange}
               required
               placeholder="Enter meal name"
+              label="Meal Name"
             />
 
             <div>
@@ -149,73 +167,8 @@ export default function MealForm({ initialData, onSubmit, buttonLabel = 'Save', 
               value={formData.date}
               onChange={handleChange}
               required
+              label="Date"
             />
-          </div>
-        </Fieldset>
-
-        <Fieldset>
-          <Legend>Comments</Legend>
-          <div className="space-y-4">
-            <Textarea
-              name="notes"
-              value={formData.notes}
-              onChange={handleChange}
-              rows={4}
-              placeholder="Add any notes about this meal..."
-            />
-          </div>
-        </Fieldset>
-
-        <Fieldset>
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-2">
-              <Legend className="mb-0 mr-2">Preferences</Legend>
-              <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
-                Would order again?
-              </span>
-            </div>
-            <div className="flex items-center space-x-3">
-              <button
-                type="button"
-                onClick={() => {
-                  // Toggle between true and null
-                  const newValue = formData.isThumbsUp === true ? null : true;
-                  setFormData({...formData, isThumbsUp: newValue});
-                }}
-                className={`px-4 py-2 rounded-lg border transition-colors duration-200 flex items-center ${
-                  formData.isThumbsUp === true 
-                    ? "bg-blue-500 border-blue-500 text-white" 
-                    : "border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white"
-                }`}
-              >
-                {formData.isThumbsUp === true ? (
-                  <HandThumbUpSolid className="w-5 h-5 mr-1" />
-                ) : (
-                  <HandThumbUpIcon className="w-5 h-5 mr-1" />
-                )}
-                Yes
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  // Toggle between false and null
-                  const newValue = formData.isThumbsUp === false ? null : false;
-                  setFormData({...formData, isThumbsUp: newValue});
-                }}
-                className={`px-4 py-2 rounded-lg border transition-colors duration-200 flex items-center ${
-                  formData.isThumbsUp === false 
-                    ? "bg-red-500 border-red-500 text-white" 
-                    : "border-red-500 text-red-500 hover:bg-red-500 hover:text-white"
-                }`}
-              >
-                {formData.isThumbsUp === false ? (
-                  <HandThumbDownSolid className="w-5 h-5 mr-1" />
-                ) : (
-                  <HandThumbDownIcon className="w-5 h-5 mr-1" />
-                )}
-                No
-              </button>
-            </div>
           </div>
         </Fieldset>
 
@@ -237,11 +190,47 @@ export default function MealForm({ initialData, onSubmit, buttonLabel = 'Save', 
         </Fieldset>
 
         <Fieldset>
+          <Legend>Preferences</Legend>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-2">
+              <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                Would order again?
+              </span>
+            </div>
+            <ThumbsRating 
+              value={formData.isThumbsUp}
+              onChange={handleThumbsRating}
+              size="md"
+            />
+          </div>
+        </Fieldset>
+
+        <Fieldset>
+          <Legend>Comments</Legend>
+          <div className="space-y-4">
+            <Textarea
+              name="notes"
+              value={formData.notes}
+              onChange={handleChange}
+              rows={4}
+              placeholder="Add any notes about this meal..."
+            />
+          </div>
+        </Fieldset>
+
+        <Fieldset>
           <Legend>Tags</Legend>
-          <TagSelector 
-            selectedTags={selectedTags}
-            onTagsChange={handleTagsChange}
-          />
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-900 dark:text-gray-100 mb-2">
+              Tags
+            </label>
+            <div className="w-full">
+              <TagSelector
+                selectedTags={selectedTags} // Use the selectedTags state
+                onTagsChange={handleTagsChange} // Use the handleTagsChange function
+              />
+            </div>
+          </div>
         </Fieldset>
 
         {errorMsg && (
@@ -250,21 +239,23 @@ export default function MealForm({ initialData, onSubmit, buttonLabel = 'Save', 
 
         <div className="flex justify-end gap-3 pt-4">
           {onCancel && (
-            <button
+            <Button
               type="button"
               onClick={onCancel}
-              className="px-4 py-2 rounded-lg border border-red-500 text-red-500 hover:bg-red-500 hover:text-white transition-colors duration-200"
+              negative
+              className="font-normal"
             >
               Cancel
-            </button>
+            </Button>
           )}
-          <button
+          <Button
             type="submit"
             disabled={loading}
-            className="px-4 py-2 rounded-lg border border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+            positive
+            className="font-normal"
           >
             {loading ? 'Saving...' : buttonLabel}
-          </button>
+          </Button>
         </div>
       </form>
     </div>

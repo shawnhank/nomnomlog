@@ -1,150 +1,124 @@
 import { useState, useEffect } from 'react';
-import { Combobox, ComboboxOption, ComboboxLabel } from '../catalyst/combobox';
 import { Button } from '../catalyst/button';
-import { XMarkIcon } from '@heroicons/react/24/outline';
+import { Combobox, ComboboxOption, ComboboxLabel } from '../catalyst/combobox';
 import * as tagService from '../../services/tag';
 
 export default function TagSelector({ selectedTags = [], onTagsChange }) {
   const [tags, setTags] = useState([]);
-  const [inputValue, setInputValue] = useState('');
-  const [selected, setSelected] = useState([]);
-
-  // Load all tags on component mount
+  const [newTagName, setNewTagName] = useState('');
+  
+  // Load all tags when component mounts
   useEffect(() => {
     async function loadTags() {
       try {
-        const allTags = await tagService.getAll();
-        setTags(allTags);
+        const tagsData = await tagService.getAll();
+        setTags(tagsData);
       } catch (err) {
-        console.error('Failed to load tags:', err);
+        console.error('Error loading tags:', err);
       }
     }
     
     loadTags();
   }, []);
-
-  // Update selected tags when prop changes
-  useEffect(() => {
-    if (selectedTags.length) {
-      // Convert tag IDs to tag objects if needed
-      const selectedTagObjects = selectedTags.map(tagId => {
-        if (typeof tagId === 'string') {
-          const foundTag = tags.find(t => t._id === tagId);
-          return foundTag || null;
-        }
-        return tagId;
-      }).filter(Boolean);
-      
-      setSelected(selectedTagObjects);
-    } else {
-      setSelected([]);
+  
+  // Handle selecting a tag from the dropdown
+  function handleTagSelect(tag) {
+    if (tag && !selectedTags.includes(tag._id)) {
+      onTagsChange([...selectedTags, tag._id]);
     }
-  }, [selectedTags, tags]);
-
-  // Handle tag selection from combobox
-  const handleTagSelect = (tag) => {
-    if (!tag) return;
-    
-    // Check if tag is already selected
-    if (!selected.some(t => t._id === tag._id)) {
-      const updatedTags = [...selected, tag];
-      setSelected(updatedTags);
-      onTagsChange(updatedTags.map(t => t._id));
-    }
-    
-    setInputValue('');
-  };
-
-  // Handle removing a tag
-  const handleRemoveTag = (tagId) => {
-    const updatedTags = selected.filter(tag => tag._id !== tagId);
-    setSelected(updatedTags);
-    onTagsChange(updatedTags.map(t => t._id));
-  };
-
-  // Handle creating a new tag
-  const handleAddTag = async () => {
-    if (!inputValue.trim()) return;
-    
-    // Check if tag already exists
-    const existingTag = tags.find(
-      tag => tag.name.toLowerCase() === inputValue.trim().toLowerCase()
-    );
-    
-    if (existingTag) {
-      handleTagSelect(existingTag);
-      return;
-    }
+  }
+  
+  // Handle adding a new tag
+  async function handleAddNewTag() {
+    if (!newTagName.trim()) return;
     
     try {
-      // Create new tag
-      const newTag = await tagService.create({ name: inputValue.trim() });
+      // Create the new tag
+      const newTag = await tagService.create({ name: newTagName.trim() });
       
-      // Add to available tags
+      // Add the new tag to the list of all tags
       setTags([...tags, newTag]);
       
-      // Add to selected tags
-      const updatedTags = [...selected, newTag];
-      setSelected(updatedTags);
-      onTagsChange(updatedTags.map(t => t._id));
+      // Select the new tag
+      onTagsChange([...selectedTags, newTag._id]);
       
-      setInputValue('');
+      // Clear the input
+      setNewTagName('');
     } catch (err) {
-      console.error('Failed to create tag:', err);
+      console.error('Error creating new tag:', err);
     }
-  };
-
+  }
+  
+  // Handle removing a tag
+  function handleRemoveTag(tagId) {
+    onTagsChange(selectedTags.filter(id => id !== tagId));
+  }
+  
   return (
-    <div className="space-y-3">
-      {/* Selected tags display */}
-      {selected.length > 0 && (
-        <div className="flex flex-wrap gap-2 mb-3">
-          {selected.map(tag => (
-            <span 
+    <div className="space-y-4">
+      {/* Selected tags */}
+      <div className="flex flex-wrap gap-2">
+        {selectedTags.map(tagId => {
+          const tag = tags.find(t => t._id === tagId);
+          return tag ? (
+            <div 
               key={tag._id}
-              className="inline-flex items-center px-2.5 py-0.5 rounded-full text-sm font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200"
+              className="inline-flex items-center px-3 py-1 rounded-full bg-blue-100 text-blue-800"
             >
-              {tag.name}
+              <span>{tag.name}</span>
               <button
                 type="button"
                 onClick={() => handleRemoveTag(tag._id)}
-                className="ml-1.5 inline-flex items-center justify-center w-4 h-4 rounded-full text-blue-400 hover:bg-blue-200 hover:text-blue-600 focus:outline-none dark:hover:bg-blue-800"
+                className="ml-1.5 text-blue-600 hover:text-blue-800"
               >
-                <XMarkIcon className="w-3 h-3" />
-                <span className="sr-only">Remove tag {tag.name}</span>
+                &times;
               </button>
-            </span>
-          ))}
-        </div>
-      )}
+            </div>
+          ) : null;
+        })}
+      </div>
       
       {/* Tag input with autocomplete */}
-      <div className="flex gap-2">
-        <Combobox
-          as="div"
-          options={tags}
-          value={null}
-          onChange={handleTagSelect}
-          displayValue={(tag) => tag?.name || ''}
-          filter={(tag, query) => 
-            tag.name.toLowerCase().includes(query.toLowerCase())
-          }
-          placeholder="Search or add tags..."
-          className="flex-1"
-        >
-          {(tag) => (
-            <ComboboxOption value={tag}>
-              <ComboboxLabel>{tag.name}</ComboboxLabel>
-            </ComboboxOption>
-          )}
-        </Combobox>
+      <div className="flex gap-2 w-full">
+        <div className="flex-grow">
+          <Combobox
+            as="div"
+            options={tags}
+            value={null}
+            onChange={handleTagSelect}
+            displayValue={(tag) => tag?.name || ''}
+            filter={(tag, query) => 
+              tag.name.toLowerCase().includes(query.toLowerCase())
+            }
+            placeholder="Search or add tags..."
+            className="w-full"
+          >
+            {(tag) => (
+              <ComboboxOption value={tag}>
+                <ComboboxLabel>{tag.name}</ComboboxLabel>
+              </ComboboxOption>
+            )}
+          </Combobox>
+        </div>
         
         <Button
           type="button"
-          onClick={handleAddTag}
-          color="blue"
-          outline
-          className="text-sm px-2 py-1"
+          onClick={() => {
+            const input = document.querySelector('input[placeholder="Search or add tags..."]');
+            const value = input?.value;
+            if (value) {
+              const matchingTag = tags.find(t => t.name.toLowerCase() === value.toLowerCase());
+              if (matchingTag) {
+                handleTagSelect(matchingTag);
+              } else {
+                setNewTagName(value);
+                setTimeout(() => handleAddNewTag(), 0);
+              }
+              if (input) input.value = '';
+            }
+          }}
+          positive
+          className="text-sm px-2 py-1 whitespace-nowrap"
         >
           Add
         </Button>

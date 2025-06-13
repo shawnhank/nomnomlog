@@ -1,5 +1,6 @@
 const Meal = require('../models/meal');
 const MealTag = require('../models/mealTag');
+const s3Service = require('../services/s3Service');
 
 module.exports = {
   getAll,
@@ -89,12 +90,56 @@ async function deleteMeal(req, res) {
       return res.status(404).json({ error: 'Meal not found' });
     }
     
-    // Also delete any associated meal tags
+    // Delete any associated meal tags
     await MealTag.deleteMany({ mealId: req.params.id });
+    
+    // Delete associated images from S3
+    if (meal.mealImages && meal.mealImages.length > 0) {
+      try {
+        // Extract filenames from image URLs
+        const deletePromises = meal.mealImages.map(image => {
+          // The URL format is /api/uploads/images/[filename]
+          // We need to extract just the filename part
+          const urlParts = image.url.split('/');
+          const fileName = urlParts[urlParts.length - 1];
+          
+          // If it's a valid S3 path (contains userId), delete it
+          if (fileName.includes('/')) {
+            return s3Service.deleteImage(fileName);
+          } else if (meal.userId) {
+            // Try with userId prefix if available
+            return s3Service.deleteImage(`${meal.userId}/${fileName}`);
+          }
+          return Promise.resolve(); // Skip if we can't determine the path
+        });
+        
+        await Promise.all(deletePromises);
+        console.log(`Deleted ${meal.mealImages.length} images for meal ${meal._id}`);
+      } catch (imageErr) {
+        // Log error but don't fail the request
+        console.error('Error deleting meal images:', imageErr);
+      }
+    }
+    
+    // Also check for legacy imageUrl
+    if (meal.imageUrl) {
+      try {
+        const urlParts = meal.imageUrl.split('/');
+        const fileName = urlParts[urlParts.length - 1];
+        
+        if (fileName.includes('/')) {
+          await s3Service.deleteImage(fileName);
+        } else if (meal.userId) {
+          await s3Service.deleteImage(`${meal.userId}/${fileName}`);
+        }
+      } catch (imageErr) {
+        console.error('Error deleting legacy meal image:', imageErr);
+      }
+    }
     
     res.json({ message: 'Meal deleted successfully' });
   } catch (err) {
-    res.status(400).json({ error: err.message });
+    res.status(500).json({ error: err.message });
   }
 }
 

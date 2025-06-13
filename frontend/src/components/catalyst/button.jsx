@@ -56,6 +56,17 @@ const styles = {
     // Icon
     '[--btn-icon:var(--color-zinc-500)] data-active:[--btn-icon:var(--color-zinc-700)] data-hover:[--btn-icon:var(--color-zinc-700)] dark:[--btn-icon:var(--color-zinc-500)] dark:data-active:[--btn-icon:var(--color-zinc-400)] dark:data-hover:[--btn-icon:var(--color-zinc-400)]',
   ],
+  // New custom outline styles for positive/negative actions
+  outlineBlue: [
+    'border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white transition-colors duration-200',
+    'dark:border-blue-400 dark:text-blue-400 dark:hover:bg-blue-500 dark:hover:text-white',
+    'font-normal', // Add normal font weight
+  ],
+  outlineRed: [
+    'border-red-500 text-red-500 hover:bg-red-500 hover:text-white transition-colors duration-200',
+    'dark:border-red-400 dark:text-red-400 dark:hover:bg-red-500 dark:hover:text-white',
+    'font-normal', // Add normal font weight
+  ],
   colors: {
     'dark/zinc': [
       'text-white [--btn-bg:var(--color-zinc-900)] [--btn-border:var(--color-zinc-950)]/90 [--btn-hover-overlay:var(--color-white)]/10',
@@ -158,11 +169,25 @@ const styles = {
   },
 }
 
-export const Button = forwardRef(function Button({ color, outline, plain, className, children, ...props }, ref) {
+export const Button = forwardRef(function Button({ 
+  color, 
+  outline, 
+  plain, 
+  positive, 
+  negative,
+  className, 
+  children, 
+  ...props 
+}, ref) {
   let classes = clsx(
     className,
     styles.base,
-    outline ? styles.outline : plain ? styles.plain : clsx(styles.solid, styles.colors[color ?? 'dark/zinc'])
+    positive ? styles.outlineBlue : 
+    negative ? styles.outlineRed : 
+    outline && color === 'blue' ? 'border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white transition-colors duration-200' :
+    outline ? styles.outline : 
+    plain ? styles.plain : 
+    clsx(styles.solid, styles.colors[color ?? 'dark/zinc'])
   )
 
   return 'href' in props ? (

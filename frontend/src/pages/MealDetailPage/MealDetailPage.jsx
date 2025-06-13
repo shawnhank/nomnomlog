@@ -1,17 +1,28 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useParams, Link, useNavigate } from 'react-router';
-import { HandThumbUpIcon, HandThumbDownIcon, PlusIcon, ArrowLeftIcon } from '@heroicons/react/24/outline';
-import { HandThumbUpIcon as HandThumbUpSolid, HandThumbDownIcon as HandThumbDownSolid } from '@heroicons/react/24/solid';
+import { PlusIcon } from '@heroicons/react/24/outline';
 import * as mealService from '../../services/meal';
+import * as mealTagService from '../../services/mealTag';
+import * as tagService from '../../services/tag';
 import { Button } from '../../components/catalyst/button';
+import { Textarea } from '../../components/catalyst/textarea';
 import DeleteConfirmationModal from '../../components/DeleteConfirmationModal/DeleteConfirmationModal';
 import SimpleBreadcrumbs from '../../components/SimpleBreadcrumbs/SimpleBreadcrumbs';
+import MealCard from '../../components/MealCard/MealCard';
+import ThumbsRating from '../../components/ThumbsRating/ThumbsRating';
+import ReactMarkdown from 'react-markdown';
 
 export default function MealDetailPage() {
   const [meal, setMeal] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [mealTags, setMealTags] = useState([]);
+  const [isEditingNotes, setIsEditingNotes] = useState(false);
+  const [notes, setNotes] = useState('');
+  const [savingNotes, setSavingNotes] = useState(false);
+  const notesTextareaRef = useRef(null);
+  const saveTimeoutRef = useRef(null);
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -32,6 +43,11 @@ export default function MealDetailPage() {
         }
         
         setMeal(mealData);
+        setNotes(mealData.notes || '');
+        
+        // Fetch tags for this meal
+        const mealTagsData = await mealTagService.getAllForMeal(id);
+        setMealTags(mealTagsData);
       } catch (err) {
         setError('Failed to load meal details');
         console.error(err);
@@ -42,6 +58,22 @@ export default function MealDetailPage() {
 
     fetchMeal();
   }, [id]);
+
+  // Focus textarea when editing starts
+  useEffect(() => {
+    if (isEditingNotes && notesTextareaRef.current) {
+      notesTextareaRef.current.focus();
+    }
+  }, [isEditingNotes]);
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (saveTimeoutRef.current) {
+        clearTimeout(saveTimeoutRef.current);
+      }
+    };
+  }, []);
 
   // Handle delete meal
   async function handleDelete() {
@@ -54,13 +86,9 @@ export default function MealDetailPage() {
     setShowDeleteModal(false);
   }
 
-
-
   // Handle thumbs rating with toggle functionality
-  async function handleThumbsRating(isThumbsUp) {
+  async function handleThumbsRating(newValue) {
     try {
-      // If the current state matches the requested state, clear it (set to null)
-      const newValue = meal.isThumbsUp === isThumbsUp ? null : isThumbsUp;
       const updatedMeal = await mealService.setThumbsRating(id, newValue);
       setMeal(updatedMeal);
     } catch (err) {
@@ -68,7 +96,62 @@ export default function MealDetailPage() {
     }
   }
 
-  // Add this function to handle edit navigation
+  // Handle notes change with debounced auto-save
+  function handleNotesChange(e) {
+    const newNotes = e.target.value;
+    setNotes(newNotes);
+    
+    // Clear any existing timeout
+    if (saveTimeoutRef.current) {
+      clearTimeout(saveTimeoutRef.current);
+    }
+    
+    // Set a new timeout to save after 1 second of inactivity
+    saveTimeoutRef.current = setTimeout(() => {
+      saveNotes(newNotes);
+    }, 1000);
+  }
+
+  // Save notes
+  async function saveNotes(notesToSave = notes) {
+    // Don't save if notes haven't changed
+    if (meal.notes === notesToSave) {
+      return;
+    }
+
+    try {
+      setSavingNotes(true);
+      const updatedMeal = await mealService.update(id, { ...meal, notes: notesToSave });
+      setMeal(updatedMeal);
+    } catch (err) {
+      setError('Failed to save notes');
+    } finally {
+      setSavingNotes(false);
+    }
+  }
+
+  // Start editing notes
+  function startEditingNotes() {
+    setIsEditingNotes(true);
+  }
+
+  // Stop editing notes and save if needed
+  function stopEditingNotes() {
+    // Clear any pending auto-save
+    if (saveTimeoutRef.current) {
+      clearTimeout(saveTimeoutRef.current);
+      saveTimeoutRef.current = null;
+    }
+    
+    // Save if there are changes
+    if (meal.notes !== notes) {
+      saveNotes();
+    }
+    
+    setIsEditingNotes(false);
+  }
+
+  // Handle edit navigation
   function handleEdit() {
     navigate(`/meals/${id}/edit`);
   }
@@ -76,11 +159,6 @@ export default function MealDetailPage() {
   if (loading) return <div className="flex justify-center items-center h-64">Loading meal details...</div>;
   if (error) return <div className="text-red-600 p-4">{error}</div>;
   if (!meal) return <div className="text-gray-600 p-4">Meal not found</div>;
-
-  // Find primary image if available
-  const primaryImage = meal.mealImages && meal.mealImages.length > 0 
-    ? (meal.mealImages.find(img => img.isPrimary) || meal.mealImages[0])
-    : null;
 
   return (
     <div className="max-w-3xl mx-auto p-4 sm:p-6">
@@ -94,14 +172,6 @@ export default function MealDetailPage() {
         />
       </div>
       
-      {/* Back to Meals link for mobile */}
-      <div className="mb-4 sm:hidden">
-        <Link to="/meals" className="inline-flex items-center text-blue-600 hover:text-blue-800">
-          <ArrowLeftIcon className="w-4 h-4 mr-1" />
-          Back to Meals
-        </Link>
-      </div>
-
       {/* Header with meal name and action buttons */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b pb-4 mb-6">
         <h1 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-0">{meal.name}</h1>
@@ -129,84 +199,97 @@ export default function MealDetailPage() {
         </div>
       </div>
 
+      {/* Meal Card - larger size */}
+      <div className="mb-6 max-w-xl mx-auto">
+        <MealCard meal={meal} />
+      </div>
+
       {/* Meal details */}
       <div className="space-y-6">
-        {/* Restaurant and date info */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {meal.restaurantId && (
+        {/* Tags */}
+        {mealTags && mealTags.length > 0 && (
+          <div>
+            <p className="section-heading">Tags</p>
+            <div className="flex flex-wrap gap-2">
+              {mealTags.map(mealTag => (
+                <div 
+                  key={mealTag._id}
+                  className="inline-flex items-center px-3 py-1 rounded-full bg-blue-100 text-blue-800"
+                >
+                  <span>{mealTag.tagId.name}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Notes - with inline editing and markdown support */}
+        <div>
+          <div className="flex justify-between items-center mb-2">
+            <p className="section-heading">Notes</p>
+            {savingNotes && (
+              <span className="text-sm text-gray-500 italic">Saving...</span>
+            )}
+          </div>
+          
+          {isEditingNotes ? (
             <div>
-              <p className="text-gray-600 font-medium mb-1">Restaurant</p>
-              <Link 
-                to={`/restaurants/${meal.restaurantId._id}`}
-                className="text-blue-600 hover:underline"
-              >
-                {meal.restaurantId.name}
-              </Link>
+              <Textarea
+                ref={notesTextareaRef}
+                value={notes}
+                onChange={handleNotesChange}
+                onBlur={stopEditingNotes}
+                rows={4}
+                placeholder="Add notes about this meal... (Markdown supported)"
+                className="w-full mb-2"
+              />
+              <div className="text-xs text-gray-500 mb-2">
+                Supports Markdown: **bold**, *italic*, # heading, - list, [link](url)
+              </div>
+            </div>
+          ) : (
+            <div 
+              onClick={startEditingNotes}
+              className="prose prose-sm max-w-none p-3 rounded-md border border-transparent hover:border-gray-300 cursor-text min-h-[3rem]"
+            >
+              {notes ? (
+                <ReactMarkdown
+                  components={{
+                    a: ({node, ...props}) => (
+                      <a 
+                        {...props} 
+                        className="text-blue-600 underline underline-offset-2 hover:text-blue-800" 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                      />
+                    )
+                  }}
+                >
+                  {notes}
+                </ReactMarkdown>
+              ) : (
+                <span className="text-gray-400 italic">Click to add notes (Markdown supported)</span>
+              )}
             </div>
           )}
-          <div>
-            <p className="text-gray-600 font-medium mb-1">Date</p>
-            <p>{new Date(meal.date).toLocaleDateString()}</p>
-          </div>
         </div>
 
-        {/* Meal actions (thumbs only) */}
-        <div className="flex gap-3 my-4">
-          {/* Thumbs up button */}
-          <Button 
-            onClick={() => handleThumbsRating(true)}
-            color={meal.isThumbsUp === true ? 'green' : 'zinc'}
-            aria-label="Would Order Again"
-          >
-            {meal.isThumbsUp === true ? (
-              <HandThumbUpSolid className="w-5 h-5" />
-            ) : (
-              <HandThumbUpIcon className="w-5 h-5" />
-            )}
-          </Button>
-          
-          {/* Thumbs down button */}
-          <Button 
-            onClick={() => handleThumbsRating(false)}
-            color={meal.isThumbsUp === false ? 'red' : 'zinc'}
-            aria-label="Would Not Order Again"
-          >
-            {meal.isThumbsUp === false ? (
-              <HandThumbDownSolid className="w-5 h-5" />
-            ) : (
-              <HandThumbDownIcon className="w-5 h-5" />
-            )}
-          </Button>
-        </div>
-
-        {/* Primary image display */}
-        {primaryImage && (
-          <div className="my-6">
-            <img 
-              src={primaryImage.url} 
-              alt={meal.name} 
-              className="w-full max-h-96 object-cover rounded-lg shadow-md"
+        {/* Would order again - with ThumbsRating component */}
+        <div>
+          <div className="flex justify-between items-center">
+            <p className="section-heading">Would order again?</p>
+            <ThumbsRating 
+              value={meal.isThumbsUp}
+              onChange={handleThumbsRating}
+              size="lg"
             />
-            {primaryImage.caption && (
-              <p className="text-sm text-gray-600 mt-1">
-                {primaryImage.caption}
-              </p>
-            )}
           </div>
-        )}
-
-        {/* Notes */}
-        {meal.notes && (
-          <div className="bg-gray-50 p-4 rounded-lg">
-            <h3 className="text-lg font-medium mb-2">Notes</h3>
-            <p className="text-gray-700 whitespace-pre-line">{meal.notes}</p>
-          </div>
-        )}
+        </div>
 
         {/* Image gallery (if there are multiple images) */}
         {meal.mealImages && meal.mealImages.length > 1 && (
           <div className="my-6">
-            <h3 className="text-lg font-medium mb-2">Photos</h3>
+            <h3 className="section-heading">Photos</h3>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
               {meal.mealImages.map((image, index) => (
                 <div key={index} className="aspect-square">

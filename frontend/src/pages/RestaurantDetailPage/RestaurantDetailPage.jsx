@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router';
 import { Button } from '../../components/catalyst/button';
-import { HandThumbUpIcon, HandThumbDownIcon, PlusIcon } from '@heroicons/react/24/outline';
+import { HandThumbUpIcon, HandThumbDownIcon, PlusIcon, MapPinIcon, PhoneIcon, GlobeAltIcon } from '@heroicons/react/24/outline';
 import { HandThumbUpIcon as HandThumbUpSolid, HandThumbDownIcon as HandThumbDownSolid } from '@heroicons/react/24/solid';
 import * as restaurantService from '../../services/restaurant';
 import * as mealService from '../../services/meal';
 import MealCard from '../../components/MealCard/MealCard';
 import DeleteConfirmationModal from '../../components/DeleteConfirmationModal/DeleteConfirmationModal';
+import ThumbsRating from '../../components/ThumbsRating/ThumbsRating';
 
 export default function RestaurantDetailPage() {
   const [restaurant, setRestaurant] = useState(null);
@@ -79,44 +80,117 @@ export default function RestaurantDetailPage() {
     <div className="max-w-3xl mx-auto p-4 sm:p-6">
       {/* Header with restaurant name and action buttons */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b pb-4 mb-6">
-        <h1 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-0">{restaurant.name}</h1>
-        <div className="flex gap-3">
-          <Link 
-            to="/restaurants/new"
-            className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded-md text-sm flex items-center"
-          >
-            <PlusIcon className="w-5 h-5 mr-1" />
-            <span>Add Restaurant</span>
+        <div className="flex items-center gap-3 mb-4 sm:mb-0">
+          <h1 className="text-2xl sm:text-3xl font-bold">{restaurant.name}</h1>
+          <ThumbsRating 
+            value={restaurant.isThumbsUp} 
+            onChange={handleThumbsRating}
+            size="lg"
+          />
+        </div>
+        <div className="flex space-x-2 items-center">
+          <Link to={`/restaurants/${restaurant._id}/edit`}>
+            <Button positive>Edit</Button>
           </Link>
-          <button 
-            onClick={() => navigate(`/restaurants/${id}/edit`)}
-            className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md text-sm"
-          >
-            Edit
-          </button>
-          <button 
-            onClick={() => setShowDeleteModal(true)} 
-            className="bg-white hover:bg-red-50 text-red-600 border border-red-600 px-4 py-2 rounded-md text-sm"
+          <Button 
+            negative
+            onClick={() => setShowDeleteModal(true)}
           >
             Delete
-          </button>
+          </Button>
         </div>
       </div>
 
-      {/* Restaurant details */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-        {/* Left column: Info */}
-        <div className="space-y-4">
+      {/* Restaurant details with overlay styling */}
+      {primaryImage && (
+        <div className="relative overflow-hidden rounded-lg mb-6">
+          <img 
+            src={primaryImage.url} 
+            alt={restaurant.name} 
+            className="w-full h-80 object-cover"
+          />
+          
+          {/* Gradient overlay for better text readability */}
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent via-70% to-black/80"></div>
+          
+          {/* Text overlay with restaurant info */}
+          <div className="absolute bottom-0 left-0 right-0 bg-black/80 p-4">
+            {/* Restaurant details in overlay */}
+            <div className="space-y-3">
+              {/* Address with map links */}
+              {restaurant.address && (
+                <div className="flex items-start">
+                  <MapPinIcon className="h-5 w-5 text-white mr-2 flex-shrink-0 mt-0.5" />
+                  <div className="flex flex-col">
+                    <span className="text-white">{restaurant.address}</span>
+                    <div className="flex gap-2 mt-2">
+                      <a 
+                        href={`https://maps.google.com/?q=${encodeURIComponent(restaurant.address)}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-300 hover:text-blue-200"
+                      >
+                        Google Maps
+                      </a>
+                      <span className="text-gray-400">|</span>
+                      <a 
+                        href={`https://maps.apple.com/?q=${encodeURIComponent(restaurant.address)}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-300 hover:text-blue-200"
+                      >
+                        Apple Maps
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              )}
+              
+              {/* Contact info row */}
+              <div className="flex flex-wrap gap-x-6 gap-y-2 mt-3">
+                {/* Phone */}
+                {restaurant.phone && (
+                  <a
+                    href={`tel:${restaurant.phone}`}
+                    className="text-blue-300 hover:text-blue-200 flex items-center"
+                  >
+                    <PhoneIcon className="h-5 w-5 mr-2" />
+                    {restaurant.phone}
+                  </a>
+                )}
+                
+                {/* Website */}
+                {restaurant.website && (
+                  <a
+                    href={restaurant.website.startsWith('http') ? restaurant.website : `https://${restaurant.website}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-300 hover:text-blue-200 flex items-center"
+                  >
+                    <GlobeAltIcon className="h-5 w-5 mr-2" />
+                    Website
+                  </a>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      
+      {/* Fallback for no image */}
+      {!primaryImage && (
+        <div className="mb-6 space-y-4">
+          {/* Address */}
           {restaurant.address && (
-            <div>
-              <h3 className="text-gray-600 font-medium mb-1">Address</h3>
-              <p className="text-gray-800 mb-1">{restaurant.address}</p>
-              <div className="flex gap-2 mt-1">
+            <div className="mb-4">
+              <h3 className="text-lg font-medium mb-1">Address</h3>
+              <p className="text-gray-700">{restaurant.address}</p>
+              <div className="mt-1 space-x-2">
                 <a 
                   href={`https://maps.google.com/?q=${encodeURIComponent(restaurant.address)}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-blue-600 hover:underline text-sm"
+                  className="text-blue-600 hover:text-blue-800 text-lg"
                 >
                   Google Maps
                 </a>
@@ -125,7 +199,7 @@ export default function RestaurantDetailPage() {
                   href={`https://maps.apple.com/?q=${encodeURIComponent(restaurant.address)}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-blue-600 hover:underline text-sm"
+                  className="text-blue-600 hover:text-blue-800 text-lg"
                 >
                   Apple Maps
                 </a>
@@ -133,66 +207,35 @@ export default function RestaurantDetailPage() {
             </div>
           )}
           
+          {/* Phone */}
           {restaurant.phone && (
-            <div>
-              <h3 className="text-gray-600 font-medium mb-1">Phone</h3>
+            <div className="mb-4">
+              <h3 className="text-lg font-medium mb-1">Phone</h3>
               <a 
                 href={`tel:${restaurant.phone}`}
-                className="text-blue-600 hover:underline"
+                className="text-blue-600 hover:text-blue-800"
               >
                 {restaurant.phone}
               </a>
             </div>
           )}
           
+          {/* Website */}
           {restaurant.website && (
-            <div>
-              <h3 className="text-gray-600 font-medium mb-1">Website</h3>
+            <div className="mb-4">
+              <h3 className="text-lg font-medium mb-1">Website</h3>
               <a 
-                href={restaurant.website} 
-                target="_blank" 
+                href={restaurant.website.startsWith('http') ? restaurant.website : `https://${restaurant.website}`}
+                target="_blank"
                 rel="noopener noreferrer"
-                className="text-blue-600 hover:underline"
+                className="text-blue-600 hover:text-blue-800 break-words"
               >
                 {restaurant.website}
               </a>
             </div>
           )}
-          
-          {/* Thumbs rating buttons */}
-          <div className="flex gap-3 my-4">
-            {/* Thumbs up button */}
-            <Button 
-              onClick={() => handleThumbsRating(true)}
-              color={restaurant.isThumbsUp === true ? 'green' : 'zinc'}
-              aria-label="Would Visit Again"
-              icon={restaurant.isThumbsUp === true ? HandThumbUpSolid : HandThumbUpIcon}
-            />
-            
-            {/* Thumbs down button */}
-            <Button 
-              onClick={() => handleThumbsRating(false)}
-              color={restaurant.isThumbsUp === false ? 'red' : 'zinc'}
-              aria-label="Would Not Visit Again"
-              icon={restaurant.isThumbsUp === false ? HandThumbDownSolid : HandThumbDownIcon}
-            />
-          </div>
         </div>
-        
-        {/* Right column: Primary Image */}
-        {primaryImage && (
-          <div>
-            <img 
-              src={primaryImage.url} 
-              alt={restaurant.name} 
-              className="w-full h-64 object-cover rounded-lg shadow-md"
-            />
-            {primaryImage.caption && (
-              <p className="text-sm text-gray-600 mt-1">{primaryImage.caption}</p>
-            )}
-          </div>
-        )}
-      </div>
+      )}
 
       {/* Recent meals section */}
       <div className="border-t pt-6">

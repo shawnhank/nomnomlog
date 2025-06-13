@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react';
 import { Button } from '../catalyst/button';
 import { Input } from '../catalyst/input';
-import { XMarkIcon } from '@heroicons/react/24/outline';
+import { XMarkIcon, ArrowUpTrayIcon } from '@heroicons/react/24/outline';
 
 export default function MultiImageUploader({
   images = [],
@@ -149,9 +149,9 @@ export default function MultiImageUploader({
                   type="button"
                   onClick={() => handleSetPrimary(index)}
                   disabled={image.isPrimary}
-                  color={image.isPrimary ? "blue" : "zinc"}
-                  outline={!image.isPrimary}
-                  className="w-full text-xs"
+                  positive={!image.isPrimary}
+                  color={image.isPrimary ? "blue" : undefined}
+                  className="w-full text-xs font-normal"
                 >
                   {image.isPrimary ? '✓ Primary Photo' : 'Set as Primary'}
                 </Button>
@@ -169,9 +169,14 @@ export default function MultiImageUploader({
           color="blue"
           outline
           disabled={uploading}
-          className="w-full sm:w-auto"
+          className="w-full sm:w-auto border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white transition-colors duration-200"
         >
-          {uploading ? 'Uploading...' : 'Add Image'}
+          {uploading ? 'Uploading...' : (
+            <span className="flex items-center">
+              <ArrowUpTrayIcon className="w-4 h-4 mr-2" />
+              Add Image
+            </span>
+          )}
         </Button>
 
         {error && (

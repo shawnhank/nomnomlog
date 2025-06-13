@@ -28,7 +28,7 @@ export function update(id, restaurantData) {
   return sendRequest(`${BASE_URL}/${id}`, 'PUT', restaurantData);
 }
 
-export function deleteRestaurant(id) {
+export async function deleteRestaurant(id) {
   return sendRequest(`${BASE_URL}/${id}`, 'DELETE');
 }
 

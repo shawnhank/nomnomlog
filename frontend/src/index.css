@@ -21,8 +21,39 @@ body {
 }
 
 /* Custom classes */
+.section-heading {
+  @apply text-gray-900 font-medium text-base mb-1;
+}
 
+.section-content {
+  @apply text-gray-700 text-base;
+}
 
+/* Typography consistency */
+h1 {
+  @apply text-2xl sm:text-3xl font-bold text-gray-900;
+}
 
+h2 {
+  @apply text-xl sm:text-2xl font-semibold text-gray-900;
+}
 
+h3 {
+  @apply text-lg font-medium text-gray-900;
+}
+
+/* Image overlay text styles */
+.image-overlay-title {
+  @apply text-white font-semibold !important;
+}
+
+.image-overlay-subtitle {
+  @apply text-white text-opacity-90 !important;
+}
+
+/* Add this to your global CSS */
+.absolute.bottom-0 h3,
+.absolute.bottom-0 p {
+  @apply text-white;
+}
 /* Remove all the other styles that conflict with Tailwind */

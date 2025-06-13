@@ -1,86 +1,84 @@
+import React from 'react';
 import { Link } from 'react-router';
-import { HandThumbUpIcon as HandThumbUpSolid, HandThumbDownIcon as HandThumbDownSolid } from '@heroicons/react/24/solid';
-import { HandThumbUpIcon, HandThumbDownIcon } from '@heroicons/react/24/outline';
+import ThumbsRating from '../ThumbsRating/ThumbsRating';
 
-export default function MealCard({ meal, onThumbsRating }) {
+export default function MealCard({ meal, onThumbsRating, onDelete }) {
   // Find primary image if available
-  // If there's only one image, treat it as primary regardless of isPrimary flag
   const primaryImage = meal.mealImages && meal.mealImages.length > 0 
-    ? (meal.mealImages.length === 1
-      ? meal.mealImages[0]
-      : meal.mealImages.find(img => img.isPrimary) || meal.mealImages[0])
+    ? (meal.mealImages.find(img => img.isPrimary) || meal.mealImages[0])
     : null;
 
-  // If no mealImages but there's a legacy imageUrl, use that
-  const imageToShow = primaryImage ? primaryImage.url : meal.imageUrl;
+  // Format date
+  const formattedDate = new Date(meal.date).toLocaleDateString();
   
-  const handleThumbsRating = (isThumbsUp, e) => {
-    e.preventDefault(); // Prevent navigation
-    
-    // If the current state matches the requested state, clear it (set to null)
-    const newValue = meal.isThumbsUp === isThumbsUp ? null : isThumbsUp;
-    onThumbsRating(meal._id, newValue, e);
-  };
+  // Handle thumbs rating if provided
+  const handleThumbsRating = onThumbsRating 
+    ? (newValue, e) => {
+        // Prevent event from bubbling up to parent link
+        e.preventDefault();
+        e.stopPropagation();
+        onThumbsRating(meal._id, newValue, e);
+      }
+    : null;
 
   return (
-    <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg border border-gray-200 hover:shadow-md transition-all duration-200 hover:-translate-y-1">
-      <Link to={`/meals/${meal._id}`} className="block">
-        {/* Image - edge to edge on mobile */}
-        {imageToShow && (
-          <div className="w-full aspect-[4/3]">
+    <div className="flex flex-col h-full overflow-hidden rounded-lg border border-gray-200">
+      {/* Image */}
+      {primaryImage ? (
+        <div className="relative h-48 bg-gray-200">
+          <Link to={`/meals/${meal._id}`} className="block h-full">
             <img 
-              src={imageToShow} 
+              src={primaryImage.url} 
               alt={meal.name} 
               className="w-full h-full object-cover"
             />
-          </div>
-        )}
-        
-        {/* Content section */}
-        <div className="px-4 py-3 sm:p-4">
-          <div className="flex justify-between items-start">
-            <div>
-              <h3 className="text-base font-semibold text-gray-900 line-clamp-2">{meal.name}</h3>
-              
-              {meal.restaurantId && (
-                <p className="mt-1 text-sm text-gray-700">
-                  at {meal.restaurantId.name}
-                </p>
-              )}
-              
-              <p className="mt-1 text-sm text-gray-500">
-                {new Date(meal.date).toLocaleDateString()}
-              </p>
-            </div>
-            
-            <div className="flex space-x-2">
-              <button 
-                onClick={(e) => handleThumbsRating(true, e)}
-                className="text-gray-400 hover:text-green-500"
-                title="Would order again"
+          </Link>
+          
+          {/* Semi-transparent background bar for text */}
+          <div className="absolute bottom-0 left-0 right-0 bg-black/80 p-3">
+            <Link to={`/meals/${meal._id}`} className="block">
+              <h3 className="text-white font-bold text-lg leading-tight">{meal.name}</h3>
+            </Link>
+            {meal.restaurantId && (
+              <Link 
+                to={`/restaurants/${meal.restaurantId._id}`}
+                className="text-white hover:text-blue-300 font-medium text-sm inline-block"
               >
-                {meal.isThumbsUp === true ? (
-                  <HandThumbUpSolid className="w-5 h-5 text-green-500" />
-                ) : (
-                  <HandThumbUpIcon className="w-5 h-5" />
-                )}
-              </button>
-              
-              <button 
-                onClick={(e) => handleThumbsRating(false, e)}
-                className="text-gray-400 hover:text-red-500"
-                title="Would not order again"
-              >
-                {meal.isThumbsUp === false ? (
-                  <HandThumbDownSolid className="w-5 h-5 text-red-500" />
-                ) : (
-                  <HandThumbDownIcon className="w-5 h-5" />
-                )}
-              </button>
-            </div>
+                {meal.restaurantId.name}
+              </Link>
+            )}
           </div>
         </div>
-      </Link>
+      ) : (
+        <div className="p-4 border-b">
+          <Link to={`/meals/${meal._id}`}>
+            <h3 className="font-semibold text-lg">{meal.name}</h3>
+          </Link>
+          {meal.restaurantId && (
+            <Link 
+              to={`/restaurants/${meal.restaurantId._id}`}
+              className="text-blue-600 hover:text-blue-800 text-sm inline-block"
+            >
+              {meal.restaurantId.name}
+            </Link>
+          )}
+        </div>
+      )}
+      
+      {/* Card footer with date and thumbs */}
+      <div className="p-3 flex justify-between items-center mt-auto">
+        <Link to={`/meals/${meal._id}`} className="text-gray-600 text-sm">
+          {formattedDate}
+        </Link>
+        
+        {handleThumbsRating && (
+          <ThumbsRating 
+            value={meal.isThumbsUp}
+            onChange={handleThumbsRating}
+            size="sm"
+          />
+        )}
+      </div>
     </div>
   );
 }

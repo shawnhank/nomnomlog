@@ -65,6 +65,18 @@ export default function RestaurantListPage() {
     }
   }
 
+  // Handle restaurant deletion
+  async function handleDeleteRestaurant(id) {
+    try {
+      await restaurantService.deleteRestaurant(id);
+      // Remove the deleted restaurant from the state
+      setRestaurants(restaurants.filter(restaurant => restaurant._id !== id));
+    } catch (err) {
+      setError('Failed to delete restaurant');
+      console.error(err);
+    }
+  }
+
   // Filter restaurants based on search term
   const filteredRestaurants = restaurants.filter(restaurant =>
     restaurant.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -93,7 +105,7 @@ export default function RestaurantListPage() {
           className="text-sm"
         >
           <HandThumbUpIcon className="h-5 w-5 inline mr-1" />
-          <span className="hidden sm:inline whitespace-nowrap">Would Visit Again</span>
+          <span className="hidden sm:inline whitespace-nowrap">Thumbs Up</span>
         </Button>
         <Button 
           plain={activeFilter !== 'thumbsDown'}
@@ -102,7 +114,7 @@ export default function RestaurantListPage() {
           className="text-sm"
         >
           <HandThumbDownIcon className="h-5 w-5 inline mr-1" />
-          <span className="hidden sm:inline whitespace-nowrap">Would Not Visit Again</span>
+          <span className="hidden sm:inline whitespace-nowrap">Thumbs Down</span>
         </Button>
         <Button 
           plain={activeFilter !== 'unrated'}
@@ -165,7 +177,8 @@ export default function RestaurantListPage() {
             <li key={restaurant._id} className="border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-all duration-200 hover:-translate-y-1">
               <RestaurantCard 
                 restaurant={restaurant} 
-                onThumbsRating={handleThumbsRating} 
+                onThumbsRating={handleThumbsRating}
+                onDelete={handleDeleteRestaurant}
               />
             </li>
           ))}

@@ -6,6 +6,7 @@ import * as mealService from '../../services/meal';
 import * as restaurantService from '../../services/restaurant';
 import MealCard from '../../components/MealCard/MealCard';
 import { Button } from '../../components/catalyst/button';
+import SimpleBreadcrumbs from '../../components/SimpleBreadcrumbs/SimpleBreadcrumbs';
 // import './MealListPage.css';
 
 export default function MealListPage() {
@@ -65,6 +66,22 @@ export default function MealListPage() {
     }
   }
 
+  // Handle meal deletion
+  async function handleDeleteMeal(id) {
+    try {
+      await mealService.deleteMeal(id);
+      
+      // Remove the deleted meal from the state
+      setMeals(meals.filter(meal => meal._id !== id));
+      
+      // Show success message
+      setError('');
+    } catch (err) {
+      console.error('Delete error:', err);
+      setError(`Failed to delete meal: ${err.message || 'Unknown error'}`);
+    }
+  }
+
   // Filter meals based on search term
   const filteredMeals = meals.filter(meal =>
     meal.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -74,6 +91,15 @@ export default function MealListPage() {
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-6">
+      {/* Add SimpleBreadcrumbs */}
+      <div className="mb-4">
+        <SimpleBreadcrumbs 
+          customCrumbs={[
+            { name: 'Meals', path: '/meals', current: true }
+          ]}
+        />
+      </div>
+      
       <div className="mb-6 text-center">
         <h1 className="text-2xl font-bold mb-4">Meals</h1>
       </div>
@@ -167,6 +193,7 @@ export default function MealListPage() {
               <MealCard 
                 meal={meal} 
                 onThumbsRating={handleThumbsRating} 
+                onDelete={handleDeleteMeal}
               />
             </li>
           ))}

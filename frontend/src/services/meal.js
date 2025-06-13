@@ -2,178 +2,81 @@ import { getToken } from './authService';
 
 const BASE_URL = '/api/meals';
 
-// Get all meals
-export async function getAll() {
-  const res = await fetch(BASE_URL, {
-    headers: {
-      'Authorization': `Bearer ${getToken()}`
-    }
-  });
+async function sendRequest(url, method = 'GET', payload = null) {
+  const options = { method };
+  if (payload) {
+    options.headers = { 'Content-Type': 'application/json' };
+    options.body = JSON.stringify(payload);
+  }
   
+  // Add authorization header
+  options.headers = {
+    ...options.headers,
+    'Authorization': `Bearer ${getToken()}`
+  };
+  
+  const res = await fetch(url, options);
   if (res.ok) {
+    // For DELETE requests that return 204 No Content
+    if (res.status === 204) return null;
     return res.json();
   } else {
-    throw new Error('Failed to fetch meals');
+    const errorData = await res.json().catch(() => ({ error: 'Unknown error' }));
+    throw new Error(errorData.error || 'Request failed');
   }
+}
+
+// Get all meals
+export async function getAll() {
+  return sendRequest(BASE_URL);
 }
 
 // Get meal by ID
 export async function getById(id) {
-  const res = await fetch(`${BASE_URL}/${id}`, {
-    headers: {
-      'Authorization': `Bearer ${getToken()}`
-    }
-  });
-  
-  if (res.ok) {
-    return res.json();
-  } else {
-    throw new Error('Failed to fetch meal');
-  }
+  return sendRequest(`${BASE_URL}/${id}`);
 }
 
 // Create a new meal
 export async function create(mealData) {
-  const res = await fetch(BASE_URL, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${getToken()}`
-    },
-    body: JSON.stringify(mealData)
-  });
-  
-  if (res.ok) {
-    return res.json();
-  } else {
-    throw new Error('Failed to create meal');
-  }
+  return sendRequest(BASE_URL, 'POST', mealData);
 }
 
 // Update a meal
 export async function update(id, mealData) {
-  const res = await fetch(`${BASE_URL}/${id}`, {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${getToken()}`
-    },
-    body: JSON.stringify(mealData)
-  });
-  
-  if (res.ok) {
-    return res.json();
-  } else {
-    throw new Error('Failed to update meal');
-  }
+  return sendRequest(`${BASE_URL}/${id}`, 'PUT', mealData);
 }
 
 // Delete a meal
 export async function deleteMeal(id) {
-  const res = await fetch(`${BASE_URL}/${id}`, {
-    method: 'DELETE',
-    headers: {
-      'Authorization': `Bearer ${getToken()}`
-    }
-  });
-  
-  if (res.ok) {
-    return res.json();
-  } else {
-    throw new Error('Failed to delete meal');
-  }
+  return sendRequest(`${BASE_URL}/${id}`, 'DELETE');
 }
 
 // Toggle favorite status
 export async function toggleFavorite(id) {
-  const res = await fetch(`${BASE_URL}/${id}/favorite`, {
-    method: 'PUT',
-    headers: {
-      'Authorization': `Bearer ${getToken()}`
-    }
-  });
-  
-  if (res.ok) {
-    return res.json();
-  } else {
-    throw new Error('Failed to toggle favorite status');
-  }
+  return sendRequest(`${BASE_URL}/${id}/favorite`, 'PUT');
 }
 
 // Set thumbs rating
 export async function setThumbsRating(id, isThumbsUp) {
-  const res = await fetch(`${BASE_URL}/${id}/thumbs`, {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${getToken()}`
-    },
-    body: JSON.stringify({ isThumbsUp })
-  });
-  
-  if (res.ok) {
-    return res.json();
-  } else {
-    throw new Error('Failed to set thumbs rating');
-  }
+  return sendRequest(`${BASE_URL}/${id}/thumbs`, 'PUT', { isThumbsUp });
 }
 
 // Get all favorite meals
 export async function getFavorites() {
-  const res = await fetch(`${BASE_URL}/favorites`, {
-    headers: {
-      'Authorization': `Bearer ${getToken()}`
-    }
-  });
-  
-  if (res.ok) {
-    return res.json();
-  } else {
-    throw new Error('Failed to fetch favorite meals');
-  }
+  return sendRequest(`${BASE_URL}/favorites`);
 }
 
 // Get all thumbs up meals
 export async function getThumbsUp() {
-  const res = await fetch(`${BASE_URL}/thumbs-up`, {
-    headers: {
-      'Authorization': `Bearer ${getToken()}`
-    }
-  });
-  
-  if (res.ok) {
-    return res.json();
-  } else {
-    throw new Error('Failed to fetch thumbs up meals');
-  }
+  return sendRequest(`${BASE_URL}/thumbs-up`);
 }
 
 // Get all thumbs down meals
 export async function getThumbsDown() {
-  const res = await fetch(`${BASE_URL}/thumbs-down`, {
-    headers: {
-      'Authorization': `Bearer ${getToken()}`
-    }
-  });
-  
-  if (res.ok) {
-    return res.json();
-  } else {
-    throw new Error('Failed to fetch thumbs down meals');
-  }
+  return sendRequest(`${BASE_URL}/thumbs-down`);
 }
 
 // Get all unrated meals
 export async function getUnrated() {
-  const res = await fetch(`${BASE_URL}/unrated`, {
-    headers: {
-      'Authorization': `Bearer ${getToken()}`
-    }
-  });
-  
-  if (res.ok) {
-    return res.json();
-  } else {
-    throw new Error('Failed to fetch unrated meals');
-  }
+  return sendRequest(`${BASE_URL}/unrated`);
 }
