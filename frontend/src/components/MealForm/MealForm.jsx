@@ -3,12 +3,13 @@ import MultiImageUploader from '../MultiImageUploader/MultiImageUploader';
 import TagSelector from '../TagSelector/TagSelector';
 import * as tagService from '../../services/tag';
 import * as mealTagService from '../../services/mealTag';
-import { Button } from '../catalyst/button';
+import * as restaurantService from '../../services/restaurant';
+import { Combobox, ComboboxOption, ComboboxLabel } from '../catalyst/combobox';
 import { Input } from '../catalyst/input';
-import { Select } from '../catalyst/select';
 import { Textarea } from '../catalyst/textarea';
 import { Fieldset, Legend } from '../catalyst/fieldset';
-import { Checkbox } from '../catalyst/checkbox';
+import { HandThumbUpIcon, HandThumbDownIcon } from '@heroicons/react/24/outline';
+import { HandThumbUpIcon as HandThumbUpSolid, HandThumbDownIcon as HandThumbDownSolid } from '@heroicons/react/24/solid';
 
 export default function MealForm({ initialData, onSubmit, buttonLabel = 'Save', loading = false, onCancel }) {
   // Default form values
@@ -30,8 +31,9 @@ export default function MealForm({ initialData, onSubmit, buttonLabel = 'Save', 
   useEffect(() => {
     async function loadData() {
       try {
-        // Load restaurants (assuming this is already implemented)
-        // ...
+        // Load restaurants
+        const restaurantsData = await restaurantService.getAll();
+        setRestaurants(restaurantsData);
 
         // Load tags for this meal if editing
         if (initialData?._id) {
@@ -111,19 +113,35 @@ export default function MealForm({ initialData, onSubmit, buttonLabel = 'Save', 
               placeholder="Enter meal name"
             />
 
-            <Select
-              name="restaurantId"
-              value={formData.restaurantId}
-              onChange={handleChange}
-              required
-            >
-              <option value="">Select a restaurant</option>
-              {restaurants.map(restaurant => (
-                <option key={restaurant._id} value={restaurant._id}>
-                  {restaurant.name}
-                </option>
-              ))}
-            </Select>
+            <div>
+              <label className="block text-sm font-medium text-gray-900 dark:text-gray-100 mb-2">
+                Restaurant
+              </label>
+              {restaurants.length > 0 ? (
+                <Combobox
+                  options={restaurants}
+                  value={restaurants.find(r => r._id === formData.restaurantId) || null}
+                  onChange={(restaurant) => {
+                    if (restaurant) {
+                      setFormData({...formData, restaurantId: restaurant._id});
+                    }
+                  }}
+                  displayValue={(restaurant) => restaurant?.name || ''}
+                  filter={(restaurant, query) => 
+                    restaurant.name.toLowerCase().includes(query.toLowerCase())
+                  }
+                  placeholder="Select or search for a restaurant..."
+                >
+                  {(restaurant) => (
+                    <ComboboxOption value={restaurant}>
+                      <ComboboxLabel>{restaurant.name}</ComboboxLabel>
+                    </ComboboxOption>
+                  )}
+                </Combobox>
+              ) : (
+                <div className="text-gray-500">Loading restaurants...</div>
+              )}
+            </div>
 
             <Input
               type="date"
@@ -157,22 +175,46 @@ export default function MealForm({ initialData, onSubmit, buttonLabel = 'Save', 
               </span>
             </div>
             <div className="flex items-center space-x-3">
-              <Button
+              <button
                 type="button"
-                color={formData.isThumbsUp === true ? 'green' : 'zinc'}
-                outline={formData.isThumbsUp !== true}
-                onClick={() => setFormData({...formData, isThumbsUp: true})}
+                onClick={() => {
+                  // Toggle between true and null
+                  const newValue = formData.isThumbsUp === true ? null : true;
+                  setFormData({...formData, isThumbsUp: newValue});
+                }}
+                className={`px-4 py-2 rounded-lg border transition-colors duration-200 flex items-center ${
+                  formData.isThumbsUp === true 
+                    ? "bg-blue-500 border-blue-500 text-white" 
+                    : "border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white"
+                }`}
               >
-                👍 Yes
-              </Button>
-              <Button
+                {formData.isThumbsUp === true ? (
+                  <HandThumbUpSolid className="w-5 h-5 mr-1" />
+                ) : (
+                  <HandThumbUpIcon className="w-5 h-5 mr-1" />
+                )}
+                Yes
+              </button>
+              <button
                 type="button"
-                color={formData.isThumbsUp === false ? 'red' : 'zinc'}
-                outline={formData.isThumbsUp !== false}
-                onClick={() => setFormData({...formData, isThumbsUp: false})}
+                onClick={() => {
+                  // Toggle between false and null
+                  const newValue = formData.isThumbsUp === false ? null : false;
+                  setFormData({...formData, isThumbsUp: newValue});
+                }}
+                className={`px-4 py-2 rounded-lg border transition-colors duration-200 flex items-center ${
+                  formData.isThumbsUp === false 
+                    ? "bg-red-500 border-red-500 text-white" 
+                    : "border-red-500 text-red-500 hover:bg-red-500 hover:text-white"
+                }`}
               >
-                👎 No
-              </Button>
+                {formData.isThumbsUp === false ? (
+                  <HandThumbDownSolid className="w-5 h-5 mr-1" />
+                ) : (
+                  <HandThumbDownIcon className="w-5 h-5 mr-1" />
+                )}
+                No
+              </button>
             </div>
           </div>
         </Fieldset>
@@ -208,22 +250,21 @@ export default function MealForm({ initialData, onSubmit, buttonLabel = 'Save', 
 
         <div className="flex justify-end gap-3 pt-4">
           {onCancel && (
-            <Button
+            <button
               type="button"
-              color="zinc"
-              outline
               onClick={onCancel}
+              className="px-4 py-2 rounded-lg border border-red-500 text-red-500 hover:bg-red-500 hover:text-white transition-colors duration-200"
             >
               Cancel
-            </Button>
+            </button>
           )}
-          <Button
+          <button
             type="submit"
-            color="blue"
             disabled={loading}
+            className="px-4 py-2 rounded-lg border border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading ? 'Saving...' : buttonLabel}
-          </Button>
+          </button>
         </div>
       </form>
     </div>

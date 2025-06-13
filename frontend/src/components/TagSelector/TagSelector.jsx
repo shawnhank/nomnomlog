@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Combobox } from '../catalyst/combobox';
+import { Combobox, ComboboxOption, ComboboxLabel } from '../catalyst/combobox';
 import { Button } from '../catalyst/button';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import * as tagService from '../../services/tag';
@@ -131,9 +131,13 @@ export default function TagSelector({ selectedTags = [], onTagsChange }) {
           }
           placeholder="Search or add tags..."
           className="flex-1"
-          onInputChange={setInputValue}
-          inputValue={inputValue}
-        />
+        >
+          {(tag) => (
+            <ComboboxOption value={tag}>
+              <ComboboxLabel>{tag.name}</ComboboxLabel>
+            </ComboboxOption>
+          )}
+        </Combobox>
         
         <Button
           type="button"

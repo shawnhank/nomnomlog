@@ -83,31 +83,35 @@ export default function MealListPage() {
           plain={activeFilter !== 'all'}
           color={activeFilter === 'all' ? 'blue' : undefined}
           onClick={() => setActiveFilter('all')}
+          className="text-sm"
         >
-          All Meals
+          <span className="whitespace-nowrap">All Meals</span>
         </Button>
         <Button 
           plain={activeFilter !== 'thumbsUp'}
           color={activeFilter === 'thumbsUp' ? 'blue' : undefined}
-          icon={HandThumbUpIcon}
           onClick={() => setActiveFilter('thumbsUp')}
+          className="text-sm"
         >
-          Would Order Again
+          <HandThumbUpIcon className="h-5 w-5 inline mr-1" />
+          <span className="hidden sm:inline whitespace-nowrap">Thumbs Up</span>
         </Button>
         <Button 
           plain={activeFilter !== 'thumbsDown'}
           color={activeFilter === 'thumbsDown' ? 'blue' : undefined}
-          icon={HandThumbDownIcon}
           onClick={() => setActiveFilter('thumbsDown')}
+          className="text-sm"
         >
-          Would Not Order Again
+          <HandThumbDownIcon className="h-5 w-5 inline mr-1" />
+          <span className="hidden sm:inline whitespace-nowrap">Thumbs Down</span>
         </Button>
         <Button 
           plain={activeFilter !== 'unrated'}
           color={activeFilter === 'unrated' ? 'blue' : undefined}
           onClick={() => setActiveFilter('unrated')}
+          className="text-sm"
         >
-          Unrated
+          <span className="whitespace-nowrap">No Rating</span>
         </Button>
         <Link 
           to="/meals/new" 
@@ -115,9 +119,10 @@ export default function MealListPage() {
         >
           <Button 
             color="blue"
-            icon={PlusIcon}
+            className="whitespace-nowrap text-white"
           >
-            <span className="hidden sm:inline">Add</span>
+            <PlusIcon className="h-5 w-5 inline mr-1 text-white" />
+            <span className="hidden sm:inline">Add Meal</span>
           </Button>
         </Link>
       </div>
@@ -140,7 +145,7 @@ export default function MealListPage() {
         </div>
       )}
       
-      {/* Content */}
+      {/*  Content */}
       {loading ? (
         <div className="text-center py-8">Loading meals...</div>
       ) : filteredMeals.length === 0 ? (

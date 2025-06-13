@@ -82,31 +82,35 @@ export default function RestaurantListPage() {
           plain={activeFilter !== 'all'}
           color={activeFilter === 'all' ? 'blue' : undefined}
           onClick={() => setActiveFilter('all')}
+          className="text-sm"
         >
-          All Restaurants
+          <span className="whitespace-nowrap">All Restaurants</span>
         </Button>
         <Button 
           plain={activeFilter !== 'thumbsUp'}
           color={activeFilter === 'thumbsUp' ? 'blue' : undefined}
-          icon={HandThumbUpIcon}
           onClick={() => setActiveFilter('thumbsUp')}
+          className="text-sm"
         >
-          Would Visit Again
+          <HandThumbUpIcon className="h-5 w-5 inline mr-1" />
+          <span className="hidden sm:inline whitespace-nowrap">Would Visit Again</span>
         </Button>
         <Button 
           plain={activeFilter !== 'thumbsDown'}
           color={activeFilter === 'thumbsDown' ? 'blue' : undefined}
-          icon={HandThumbDownIcon}
           onClick={() => setActiveFilter('thumbsDown')}
+          className="text-sm"
         >
-          Would Not Visit Again
+          <HandThumbDownIcon className="h-5 w-5 inline mr-1" />
+          <span className="hidden sm:inline whitespace-nowrap">Would Not Visit Again</span>
         </Button>
         <Button 
           plain={activeFilter !== 'unrated'}
           color={activeFilter === 'unrated' ? 'blue' : undefined}
           onClick={() => setActiveFilter('unrated')}
+          className="text-sm"
         >
-          Unrated
+          <span className="whitespace-nowrap">Unrated</span>
         </Button>
         <Link 
           to="/restaurants/new" 
@@ -114,9 +118,10 @@ export default function RestaurantListPage() {
         >
           <Button 
             color="blue"
-            icon={PlusIcon}
+            className="whitespace-nowrap"
           >
-            <span className="hidden sm:inline">Add</span>
+            <PlusIcon className="h-5 w-5 inline mr-1" />
+            <span className="hidden sm:inline">Add Restaurant</span>
           </Button>
         </Link>
       </div>

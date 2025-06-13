@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router';
-import { HandThumbUpIcon, HandThumbDownIcon, PlusIcon } from '@heroicons/react/24/outline';
+import { HandThumbUpIcon, HandThumbDownIcon, PlusIcon, ArrowLeftIcon } from '@heroicons/react/24/outline';
 import { HandThumbUpIcon as HandThumbUpSolid, HandThumbDownIcon as HandThumbDownSolid } from '@heroicons/react/24/solid';
 import * as mealService from '../../services/meal';
 import { Button } from '../../components/catalyst/button';
 import DeleteConfirmationModal from '../../components/DeleteConfirmationModal/DeleteConfirmationModal';
+import SimpleBreadcrumbs from '../../components/SimpleBreadcrumbs/SimpleBreadcrumbs';
 
 export default function MealDetailPage() {
   const [meal, setMeal] = useState(null);
@@ -83,10 +84,28 @@ export default function MealDetailPage() {
 
   return (
     <div className="max-w-3xl mx-auto p-4 sm:p-6">
+      {/* Breadcrumbs */}
+      <div className="mb-4">
+        <SimpleBreadcrumbs 
+          customCrumbs={[
+            { name: 'Meals', path: '/meals', current: false },
+            { name: meal.name, path: `/meals/${meal._id}`, current: true }
+          ]}
+        />
+      </div>
+      
+      {/* Back to Meals link for mobile */}
+      <div className="mb-4 sm:hidden">
+        <Link to="/meals" className="inline-flex items-center text-blue-600 hover:text-blue-800">
+          <ArrowLeftIcon className="w-4 h-4 mr-1" />
+          Back to Meals
+        </Link>
+      </div>
+
       {/* Header with meal name and action buttons */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b pb-4 mb-6">
         <h1 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-0">{meal.name}</h1>
-        <div className="flex flex-nowrap gap-3 shrink-0">
+        <div className="flex flex-nowrap gap-3 shrink-0 sm:ml-4">
           <Link 
             to="/meals/new"
             className="inline-flex items-center justify-center gap-x-2 rounded-lg bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 whitespace-nowrap"
@@ -95,18 +114,18 @@ export default function MealDetailPage() {
             <span>Add Meal</span>
           </Link>
           <Link to={`/meals/${meal._id}/edit`}>
-            <Button 
-              color="blue"
+            <button 
+              className="px-4 py-2 rounded-lg border border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white transition-colors duration-200"
             >
               Edit
-            </Button>
+            </button>
           </Link>
-          <Button
+          <button
             onClick={() => setShowDeleteModal(true)}
-            color="red"
+            className="px-4 py-2 rounded-lg border border-red-500 text-red-500 hover:bg-red-500 hover:text-white transition-colors duration-200"
           >
             Delete
-          </Button>
+          </button>
         </div>
       </div>
 
