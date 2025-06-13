@@ -34,24 +34,26 @@ export default function MealCard({ meal, onThumbsRating }) {
         {/* Image */}
         {primaryImage ? (
           <div className="relative h-56 bg-gray-200">
-            <Link to={`/meals/${meal._id}`} className="block h-full">
+            {/* Remove the nested Link and use a div instead */}
+            <div className="h-full">
               <img 
                 src={primaryImage.url} 
                 alt={meal.name} 
                 className="w-full h-full object-cover"
               />
-            </Link>
+            </div>
             
             {/* Semi-transparent background bar for text */}
             <div className="absolute bottom-0 left-0 right-0 bg-black/80 p-3">
               <div className="flex flex-col">
-                <Link to={`/meals/${meal._id}`} className="block">
-                  <h3 className="text-white font-bold text-lg leading-tight">{meal.name}</h3>
-                </Link>
+                {/* Remove Link here and just use text */}
+                <h3 className="text-white font-bold text-lg leading-tight">{meal.name}</h3>
+                
                 {meal.restaurantId && (
                   <Link 
                     to={`/restaurants/${meal.restaurantId._id}`}
                     className="text-white hover:text-blue-300 font-medium text-sm inline-block"
+                    onClick={(e) => e.stopPropagation()} // Prevent parent link navigation
                   >
                     {meal.restaurantId.name}
                   </Link>
@@ -59,9 +61,10 @@ export default function MealCard({ meal, onThumbsRating }) {
                 
                 {/* Date and thumbs in same row */}
                 <div className="flex justify-between items-center mt-2">
-                  <Link to={`/meals/${meal._id}`} className="text-white text-sm">
+                  {/* Remove Link here and just use text */}
+                  <span className="text-white text-sm">
                     {formattedDate}
-                  </Link>
+                  </span>
                   
                   {handleThumbsRating && (
                     <div className="flex space-x-2 ml-auto">
@@ -96,13 +99,14 @@ export default function MealCard({ meal, onThumbsRating }) {
           </div>
         ) : (
           <div className="p-4 border-b">
-            <Link to={`/meals/${meal._id}`}>
-              <h3 className="font-semibold text-lg">{meal.name}</h3>
-            </Link>
+            {/* Remove Link here and just use text */}
+            <h3 className="font-semibold text-lg">{meal.name}</h3>
+            
             {meal.restaurantId && (
               <Link 
                 to={`/restaurants/${meal.restaurantId._id}`}
                 className="text-blue-600 hover:text-blue-800 text-sm inline-block"
+                onClick={(e) => e.stopPropagation()} // Prevent parent link navigation
               >
                 {meal.restaurantId.name}
               </Link>
@@ -110,9 +114,10 @@ export default function MealCard({ meal, onThumbsRating }) {
             
             {/* Date and thumbs for no-image case */}
             <div className="flex justify-between items-center mt-2">
-              <Link to={`/meals/${meal._id}`} className="text-gray-600 text-sm">
+              {/* Remove Link here and just use text */}
+              <span className="text-gray-600 text-sm">
                 {formattedDate}
-              </Link>
+              </span>
               
               {handleThumbsRating && (
                 <div className="flex space-x-2">

@@ -8,6 +8,7 @@ import { Input } from '../catalyst/input';
 import { Textarea } from '../catalyst/textarea';
 import { Fieldset, Legend } from '../catalyst/fieldset';
 import { Button } from '../catalyst/button';
+import ThumbsRating from '../ThumbsRating/ThumbsRating';
 
 export default function RestaurantForm({ initialData, onSubmit, buttonLabel = 'Save', loading = false, onCancel }) {
   // Default form values
@@ -16,7 +17,10 @@ export default function RestaurantForm({ initialData, onSubmit, buttonLabel = 'S
     address: '',
     phone: '',
     website: '',
-    restaurantImages: []
+    restaurantImages: [],
+    notes: '',
+    date: new Date().toISOString().split('T')[0],
+    isThumbsUp: null
   };
 
   const [formData, setFormData] = useState(initialData || defaultFormData);
@@ -46,6 +50,11 @@ export default function RestaurantForm({ initialData, onSubmit, buttonLabel = 'S
       ...formData,
       [name]: value
     });
+  }
+
+  // Handle thumbs rating changes
+  function handleThumbsRating(newValue) {
+    setFormData({ ...formData, isThumbsUp: newValue });
   }
 
   // Handle form submission
@@ -92,16 +101,13 @@ export default function RestaurantForm({ initialData, onSubmit, buttonLabel = 'S
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-sm p-6">
-      <form onSubmit={handleSubmit}>
-        <Fieldset>
-          <Legend>Restaurant Information</Legend>
+    <div className="w-full bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
+      <form onSubmit={handleSubmit} className="p-6 space-y-8">
+        <Fieldset className="bg-white dark:bg-gray-800 rounded-md p-4 shadow-sm border border-gray-200 dark:border-gray-700">
+          <Legend className="text-lg font-medium text-gray-900 dark:text-white px-2">Restaurant Information</Legend>
           
-          <div className="space-y-4">
+          <div className="space-y-5 mt-4">
             <div>
-              <label className="block text-sm font-medium text-gray-900 dark:text-gray-100 mb-2">
-                Name
-              </label>
               <Input
                 type="text"
                 name="name"
@@ -109,58 +115,73 @@ export default function RestaurantForm({ initialData, onSubmit, buttonLabel = 'S
                 onChange={handleChange}
                 placeholder="Enter restaurant name"
                 required
+                label="Name"
+                className="w-full"
+                labelClassName="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
               />
             </div>
             
             <div>
-              <label className="block text-sm font-medium text-gray-900 dark:text-gray-100 mb-2">
-                Address
-              </label>
               <Input
                 type="text"
                 name="address"
                 value={formData.address}
                 onChange={handleChange}
                 placeholder="Enter restaurant address"
+                label="Address"
+                className="w-full"
+                labelClassName="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
               />
             </div>
             
             <div>
-              <label className="block text-sm font-medium text-gray-900 dark:text-gray-100 mb-2">
-                Phone
-              </label>
               <Input
                 type="tel"
                 name="phone"
                 value={formData.phone}
                 onChange={handleChange}
                 placeholder="Enter phone number"
+                label="Phone"
+                className="w-full"
+                labelClassName="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
               />
             </div>
             
             <div>
-              <label className="block text-sm font-medium text-gray-900 dark:text-gray-100 mb-2">
-                Website
-              </label>
               <Input
                 type="url"
                 name="website"
                 value={formData.website}
                 onChange={handleChange}
                 placeholder="https://example.com"
+                label="Website"
+                className="w-full"
+                labelClassName="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+              />
+            </div>
+            
+            <div>
+              <Input
+                type="date"
+                name="date"
+                value={formData.date}
+                onChange={handleChange}
+                label="First Visited"
+                className="w-full"
+                labelClassName="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
               />
             </div>
           </div>
         </Fieldset>
 
-        <Fieldset>
-          <Legend>Photos</Legend>
+        <Fieldset className="bg-white dark:bg-gray-800 rounded-md p-4 shadow-sm border border-gray-200 dark:border-gray-700">
+          <Legend className="text-lg font-medium text-gray-900 dark:text-white px-2">Photos</Legend>
 
-          <div className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-900 dark:text-gray-100 mb-2">
-                Restaurant Photos
-              </label>
+          <div className="mt-4">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Restaurant Photos
+            </label>
+            <div className="bg-gray-50 dark:bg-gray-900 rounded-lg p-4 border-2 border-dashed border-gray-300 dark:border-gray-700">
               <MultiImageUploader
                 images={formData.restaurantImages}
                 onImagesUpdated={handleImagesUpdated}
@@ -169,17 +190,53 @@ export default function RestaurantForm({ initialData, onSubmit, buttonLabel = 'S
             </div>
           </div>
         </Fieldset>
+        
+        <Fieldset className="bg-white dark:bg-gray-800 rounded-md p-4 shadow-sm border border-gray-200 dark:border-gray-700">
+          <Legend className="text-lg font-medium text-gray-900 dark:text-white px-2">Preferences</Legend>
+          <div className="flex items-center justify-between mt-4">
+            <div className="flex items-center space-x-2">
+              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                Would visit again?
+              </span>
+            </div>
+            <ThumbsRating 
+              value={formData.isThumbsUp}
+              onChange={handleThumbsRating}
+              size="md"
+            />
+          </div>
+        </Fieldset>
+        
+        <Fieldset className="bg-white dark:bg-gray-800 rounded-md p-4 shadow-sm border border-gray-200 dark:border-gray-700">
+          <Legend className="text-lg font-medium text-gray-900 dark:text-white px-2">Comments</Legend>
+          <div className="mt-4">
+            <Textarea
+              name="notes"
+              value={formData.notes}
+              onChange={handleChange}
+              rows={4}
+              placeholder="Add any notes about this restaurant..."
+              className="w-full"
+              labelClassName="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+            />
+          </div>
+        </Fieldset>
 
-        <Fieldset>
-          <Legend>Tags</Legend>
-          <TagSelector 
-            selectedTags={selectedTags}
-            onTagsChange={handleTagsChange}
-          />
+        <Fieldset className="bg-white dark:bg-gray-800 rounded-md p-4 shadow-sm border border-gray-200 dark:border-gray-700">
+          <Legend className="text-lg font-medium text-gray-900 dark:text-white px-2">Tags</Legend>
+          <div className="mt-4">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Tags
+            </label>
+            <TagSelector 
+              selectedTags={selectedTags}
+              onTagsChange={handleTagsChange}
+            />
+          </div>
         </Fieldset>
 
         {errorMsg && (
-          <p className="text-red-600">{errorMsg}</p>
+          <p className="text-red-600 font-medium">{errorMsg}</p>
         )}
 
         <div className="flex justify-end gap-3 pt-4">
@@ -188,6 +245,7 @@ export default function RestaurantForm({ initialData, onSubmit, buttonLabel = 'S
               type="button"
               onClick={onCancel}
               negative
+              className="px-4 py-2 text-sm font-medium rounded-md"
             >
               Cancel
             </Button>
@@ -196,6 +254,7 @@ export default function RestaurantForm({ initialData, onSubmit, buttonLabel = 'S
             type="submit"
             disabled={loading}
             positive
+            className="px-4 py-2 text-sm font-medium rounded-md"
           >
             {loading ? 'Saving...' : buttonLabel}
           </Button>

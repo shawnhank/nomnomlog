@@ -28,15 +28,15 @@
 
 - [ ] As a user, I want to upload a single or multiple photos of a restaurant, directly using the camera, from the camera roll, from an album, or from a file manager so that I have a visual reference of the restaurant 
 
-- [ ] As a user, I want to add tags and attach them to meals and restaurants, so that I can organize views/lists by these tags.
+- [x] As a user, I want to add tags and attach them to meals and restaurants, so that I can organize views/lists by these tags.
 
 - [ ] As a user, I want to be able to have a view of all my tags, and edit, update, or delete them
 
 - [ ] As a user, i want to be able to delete tags individually or in bulk using a multiselect feature that allows me to select multiple tags and delete them from the tags view/page
 
-- [ ] As a user, I want to view all my restaurants and have the ability to multi-select and delete restaurants in bulk.
+- [ ] As a user, I want to view all my restaurants and quickly delete restaurants as needed.
 
-- [ ] As a user, I want to view all my meals and have the ability to multi-select and delete restaurants in bulk.
+- [ ] As a user, I want to view all my meals and have the ability to quickly delete restaurants as needed.
 
 - [ ] As a user, I want to be able to tap or click a restauarnts phone number to call them to place an order or make a reservation
 

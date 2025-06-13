@@ -116,23 +116,28 @@ export default function MealForm({ initialData, onSubmit, buttonLabel = 'Save', 
   }
 
   return (
-    <div className="w-full bg-white dark:bg-gray-800 rounded-lg shadow-md">
-      <form onSubmit={handleSubmit} className="space-y-6">
-        <Fieldset>
-          <Legend>Meal Details</Legend>
+    <div className="w-full bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
+      <form onSubmit={handleSubmit} className="p-6 space-y-8">
+        <Fieldset className="bg-white dark:bg-gray-800 rounded-md p-4 shadow-sm border border-gray-200 dark:border-gray-700">
+          <Legend className="text-lg font-medium text-gray-900 dark:text-white px-2">Meal Details</Legend>
 
-          <div className="space-y-4">
-            <Input
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              required
-              placeholder="Enter meal name"
-              label="Meal Name"
-            />
+          <div className="space-y-5 mt-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                Meal Name
+              </label>
+              <Input
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                required
+                placeholder="Enter meal name"
+                className="w-full"
+              />
+            </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-900 dark:text-gray-100 mb-2">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 Restaurant
               </label>
               {restaurants.length > 0 ? (
@@ -149,6 +154,7 @@ export default function MealForm({ initialData, onSubmit, buttonLabel = 'Save', 
                     restaurant.name.toLowerCase().includes(query.toLowerCase())
                   }
                   placeholder="Select or search for a restaurant..."
+                  className="w-full"
                 >
                   {(restaurant) => (
                     <ComboboxOption value={restaurant}>
@@ -157,29 +163,34 @@ export default function MealForm({ initialData, onSubmit, buttonLabel = 'Save', 
                   )}
                 </Combobox>
               ) : (
-                <div className="text-gray-500">Loading restaurants...</div>
+                <div className="text-gray-500 p-2 border rounded-md border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900">Loading restaurants...</div>
               )}
             </div>
 
-            <Input
-              type="date"
-              name="date"
-              value={formData.date}
-              onChange={handleChange}
-              required
-              label="Date"
-            />
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                Date
+              </label>
+              <Input
+                type="date"
+                name="date"
+                value={formData.date}
+                onChange={handleChange}
+                required
+                className="w-full"
+              />
+            </div>
           </div>
         </Fieldset>
 
-        <Fieldset>
-          <Legend>Photos</Legend>
+        <Fieldset className="bg-white dark:bg-gray-800 rounded-md p-4 shadow-sm border border-gray-200 dark:border-gray-700">
+          <Legend className="text-lg font-medium text-gray-900 dark:text-white px-2">Photos</Legend>
 
-          <div className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-900 dark:text-gray-100 mb-2">
-                Meal Photos
-              </label>
+          <div className="mt-4">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Meal Photos
+            </label>
+            <div className="bg-gray-50 dark:bg-gray-900 rounded-lg p-4 border-2 border-dashed border-gray-300 dark:border-gray-700">
               <MultiImageUploader
                 images={formData.mealImages}
                 onImagesUpdated={handleImagesUpdated}
@@ -189,11 +200,11 @@ export default function MealForm({ initialData, onSubmit, buttonLabel = 'Save', 
           </div>
         </Fieldset>
 
-        <Fieldset>
-          <Legend>Preferences</Legend>
-          <div className="flex items-center justify-between">
+        <Fieldset className="bg-white dark:bg-gray-800 rounded-md p-4 shadow-sm border border-gray-200 dark:border-gray-700">
+          <Legend className="text-lg font-medium text-gray-900 dark:text-white px-2">Preferences</Legend>
+          <div className="flex items-center justify-between mt-4">
             <div className="flex items-center space-x-2">
-              <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
+              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
                 Would order again?
               </span>
             </div>
@@ -205,36 +216,40 @@ export default function MealForm({ initialData, onSubmit, buttonLabel = 'Save', 
           </div>
         </Fieldset>
 
-        <Fieldset>
-          <Legend>Comments</Legend>
-          <div className="space-y-4">
+        <Fieldset className="bg-white dark:bg-gray-800 rounded-md p-4 shadow-sm border border-gray-200 dark:border-gray-700">
+          <Legend className="text-lg font-medium text-gray-900 dark:text-white px-2">Comments</Legend>
+          <div className="mt-4">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              Notes
+            </label>
             <Textarea
               name="notes"
               value={formData.notes}
               onChange={handleChange}
               rows={4}
               placeholder="Add any notes about this meal..."
+              className="w-full"
             />
           </div>
         </Fieldset>
 
-        <Fieldset>
-          <Legend>Tags</Legend>
-          <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-900 dark:text-gray-100 mb-2">
+        <Fieldset className="bg-white dark:bg-gray-800 rounded-md p-4 shadow-sm border border-gray-200 dark:border-gray-700">
+          <Legend className="text-lg font-medium text-gray-900 dark:text-white px-2">Tags</Legend>
+          <div className="mt-4">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               Tags
             </label>
             <div className="w-full">
               <TagSelector
-                selectedTags={selectedTags} // Use the selectedTags state
-                onTagsChange={handleTagsChange} // Use the handleTagsChange function
+                selectedTags={selectedTags}
+                onTagsChange={handleTagsChange}
               />
             </div>
           </div>
         </Fieldset>
 
         {errorMsg && (
-          <p className="text-red-600">{errorMsg}</p>
+          <p className="text-red-600 font-medium">{errorMsg}</p>
         )}
 
         <div className="flex justify-end gap-3 pt-4">
@@ -243,7 +258,7 @@ export default function MealForm({ initialData, onSubmit, buttonLabel = 'Save', 
               type="button"
               onClick={onCancel}
               negative
-              className="font-normal"
+              className="px-4 py-2 text-sm font-medium rounded-md"
             >
               Cancel
             </Button>
@@ -252,7 +267,7 @@ export default function MealForm({ initialData, onSubmit, buttonLabel = 'Save', 
             type="submit"
             disabled={loading}
             positive
-            className="font-normal"
+            className="px-4 py-2 text-sm font-medium rounded-md"
           >
             {loading ? 'Saving...' : buttonLabel}
           </Button>

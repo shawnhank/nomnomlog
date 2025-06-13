@@ -2,12 +2,12 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import * as restaurantService from '../../services/restaurant';
 import { Alert } from '../../components/catalyst/alert';
-import { Heading } from '../../components/catalyst/heading';
 import RestaurantForm from '../../components/RestaurantForm/RestaurantForm';
+import SimpleBreadcrumbs from '../../components/SimpleBreadcrumbs/SimpleBreadcrumbs';
 
 export default function NewRestaurantPage() {
   const [loading, setLoading] = useState(false);
-  const [errorMsg, setErrorMsg] = useState('');
+  const [error, setError] = useState('');
   const navigate = useNavigate();
   
   // Handle form submission
@@ -17,10 +17,8 @@ export default function NewRestaurantPage() {
     try {
       const newRestaurant = await restaurantService.create(formData);
       navigate(`/restaurants/${newRestaurant._id}`);
-      return newRestaurant;
     } catch (err) {
-      setErrorMsg('Failed to create restaurant');
-      console.error(err);
+      setError('Failed to create restaurant');
     } finally {
       setLoading(false);
     }
@@ -32,19 +30,28 @@ export default function NewRestaurantPage() {
   }
   
   return (
-    <div className="w-full max-w-4xl mx-auto p-4 sm:p-6">
-      <Heading className="mb-6">Add New Restaurant</Heading>
+    <div className="w-full max-w-4xl mx-auto p-4 sm:p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md">
+      {/* Add SimpleBreadcrumbs */}
+      <div className="mb-4">
+        <SimpleBreadcrumbs 
+          customCrumbs={[
+            { name: 'Restaurants', path: '/restaurants', current: false },
+            { name: 'Add New Restaurant', path: '/restaurants/new', current: true }
+          ]}
+        />
+      </div>
 
-      {errorMsg && (
-        <Alert className="mb-6">
-          {errorMsg}
+      <h1 className="text-2xl font-bold mb-4">Add New Restaurant</h1>
+
+      {error && (
+        <Alert type="error" className="mb-4">
+          {error}
         </Alert>
       )}
-      
-      <RestaurantForm 
+
+      <RestaurantForm
         onSubmit={handleSubmit}
         onCancel={handleCancel}
-        buttonLabel="Add Restaurant"
         loading={loading}
       />
     </div>
