@@ -4,7 +4,7 @@ import { NavLink, Link, useNavigate } from 'react-router'
 import { logOut } from '../../services/authService'
 import { toggleTheme } from '../../utils/themeUtils'
 import { useState, useEffect } from 'react'
-import { Button } from '../Button/button'
+import { Button } from '../catalyst/button'
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')

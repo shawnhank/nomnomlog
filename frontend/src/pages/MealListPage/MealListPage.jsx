@@ -5,7 +5,7 @@ import { HandThumbUpIcon as HandThumbUpSolid, HandThumbDownIcon as HandThumbDown
 import * as mealService from '../../services/meal';
 import * as restaurantService from '../../services/restaurant';
 import MealCard from '../../components/MealCard/MealCard';
-import { Button } from '../../components/Button/button';
+import { Button } from '../../components/catalyst/button';
 // import './MealListPage.css';
 
 export default function MealListPage() {

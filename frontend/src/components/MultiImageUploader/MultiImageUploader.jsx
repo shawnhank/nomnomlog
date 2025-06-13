@@ -1,14 +1,16 @@
-import { useState } from 'react';
-import { Button } from '../Button/button';
+import { useState, useRef } from 'react';
+import { Button } from '../catalyst/button';
+import { Input } from '../catalyst/input';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 
-export default function MultiImageUploader({ 
-  images = [], 
+export default function MultiImageUploader({
+  images = [],
   onImagesUpdated,
   entityType = 'meal' // Can be 'user', 'restaurant', or 'meal'
 }) {
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState(null);
+  const fileInputRef = useRef(null);
 
   // Get the appropriate field name based on entity type
   const getFieldName = () => {
@@ -101,69 +103,94 @@ export default function MultiImageUploader({
     onImagesUpdated({ [getFieldName()]: updatedImages });
   };
 
+  const handleAddImageClick = () => {
+    fileInputRef.current?.click();
+  };
+
   return (
-    <div className="mb-4">
-      <div className="flex flex-col items-center">
-        {/* Image gallery */}
-        {images.length > 0 && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 mb-4 w-full">
-            {images.map((image, index) => (
-              <div key={index} className={`relative border rounded-lg p-1 ${image.isPrimary ? 'border-blue-500' : 'border-gray-300'}`}>
-                <img 
-                  src={image.url} 
-                  alt={image.caption || `Image ${index + 1}`} 
-                  className="w-full h-32 object-cover rounded-md" 
+    <div className="space-y-4">
+      {/* Image gallery */}
+      {images.length > 0 && (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {images.map((image, index) => (
+            <div
+              key={index}
+              className={`relative border-2 rounded-lg p-2 transition-colors ${
+                image.isPrimary
+                  ? 'border-blue-500 bg-blue-50 dark:bg-blue-950/20 dark:border-blue-400'
+                  : 'border-gray-300 bg-white dark:bg-gray-800 dark:border-gray-600'
+              }`}
+            >
+              <div className="relative">
+                <img
+                  src={image.url}
+                  alt={image.caption || `Image ${index + 1}`}
+                  className="w-full h-32 object-cover rounded-md"
                 />
-                <div className="mt-1 flex flex-col gap-1">
-                  <input
-                    type="text"
-                    placeholder="Caption"
-                    value={image.caption || ''}
-                    onChange={(e) => handleCaptionChange(index, e.target.value)}
-                    className="text-xs p-1 border rounded"
-                  />
-                  <div className="flex justify-between">
-                    <button
-                      type="button"
-                      onClick={() => handleSetPrimary(index)}
-                      disabled={image.isPrimary}
-                      className="text-xs px-1 py-0.5 bg-blue-500 text-white rounded disabled:bg-gray-300"
-                    >
-                      {image.isPrimary ? 'Primary' : 'Set Primary'}
-                    </button>
-                    <Button
-                      type="button"
-                      onClick={() => handleRemoveImage(index)}
-                      color="red"
-                      plain
-                      className="absolute top-2 right-2"
-                      aria-label="Remove image"
-                    >
-                      <XMarkIcon className="w-5 h-5" />
-                    </Button>
-                  </div>
-                </div>
+                <Button
+                  type="button"
+                  onClick={() => handleRemoveImage(index)}
+                  color="red"
+                  plain
+                  className="absolute top-1 right-1 p-1 bg-white/80 dark:bg-gray-800/80 rounded-full"
+                  aria-label="Remove image"
+                >
+                  <XMarkIcon className="w-4 h-4" />
+                </Button>
               </div>
-            ))}
+
+              <div className="mt-2 space-y-2">
+                <Input
+                  type="text"
+                  placeholder="Caption (optional)"
+                  value={image.caption || ''}
+                  onChange={(e) => handleCaptionChange(index, e.target.value)}
+                  className="text-sm"
+                />
+                <Button
+                  type="button"
+                  onClick={() => handleSetPrimary(index)}
+                  disabled={image.isPrimary}
+                  color={image.isPrimary ? "blue" : "zinc"}
+                  outline={!image.isPrimary}
+                  className="w-full text-xs"
+                >
+                  {image.isPrimary ? '✓ Primary Photo' : 'Set as Primary'}
+                </Button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Upload button */}
+      <div className="flex flex-col items-center gap-3">
+        <Button
+          type="button"
+          onClick={handleAddImageClick}
+          color="blue"
+          outline
+          disabled={uploading}
+          className="w-full sm:w-auto"
+        >
+          {uploading ? 'Uploading...' : 'Add Image'}
+        </Button>
+
+        {error && (
+          <div className="w-full p-3 bg-red-50 border border-red-200 rounded-md dark:bg-red-950/20 dark:border-red-800">
+            <p className="text-red-700 dark:text-red-400 text-sm">{error}</p>
           </div>
         )}
-        
-        {/* Upload button */}
-        <div className="flex items-center space-x-2">
-          <Button
-            type="button"
-            onClick={handleAddImageClick}
-            color="blue"
-            outline
-          >
-            Add Image
-          </Button>
-        </div>
-        
-        {error && (
-          <p className="text-red-500 mt-2">{error}</p>
-        )}
       </div>
+
+      {/* Hidden file input */}
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept="image/*"
+        onChange={handleFileSelect}
+        className="hidden"
+      />
     </div>
   );
 }

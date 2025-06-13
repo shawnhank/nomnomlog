@@ -5,12 +5,14 @@ import { HeartIcon as HeartOutline } from '@heroicons/react/24/outline';
 import { HandThumbUpIcon, HandThumbDownIcon, PlusIcon } from '@heroicons/react/24/outline';
 import { HandThumbUpIcon as HandThumbUpSolid, HandThumbDownIcon as HandThumbDownSolid } from '@heroicons/react/24/solid';
 import * as mealService from '../../services/meal';
-import { Button } from '../../components/Button/button';
+import { Button } from '../../components/catalyst/button';
+import DeleteConfirmationModal from '../../components/DeleteConfirmationModal/DeleteConfirmationModal';
 
 export default function MealDetailPage() {
   const [meal, setMeal] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -44,14 +46,13 @@ export default function MealDetailPage() {
 
   // Handle delete meal
   async function handleDelete() {
-    if (window.confirm('Are you sure you want to delete this meal?')) {
-      try {
-        await mealService.deleteMeal(id);
-        navigate('/meals');
-      } catch (err) {
-        setError('Failed to delete meal');
-      }
+    try {
+      await mealService.deleteMeal(id);
+      navigate('/meals');
+    } catch (err) {
+      setError('Failed to delete meal');
     }
+    setShowDeleteModal(false);
   }
 
   // Handle toggle favorite
@@ -107,8 +108,8 @@ export default function MealDetailPage() {
           >
             Edit
           </Button>
-          <Button 
-            onClick={handleDelete}
+          <Button
+            onClick={() => setShowDeleteModal(true)}
             color="red"
           >
             Delete
@@ -207,6 +208,16 @@ export default function MealDetailPage() {
           </div>
         )}
       </div>
+
+      {/* Delete confirmation modal */}
+      <DeleteConfirmationModal
+        isOpen={showDeleteModal}
+        onClose={() => setShowDeleteModal(false)}
+        onConfirm={handleDelete}
+        title="Delete Meal"
+        message="Are you sure you want to delete this meal? This action cannot be undone."
+        itemName={meal?.name}
+      />
     </div>
   );
 }

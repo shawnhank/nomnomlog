@@ -1,4 +1,4 @@
-import { Button } from '../Button/button';
+import { Button } from '../catalyst/button';
 
 // Replace add tag button with:
 <Button
@@ -6,7 +6,7 @@ import { Button } from '../Button/button';
   onClick={handleAddTag}
   color="blue"
   outline
-  size="sm"
+  className="text-sm px-2 py-1"
 >
   Add
 </Button>

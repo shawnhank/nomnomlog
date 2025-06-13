@@ -1,4 +1,4 @@
-import { Button } from '../Button/button';
+import { Button } from '../catalyst/button';
 
 // Replace signup button with:
 <Button

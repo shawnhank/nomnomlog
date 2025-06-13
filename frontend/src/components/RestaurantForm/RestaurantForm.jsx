@@ -1,4 +1,4 @@
-import { Button } from '../Button/button';
+import { Button } from '../catalyst/button';
 
 // Replace the submit button in the form with:
 <div className="flex justify-end mt-6">

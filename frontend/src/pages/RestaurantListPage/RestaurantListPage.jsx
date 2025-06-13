@@ -3,7 +3,7 @@ import { Link } from 'react-router';
 import { HandThumbUpIcon, HandThumbDownIcon, PlusIcon } from '@heroicons/react/24/outline';
 import * as restaurantService from '../../services/restaurant';
 import RestaurantCard from '../../components/RestaurantCard/RestaurantCard';
-import { Button } from '../../components/Button/button';
+import { Button } from '../../components/catalyst/button';
 // import './RestaurantListPage.css';
 
 export default function RestaurantListPage() {
