@@ -30,15 +30,37 @@
   gap: 1rem;
 }
 
+.restaurant-item {
+  border-radius: 0.5rem;
+  overflow: hidden;
+  transition: transform 0.2s ease;
+  border: 1px solid #ddd;
+  background-color: white;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.restaurant-item:hover {
+  transform: translateY(-2px);
+}
+
+.restaurant-item a {
+  text-decoration: none;
+  color: inherit;
+}
+
+
+
+/* Adjust to two columns at medium screens */
 @media (min-width: 640px) {
   .restaurant-list {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
+/* Keep at two columns even on large screens */
 @media (min-width: 1024px) {
   .restaurant-list {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
@@ -109,21 +131,6 @@
 
 .tabs .action-button:hover {
   background-color: #2563eb;
-}
-
-.restaurant-item {
-  border-radius: 0.5rem;
-  overflow: hidden;
-  transition: transform 0.2s ease;
-}
-
-.restaurant-item:hover {
-  transform: translateY(-2px);
-}
-
-.restaurant-item a {
-  text-decoration: none;
-  color: inherit;
 }
 
 .action-buttons-container {

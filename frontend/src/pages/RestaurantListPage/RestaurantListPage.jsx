@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router';
 import { HeartIcon as HeartSolid } from '@heroicons/react/24/solid';
 import { HeartIcon as HeartOutline } from '@heroicons/react/24/outline';
+import { PlusIcon as PlusSolid } from '@heroicons/react/24/solid';
 import * as restaurantService from '../../services/restaurant';
-import './RestaurantListPage.css';
 import RestaurantCard from '../../components/RestaurantCard/RestaurantCard';
 
 export default function RestaurantListPage() {
@@ -62,26 +62,28 @@ export default function RestaurantListPage() {
   );
 
   return (
-    <div className="RestaurantListPage">
-      <h1 className="text-2xl font-bold text-center mb-6">My Restaurants</h1>
+    <div className="max-w-full md:max-w-3xl mx-auto p-4 md:p-6">
+      <div className="mb-6 text-center">
+        <h1 className="text-2xl font-bold mb-6">Restaurants</h1>
+      </div>
       
-      {error && <div className="bg-red-100 text-red-700 p-3 rounded-md mb-4">{error}</div>}
-      
-      <div className="tabs mb-6">
+      <div className="flex overflow-x-auto pb-2 mb-4 border-b border-gray-200">
         <button 
-          className={!showFavoritesOnly ? 'active' : ''} 
+          className={`px-3 py-2 flex items-center whitespace-nowrap mr-2 ${!showFavoritesOnly ? 'text-gray-900 border-b-2 border-gray-900' : 'text-gray-600'}`}
           onClick={() => setShowFavoritesOnly(false)}
         >
-          All
+          <span>All</span>
         </button>
         <button 
-          className={showFavoritesOnly ? 'active' : ''} 
+          className={`px-3 py-2 flex items-center whitespace-nowrap mr-2 ${showFavoritesOnly ? 'text-gray-900 border-b-2 border-gray-900' : 'text-gray-600'}`}
           onClick={() => setShowFavoritesOnly(true)}
         >
-          Favorites
+          <HeartSolid className="w-5 h-5 mr-1 sm:mr-2" />
+          <span className="hidden sm:inline">Favorites</span>
         </button>
-        <Link to="/restaurants/new" className="action-button ml-auto">
-          Add
+        <Link to="/restaurants/new" className="ml-auto flex items-center justify-center bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md">
+          <PlusSolid className="w-6 h-6" />
+          <span className="hidden sm:inline ml-1">Add</span>
         </Link>
       </div>
       
@@ -95,6 +97,9 @@ export default function RestaurantListPage() {
         />
       </div>
       
+      {/* Show error message if fetch failed */}
+      {error && <div className="text-red-500 mb-4">{error}</div>}
+
       {loading ? (
         <div className="text-center py-8">Loading restaurants...</div>
       ) : filteredRestaurants.length === 0 ? (
@@ -106,9 +111,9 @@ export default function RestaurantListPage() {
               : 'No restaurants yet. Add your first one!'}
         </div>
       ) : (
-        <ul className="restaurant-list">
+        <ul className="grid grid-cols-1 gap-4 sm:gap-6">
           {filteredRestaurants.map(restaurant => (
-            <li key={restaurant._id} className="restaurant-item">
+            <li key={restaurant._id}>
               <RestaurantCard 
                 restaurant={restaurant} 
                 onToggleFavorite={handleToggleFavorite} 

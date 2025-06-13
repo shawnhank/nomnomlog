@@ -1,34 +1,50 @@
 import { Link } from 'react-router';
 import { HeartIcon as HeartSolid } from '@heroicons/react/24/solid';
 import { HeartIcon as HeartOutline } from '@heroicons/react/24/outline';
-import './RestaurantCard.css';
 
 export default function RestaurantCard({ restaurant, onToggleFavorite }) {
   // Find primary image if available
+  // If there's only one image, treat it as primary regardless of isPrimary flag
   const primaryImage = restaurant.restaurantImages && restaurant.restaurantImages.length > 0 
-    ? restaurant.restaurantImages.find(img => img.isPrimary) || restaurant.restaurantImages[0]
+    ? (restaurant.restaurantImages.length === 1
+      ? restaurant.restaurantImages[0]
+      : restaurant.restaurantImages.find(img => img.isPrimary) || restaurant.restaurantImages[0])
     : null;
+
+  // If no restaurantImages but there's a legacy imageUrl, use that
+  const imageToShow = primaryImage ? primaryImage.url : restaurant.imageUrl;
 
   const handleToggleFavorite = (e) => {
     e.preventDefault(); // Prevent navigation when clicking the heart
-    onToggleFavorite(restaurant._id);
+    onToggleFavorite(restaurant._id, e);
   };
 
   return (
-    <div className="restaurant-card border rounded-lg shadow-sm hover:shadow-md transition-shadow overflow-hidden">
+    <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg border border-gray-200 hover:shadow-md transition-all duration-200 hover:-translate-y-1">
       <Link to={`/restaurants/${restaurant._id}`} className="block">
-        {/* Restaurant header with name and favorite icon */}
-        <div className="p-4">
+        {/* Image - edge to edge on mobile */}
+        {imageToShow && (
+          <div className="w-full aspect-[4/3]">
+            <img 
+              src={imageToShow} 
+              alt={restaurant.name} 
+              className="w-full h-full object-cover"
+            />
+          </div>
+        )}
+        
+        {/* Content section */}
+        <div className="px-4 py-3 sm:p-4">
           <div className="flex justify-between items-start">
             <div>
-              <h2 className="text-xl font-semibold">{restaurant.name}</h2>
+              <h3 className="text-base font-semibold text-gray-900 line-clamp-2">{restaurant.name}</h3>
               
               {restaurant.address && (
-                <p className="text-gray-600 text-sm mt-1">{restaurant.address}</p>
+                <p className="mt-1 text-sm text-gray-700">{restaurant.address}</p>
               )}
               
               {restaurant.phone && (
-                <p className="text-gray-600 text-sm mt-1">{restaurant.phone}</p>
+                <p className="mt-1 text-sm text-gray-500">{restaurant.phone}</p>
               )}
             </div>
             
@@ -38,24 +54,13 @@ export default function RestaurantCard({ restaurant, onToggleFavorite }) {
               title={restaurant.isFavorite ? "Remove from favorites" : "Add to favorites"}
             >
               {restaurant.isFavorite ? (
-                <HeartSolid className="w-6 h-6 text-red-500" />
+                <HeartSolid className="w-5 h-5 text-red-500" />
               ) : (
-                <HeartOutline className="w-6 h-6" />
+                <HeartOutline className="w-5 h-5" />
               )}
             </button>
           </div>
         </div>
-        
-        {/* Restaurant image */}
-        {primaryImage && (
-          <div className="w-full">
-            <img 
-              src={primaryImage.url} 
-              alt={restaurant.name} 
-              className="w-full h-48 object-cover"
-            />
-          </div>
-        )}
       </Link>
     </div>
   );

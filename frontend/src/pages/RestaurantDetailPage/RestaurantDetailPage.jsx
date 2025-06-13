@@ -165,10 +165,10 @@ export default function RestaurantDetailPage() {
           <p className="text-gray-500 text-center py-4">No meals logged at this restaurant yet.</p>
         ) : (
           <>
-            <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4">
               {/* Show only up to 3 most recent meals */}
               {meals.slice(0, 3).map(meal => (
-                <li key={meal._id}>
+                <li key={meal._id} className="meal-item">
                   <MealCard meal={meal} />
                 </li>
               ))}

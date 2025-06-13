@@ -1,5 +1,10 @@
 .meal-card {
-  transition: transform 0.2s ease-in-out;
+  width: 100%;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  background-color: white;
 }
 
 .meal-card:hover {

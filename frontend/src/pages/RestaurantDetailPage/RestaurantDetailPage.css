@@ -64,7 +64,6 @@
   border-bottom-color: #1a1a1a;
 }
 
-/* More specific selectors to increase specificity */
 .RestaurantDetailPage .action-buttons .action-button,
 .RestaurantDetailPage .action-buttons button.action-button,
 .RestaurantDetailPage .action-buttons a.action-button {
@@ -160,7 +159,6 @@
   text-decoration: underline;
 }
 
-/* Delete confirmation modal */
 .delete-confirm-modal {
   position: fixed;
   top: 0;
@@ -223,4 +221,38 @@
 
 .error {
   color: #d9534f;
+}
+
+.recent-meals-list {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+@media (min-width: 640px) {
+  .recent-meals-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .recent-meals-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.recent-meals-list li {
+  border-radius: 0.5rem;
+  overflow: hidden;
+  border: 1px solid #ddd;
+  background-color: white;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease;
+}
+
+.recent-meals-list li:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }

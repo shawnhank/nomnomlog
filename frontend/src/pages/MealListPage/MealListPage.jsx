@@ -3,7 +3,7 @@ import { Link, useLocation } from 'react-router';
 import { HeartIcon as HeartSolid } from '@heroicons/react/24/solid';
 import { HeartIcon as HeartOutline } from '@heroicons/react/24/outline';
 import { HandThumbUpIcon, HandThumbDownIcon } from '@heroicons/react/24/outline';
-import { HandThumbUpIcon as HandThumbUpSolid, HandThumbDownIcon as HandThumbDownSolid } from '@heroicons/react/24/solid';
+import { HandThumbUpIcon as HandThumbUpSolid, HandThumbDownIcon as HandThumbDownSolid, PlusIcon as PlusSolid } from '@heroicons/react/24/solid';
 import * as mealService from '../../services/meal';
 import * as restaurantService from '../../services/restaurant';
 import MealCard from '../../components/MealCard/MealCard';
@@ -16,28 +16,30 @@ export default function MealListPage() {
   const [loading, setLoading] = useState(true);
   // State to store any error messages
   const [error, setError] = useState('');
-  // State to track if we're showing favorites only
-  const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
+  // State to track which filter view is active
+  const [activeFilter, setActiveFilter] = useState('all');
   // State for search term
   const [searchTerm, setSearchTerm] = useState('');
 
-  // Fetch meals when component mounts or when showFavoritesOnly changes
+  // Fetch meals when component mounts or when activeFilter changes
   useEffect(() => {
     async function fetchMeals() {
       try {
         setLoading(true);
         let mealsData;
         
-        if (showFavoritesOnly) {
-          mealsData = await mealService.getFavorites();
-        } else {
-          mealsData = await mealService.getAll();
-        }
-        
-        // Debug: Log the meals data to see if mealImages is populated
-        console.log('Fetched meals:', mealsData);
-        if (mealsData.length > 0) {
-          console.log('First meal mealImages:', mealsData[0].mealImages);
+        switch(activeFilter) {
+          case 'favorites':
+            mealsData = await mealService.getFavorites();
+            break;
+          case 'thumbsUp':
+            mealsData = await mealService.getThumbsUp();
+            break;
+          case 'thumbsDown':
+            mealsData = await mealService.getThumbsDown();
+            break;
+          default:
+            mealsData = await mealService.getAll();
         }
         
         setMeals(mealsData);
@@ -50,7 +52,7 @@ export default function MealListPage() {
     }
 
     fetchMeals();
-  }, [showFavoritesOnly]);
+  }, [activeFilter]);
 
   // Handle toggling favorite status
   async function handleToggleFavorite(id, e) {
@@ -96,58 +98,83 @@ export default function MealListPage() {
   );
 
   return (
-    <div className="MealListPage">
-      <div className="page-header">
-        <h2>My Meals</h2>
+    <div className="max-w-full md:max-w-3xl mx-auto p-4 md:p-6">
+      <div className="mb-6 text-center">
+        <h1 className="text-2xl font-bold mb-6">Meals</h1>
       </div>
       
-      <div className="tabs">
+      <div className="flex overflow-x-auto pb-2 mb-4 border-b border-gray-200">
         <button 
-          className={!showFavoritesOnly ? 'active' : ''} 
-          onClick={() => setShowFavoritesOnly(false)}
+          className={`px-3 py-2 flex items-center whitespace-nowrap mr-2 ${activeFilter === 'all' ? 'text-gray-900 border-b-2 border-gray-900' : 'text-gray-600'}`}
+          onClick={() => setActiveFilter('all')}
         >
-          All Meals
+          <span>All Meals</span>
         </button>
         <button 
-          className={showFavoritesOnly ? 'active' : ''} 
-          onClick={() => setShowFavoritesOnly(true)}
+          className={`px-3 py-2 flex items-center whitespace-nowrap mr-2 ${activeFilter === 'favorites' ? 'text-gray-900 border-b-2 border-gray-900' : 'text-gray-600'}`}
+          onClick={() => setActiveFilter('favorites')}
         >
-          Show Favorites Only
+          <HeartSolid className="w-5 h-5 mr-1 sm:mr-2" />
+          <span className="hidden sm:inline">Favorites</span>
         </button>
-        <Link to="/meals/new" className="action-button">
-          Add New Meal
+        <button 
+          className={`px-3 py-2 flex items-center whitespace-nowrap mr-2 ${activeFilter === 'thumbsUp' ? 'text-gray-900 border-b-2 border-gray-900' : 'text-gray-600'}`}
+          onClick={() => setActiveFilter('thumbsUp')}
+        >
+          <HandThumbUpSolid className="w-5 h-5 mr-1 sm:mr-2" />
+          <span className="hidden sm:inline">Would Order Again</span>
+        </button>
+        <button 
+          className={`px-3 py-2 flex items-center whitespace-nowrap mr-2 ${activeFilter === 'thumbsDown' ? 'text-gray-900 border-b-2 border-gray-900' : 'text-gray-600'}`}
+          onClick={() => setActiveFilter('thumbsDown')}
+        >
+          <HandThumbDownSolid className="w-5 h-5 mr-1 sm:mr-2" />
+          <span className="hidden sm:inline">Would Not Order Again</span>
+        </button>
+        <Link to="/meals/new" className="ml-auto flex items-center justify-center bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md">
+          <PlusSolid className="w-6 h-6" />
+          <span className="hidden sm:inline ml-1">Add</span>
         </Link>
       </div>
       
-      {/* Add search input */}
-      <div className="search-container">
+      {/* Search input */}
+      <div className="mb-4">
         <input
           type="text"
           placeholder="Search meals..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="search-input"
+          className="w-full p-2 border border-gray-300 rounded"
         />
       </div>
       
-      {/* Show error message if fetch failed */}
-      {error && <div className="error-message">{error}</div>}
+      {/* Error message */}
+      {error && <div className="text-red-500 mb-4">{error}</div>}
       
+      {/* Content */}
       {loading ? (
         <div className="text-center py-8">Loading meals...</div>
       ) : filteredMeals.length === 0 ? (
-        <div className="no-results">
+        <div className="text-center py-8 text-gray-500">
           {searchTerm 
             ? 'No meals match your search.' 
-            : showFavoritesOnly 
-              ? 'No favorite meals yet. Mark some as favorites!' 
-              : 'No meals added yet. Add your first meal!'}
+            : activeFilter === 'favorites'
+              ? 'No favorite meals yet. Mark some as favorites!'
+              : activeFilter === 'thumbsUp'
+                ? 'No "would order again" meals yet. Give some meals a thumbs up!'
+                : activeFilter === 'thumbsDown'
+                  ? 'No "would not order again" meals yet. Give some meals a thumbs down!'
+                  : 'No meals added yet. Add your first meal!'}
         </div>
       ) : (
-        <ul className="meal-list grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <ul className="grid grid-cols-1 gap-4 sm:gap-6">
           {filteredMeals.map(meal => (
             <li key={meal._id}>
-              <MealCard meal={meal} />
+              <MealCard
+                meal={meal}
+                onToggleFavorite={handleToggleFavorite}
+                onThumbsRating={handleThumbsRating}  
+              />
             </li>
           ))}
         </ul>
